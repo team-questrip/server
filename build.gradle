@@ -31,7 +31,7 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
     // Feign
-    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:4.1.0'
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:4.0.4'
 
     // hibernate-spatial
     implementation 'org.hibernate.orm:hibernate-spatial:6.2.13.Final'
