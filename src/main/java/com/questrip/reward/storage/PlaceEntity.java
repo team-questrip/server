@@ -10,6 +10,7 @@ import com.questrip.reward.utils.StringListConverter;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
@@ -18,6 +19,7 @@ import org.locationtech.jts.geom.Point;
 import java.util.List;
 
 @Entity
+@Getter
 @Table(name = "place")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @SQLDelete(sql = "UPDATE place SET is_deleted = true WHERE id = ?")
