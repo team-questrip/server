@@ -4,6 +4,7 @@ import lombok.Getter;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @Getter
 public class OpenPeriods {
@@ -73,5 +74,17 @@ public class OpenPeriods {
         }
 
         return value;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof OpenPeriods that)) return false;
+        return Objects.equals(getPeriods(), that.getPeriods());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getPeriods());
     }
 }
