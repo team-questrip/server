@@ -1,7 +1,6 @@
 package com.questrip.reward.storage;
 
 import com.questrip.reward.domain.place.LatLng;
-import com.questrip.reward.domain.place.OpenPeriods;
 import com.questrip.reward.domain.place.Period;
 import com.questrip.reward.domain.place.Place;
 import com.questrip.reward.utils.GeometryUtils;
