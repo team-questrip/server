@@ -19,6 +19,10 @@ public class OpenPeriods {
             return OpenStatus.UNKNOWN;
         }
 
+        if(isOpen24Hours()) {
+            return OpenStatus.OPEN;
+        }
+
         int dayOfWeek = getDayOfWeek(now);
 
         Period openBasePeriod = getOpenBasePeriod(dayOfWeek);
@@ -74,6 +78,10 @@ public class OpenPeriods {
         }
 
         return value;
+    }
+
+    private boolean isOpen24Hours() {
+        return periods.size() == 1 && periods.get(0).getClose() == null;
     }
 
     @Override
