@@ -1,10 +1,6 @@
 package com.questrip.reward.storage;
 
-import com.questrip.reward.domain.place.LatLng;
-import com.questrip.reward.domain.place.Period;
-import com.questrip.reward.domain.place.Place;
-import com.questrip.reward.utils.PeriodConverter;
-import com.questrip.reward.utils.StringListConverter;
+import com.questrip.reward.domain.place.*;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -14,7 +10,6 @@ import org.springframework.data.geo.Point;
 import org.springframework.data.mongodb.core.index.GeoSpatialIndexType;
 import org.springframework.data.mongodb.core.index.GeoSpatialIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.List;
 
@@ -31,10 +26,10 @@ public class PlaceEntity extends BaseEntity {
     private String formattedAddress;
     @GeoSpatialIndexed(type = GeoSpatialIndexType.GEO_2DSPHERE)
     private Point location;
-    @Convert(converter = StringListConverter.class)
+    private PlaceContent content;
     private List<String> openingHours;
-    @Convert(converter = PeriodConverter.class)
     private List<Period> openPeriods;
+    private List<PlaceImage> images;
 
     public Place toPlace() {
         return Place.builder()
@@ -44,8 +39,10 @@ public class PlaceEntity extends BaseEntity {
                 .primaryType(primaryType)
                 .formattedAddress(formattedAddress)
                 .location(new LatLng(location.getY(), location.getX()))
+                .content(content)
                 .openingHours(openingHours)
                 .openPeriods(openPeriods)
+                .images(images)
                 .build();
     }
 
@@ -57,20 +54,24 @@ public class PlaceEntity extends BaseEntity {
                 .primaryType(place.getPrimaryType())
                 .formattedAddress(place.getFormattedAddress())
                 .location(new Point(place.getLocation().getLongitude(), place.getLocation().getLatitude()))
+                .content(place.getContent())
                 .openingHours(place.getOpeningHours())
                 .openPeriods(place.getOpenPeriods().getPeriods())
+                .images(place.getImages())
                 .build();
     }
 
     @Builder
-    private PlaceEntity(String id, String googlePlaceId, String placeName, String primaryType, String formattedAddress, Point location, List<String> openingHours, List<Period> openPeriods) {
+    private PlaceEntity(String id, String googlePlaceId, String placeName, String primaryType, String formattedAddress, Point location, PlaceContent content, List<String> openingHours, List<Period> openPeriods, List<PlaceImage> images) {
         this.id = id;
         this.googlePlaceId = googlePlaceId;
         this.placeName = placeName;
         this.primaryType = primaryType;
         this.formattedAddress = formattedAddress;
         this.location = location;
+        this.content = content;
         this.openingHours = openingHours;
         this.openPeriods = openPeriods;
+        this.images = images;
     }
 }

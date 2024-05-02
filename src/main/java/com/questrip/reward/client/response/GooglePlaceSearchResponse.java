@@ -2,9 +2,7 @@ package com.questrip.reward.client.response;
 
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
-import com.questrip.reward.domain.place.LatLng;
-import com.questrip.reward.domain.place.Period;
-import com.questrip.reward.domain.place.Place;
+import com.questrip.reward.domain.place.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -41,13 +39,15 @@ public class GooglePlaceSearchResponse {
         }
     }
 
-    public Place toPlace() {
+    public Place toPlace(PlaceContent content, List<PlaceImage> images) {
         return Place.builder()
                 .googlePlaceId(id)
                 .placeName(displayName.getText())
                 .primaryType(primaryType)
                 .formattedAddress(formattedAddress)
                 .location(location)
+                .content(content)
+                .images(images)
                 .openingHours(regularOpeningHours.getWeekdayDescriptions())
                 .openPeriods(regularOpeningHours.getPeriods())
                 .build();

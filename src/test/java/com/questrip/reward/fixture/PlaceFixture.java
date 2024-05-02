@@ -2,6 +2,8 @@ package com.questrip.reward.fixture;
 
 import com.questrip.reward.domain.place.LatLng;
 import com.questrip.reward.domain.place.Place;
+import com.questrip.reward.domain.place.PlaceContent;
+import com.questrip.reward.domain.place.PlaceImage;
 
 import java.util.List;
 
@@ -23,5 +25,17 @@ public class PlaceFixture {
                 )
                 .openPeriods(OpenPeriodsFixture.get())
                 .build();
+    }
+
+    public static PlaceContent getContent() {
+        return new PlaceContent("testRecommend", "testActivity");
+    }
+
+    public static List<PlaceImage> getImages() {
+        PlaceImage img1 = new PlaceImage(1, "test.test");
+        PlaceImage img2 = new PlaceImage(2, "test.test");
+        PlaceImage img3 = new PlaceImage(3, "test.test");
+
+        return List.of(img1, img2, img3);
     }
 }
