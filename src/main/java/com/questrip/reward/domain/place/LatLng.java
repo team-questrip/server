@@ -15,6 +15,11 @@ public class LatLng {
     }
 
     @Override
+    public String toString() {
+        return "%s,%s".formatted(latitude, longitude);
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof LatLng latLng)) return false;
