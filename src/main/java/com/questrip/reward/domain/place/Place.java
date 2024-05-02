@@ -7,7 +7,7 @@ import java.util.List;
 
 @Getter
 public class Place {
-    private Long id;
+    private String id;
     private String googlePlaceId;
     private String placeName;
     private String primaryType;
@@ -17,7 +17,7 @@ public class Place {
     private OpenPeriods openPeriods;
 
     @Builder
-    private Place(Long id, String googlePlaceId, String placeName, String primaryType, String formattedAddress, LatLng location, List<String> openingHours, List<Period> openPeriods) {
+    private Place(String id, String googlePlaceId, String placeName, String primaryType, String formattedAddress, LatLng location, List<String> openingHours, List<Period> openPeriods) {
         this.id = id;
         this.googlePlaceId = googlePlaceId;
         this.placeName = placeName;
