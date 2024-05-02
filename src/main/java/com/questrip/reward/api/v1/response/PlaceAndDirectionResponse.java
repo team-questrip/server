@@ -1,7 +1,5 @@
 package com.questrip.reward.api.v1.response;
 
-import com.questrip.reward.domain.direction.DirectionSummary;
-import com.questrip.reward.domain.place.Place;
 import com.questrip.reward.domain.place.PlaceAndDirection;
 import lombok.Getter;
 

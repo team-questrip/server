@@ -18,6 +18,16 @@ public class Place {
     private OpenPeriods openPeriods;
     private List<PlaceImage> images;
 
+    public double calculateDistance(LatLng userLocation) {
+        double lat = Math.toRadians(userLocation.getLatitude());
+        double lon = Math.toRadians(userLocation.getLongitude());
+        double placeLat = Math.toRadians(location.getLatitude());
+        double placeLon = Math.toRadians(location.getLongitude());
+
+        double earthRadius = 6371;
+        return earthRadius * Math.acos(Math.sin(lat) * Math.sin(placeLat) + Math.cos(lat) * Math.cos(placeLat) * Math.cos(lon - placeLon));
+    }
+
     @Builder
     private Place(String id, String googlePlaceId, String placeName, String primaryType, String formattedAddress, LatLng location, PlaceContent content, List<String> openingHours, List<Period> openPeriods, List<PlaceImage> images) {
         this.id = id;
