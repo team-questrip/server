@@ -2,6 +2,7 @@ package com.questrip.reward.domain.place;
 
 import com.questrip.reward.domain.direction.DirectionSearcher;
 import com.questrip.reward.domain.direction.DirectionSummary;
+import com.questrip.reward.support.response.SliceResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,5 +30,9 @@ public class PlaceService {
         DirectionSummary summary = directionSearcher.getSummary(userLocation, place.getGooglePlaceId());
 
         return new PlaceAndDirection(place, summary);
+    }
+
+    public SliceResult<Place> findAllPlaceNear(LatLng userLocation, int page, int size) {
+        return placeFinder.findAllNear(userLocation, page, size);
     }
 }
