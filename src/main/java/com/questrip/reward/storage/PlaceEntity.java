@@ -1,46 +1,35 @@
 package com.questrip.reward.storage;
 
-import com.questrip.reward.domain.place.LatLng;
-import com.questrip.reward.domain.place.OpenPeriods;
-import com.questrip.reward.domain.place.Period;
-import com.questrip.reward.domain.place.Place;
-import com.questrip.reward.utils.GeometryUtils;
-import com.questrip.reward.utils.PeriodConverter;
-import com.questrip.reward.utils.StringListConverter;
+import com.questrip.reward.domain.place.*;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
-import org.locationtech.jts.geom.Point;
+import org.springframework.data.geo.Point;
+import org.springframework.data.mongodb.core.index.GeoSpatialIndexType;
+import org.springframework.data.mongodb.core.index.GeoSpatialIndexed;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
 
-@Entity
 @Getter
-@Table(name = "place")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@SQLDelete(sql = "UPDATE place SET is_deleted = true WHERE id = ?")
-@Where(clause = "is_deleted = false")
+@Document(collection = "place")
 public class PlaceEntity extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
     private String googlePlaceId;
     private String placeName;
     private String primaryType;
     private String formattedAddress;
-    @Column(columnDefinition = "POINT SRID 4326", nullable = false)
+    @GeoSpatialIndexed(type = GeoSpatialIndexType.GEO_2DSPHERE)
     private Point location;
-    @Convert(converter = StringListConverter.class)
+    private PlaceContent content;
     private List<String> openingHours;
-    @Convert(converter = PeriodConverter.class)
-    @Column(columnDefinition = "longtext")
     private List<Period> openPeriods;
-    private Boolean isDeleted;
+    private List<PlaceImage> images;
 
     public Place toPlace() {
         return Place.builder()
@@ -50,8 +39,10 @@ public class PlaceEntity extends BaseEntity {
                 .primaryType(primaryType)
                 .formattedAddress(formattedAddress)
                 .location(new LatLng(location.getY(), location.getX()))
+                .content(content)
                 .openingHours(openingHours)
                 .openPeriods(openPeriods)
+                .images(images)
                 .build();
     }
 
@@ -62,23 +53,25 @@ public class PlaceEntity extends BaseEntity {
                 .placeName(place.getPlaceName())
                 .primaryType(place.getPrimaryType())
                 .formattedAddress(place.getFormattedAddress())
-                .location(GeometryUtils.getPoint(place.getLocation().getLongitude(), place.getLocation().getLatitude()))
+                .location(new Point(place.getLocation().getLongitude(), place.getLocation().getLatitude()))
+                .content(place.getContent())
                 .openingHours(place.getOpeningHours())
                 .openPeriods(place.getOpenPeriods().getPeriods())
-                .isDeleted(false)
+                .images(place.getImages())
                 .build();
     }
 
     @Builder
-    private PlaceEntity(Long id, String googlePlaceId, String placeName, String primaryType, String formattedAddress, Point location, List<String> openingHours, List<Period> openPeriods, Boolean isDeleted) {
+    private PlaceEntity(String id, String googlePlaceId, String placeName, String primaryType, String formattedAddress, Point location, PlaceContent content, List<String> openingHours, List<Period> openPeriods, List<PlaceImage> images) {
         this.id = id;
         this.googlePlaceId = googlePlaceId;
         this.placeName = placeName;
         this.primaryType = primaryType;
         this.formattedAddress = formattedAddress;
         this.location = location;
+        this.content = content;
         this.openingHours = openingHours;
         this.openPeriods = openPeriods;
-        this.isDeleted = isDeleted;
+        this.images = images;
     }
 }

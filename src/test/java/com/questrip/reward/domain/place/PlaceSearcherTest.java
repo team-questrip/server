@@ -1,9 +1,12 @@
 package com.questrip.reward.domain.place;
 
+import com.questrip.reward.fixture.PlaceFixture;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -18,9 +21,11 @@ class PlaceSearcherTest {
     void searchPlace() {
         // given
         String 토속촌 = "ChIJb5OOGL6ifDURU29ID3t8aOA";
+        PlaceContent content = PlaceFixture.getContent();
+        List<PlaceImage> images = PlaceFixture.getImages();
 
         // when
-        Place place = placeSearcher.searchPlace(토속촌);
+        Place place = placeSearcher.searchPlace(토속촌).toPlace(content, images);
 
         // then
         assertThat(place)
@@ -37,6 +42,15 @@ class PlaceSearcherTest {
                         "korean_restaurant",
                         "5 Jahamun-ro 5-gil, Jongno-gu, Seoul, South Korea",
                         new LatLng(37.577778599999995, 126.9715909)
+                );
+        assertThat(place.getContent())
+                .extracting(
+                        "recommendationReason",
+                        "activity"
+                )
+                .containsExactly(
+                        content.getRecommendationReason(),
+                        content.getActivity()
                 );
     }
 }
