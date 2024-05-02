@@ -1,12 +1,10 @@
 package com.questrip.reward.api.v1.response;
 
-import com.questrip.reward.domain.place.LatLng;
-import com.questrip.reward.domain.place.Place;
-import com.questrip.reward.domain.place.PlaceContent;
-import com.questrip.reward.domain.place.PlaceImage;
+import com.questrip.reward.domain.place.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -21,6 +19,7 @@ public class PlaceResponse {
     private PlaceContent content;
     private List<PlaceImage> images;
     private List<String> openingHours;
+    private OpenStatus openNow;
 
     public PlaceResponse(Place place) {
         this.id = place.getId();
@@ -32,5 +31,6 @@ public class PlaceResponse {
         this.content = place.getContent();
         this.images = place.getImages();
         this.openingHours = place.getOpeningHours();
+        this.openNow = place.getOpenPeriods().isOpen(LocalDateTime.now());
     }
 }
