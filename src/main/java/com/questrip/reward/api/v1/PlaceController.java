@@ -10,7 +10,6 @@ import com.questrip.reward.domain.place.PlaceAndDirection;
 import com.questrip.reward.domain.place.PlaceService;
 import com.questrip.reward.support.response.ApiResponse;
 import com.questrip.reward.support.response.SliceResult;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +20,7 @@ public class PlaceController {
     private final PlaceService placeService;
 
     @PostMapping("/api/v1/place")
-    public ApiResponse<PlaceResponse> create(@Valid PlaceCreateRequest request) {
+    public ApiResponse<PlaceResponse> create(PlaceCreateRequest request) {
         Place saved = placeService.save(request.getGooglePlaceId(), request.toContent(), request.getImages());
 
         return ApiResponse.success("장소 저장 성공", new PlaceResponse(saved));
