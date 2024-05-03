@@ -1,14 +1,22 @@
 package com.questrip.reward.domain.place;
 
+import com.questrip.reward.client.GooglePlaceClient;
 import com.questrip.reward.fixture.PlaceFixture;
+import com.questrip.reward.support.error.GlobalException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @SpringBootTest
 class PlaceSearcherTest {
@@ -16,41 +24,22 @@ class PlaceSearcherTest {
     @Autowired
     private PlaceSearcher placeSearcher;
 
-    @DisplayName("구글 장소 찾기 결과를 반환한다.")
+    @MockBean
+    private GooglePlaceClient googlePlaceClient;
+
+    @DisplayName("구글 place 찾기를 실패할 경우 3번 반복 시행한다.")
     @Test
-    void searchPlace() {
+    void retry() {
         // given
-        String 토속촌 = "ChIJb5OOGL6ifDURU29ID3t8aOA";
-        PlaceContent content = PlaceFixture.getContent();
-        List<PlaceImage> images = PlaceFixture.getImages();
+        given(googlePlaceClient.placeDetails(any(), any(), any(), any()))
+                .willThrow(RuntimeException.class);
 
         // when
-        Place place = placeSearcher.searchPlace(토속촌).toPlace(content, images);
+        assertThatThrownBy(() -> placeSearcher.searchPlace("1234"))
+                .isInstanceOf(GlobalException.class)
+                .hasMessageContaining("외부 API 서버 오류");
 
         // then
-        assertThat(place)
-                .extracting(
-                        "googlePlaceId",
-                        "placeName",
-                        "primaryType",
-                        "formattedAddress",
-                        "location"
-                )
-                .containsExactly(
-                        토속촌,
-                        "Tosokchon Samgyetang",
-                        "korean_restaurant",
-                        "5 Jahamun-ro 5-gil, Jongno-gu, Seoul, South Korea",
-                        new LatLng(37.577778599999995, 126.9715909)
-                );
-        assertThat(place.getContent())
-                .extracting(
-                        "recommendationReason",
-                        "activity"
-                )
-                .containsExactly(
-                        content.getRecommendationReason(),
-                        content.getActivity()
-                );
+        verify(googlePlaceClient, times(3)).placeDetails(any(), any(), any(), any());
     }
 }

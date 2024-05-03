@@ -49,7 +49,7 @@ dependencies {
 
     // retry
     implementation 'org.springframework.retry:spring-retry'
-    implementation 'org.springframework:spring-aspect'
+    implementation 'org.springframework:spring-aspects'
 }
 
 tasks.named('bootBuildImage') {
