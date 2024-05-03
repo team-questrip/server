@@ -14,4 +14,5 @@ public interface GooglePlaceClient {
                                            @RequestParam(value = "fields") String fields,
                                            @RequestParam(value = "languageCode") String languageCode,
                                            @RequestParam(value = "key") String key);
+
 }
