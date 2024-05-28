@@ -4,12 +4,14 @@ import com.questrip.reward.domain.direction.DirectionSearcher;
 import com.questrip.reward.domain.direction.DirectionSummary;
 import com.questrip.reward.support.response.SliceResult;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class PlaceService {
 
@@ -22,6 +24,8 @@ public class PlaceService {
     public Place save(String googlePlaceId, PlaceContent content, List<MultipartFile> files) {
         List<PlaceImage> images = placeImageUploader.upload(files);
         Place searched = placeSearcher.searchPlace(googlePlaceId).toPlace(content, images);
+        log.info("[place save] placeId : {} saved", searched.getGooglePlaceId());
+
         return placeAppender.append(searched);
     }
 
@@ -33,6 +37,12 @@ public class PlaceService {
     }
 
     public SliceResult<Place> findAllPlaceNear(LatLng userLocation, int page, int size) {
+        log.info("[findAllPlaceNear] request userLocation lat: {}, lng: {}", userLocation.getLatitude(), userLocation.getLongitude());
+
         return placeFinder.findAllNear(userLocation, page, size);
+    }
+
+    public String reverseGeocode(LatLng latLng) {
+        return placeSearcher.reverseGeocode(latLng).toAddress();
     }
 }

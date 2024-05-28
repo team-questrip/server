@@ -72,8 +72,8 @@ tasks.withType(GenerateSwaggerUI) {
 
 openapi3 {
     servers = [
-            { url = 'https://api.questrips.com' }
-            { url = 'http://localhost:8080' },
+            { url = 'https://api.questrips.com' },
+            { url = 'http://localhost:8080' }
     ]
     title = 'QUESTRIP API'
     description = 'QUESTRIP API description'

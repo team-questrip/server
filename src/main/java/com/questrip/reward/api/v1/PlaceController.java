@@ -5,6 +5,7 @@ import com.questrip.reward.api.v1.request.PlaceCreateRequest;
 import com.questrip.reward.api.v1.response.PlaceAndDirectionResponse;
 import com.questrip.reward.api.v1.response.PlaceResponse;
 import com.questrip.reward.api.v1.response.PlaceWithDistanceResponse;
+import com.questrip.reward.api.v1.response.ReverseGeocodeResponse;
 import com.questrip.reward.domain.place.Place;
 import com.questrip.reward.domain.place.PlaceAndDirection;
 import com.questrip.reward.domain.place.PlaceService;
@@ -42,5 +43,12 @@ public class PlaceController {
                 .map(p -> new PlaceWithDistanceResponse(p, location.toLocation()));
 
         return ApiResponse.success("장소 조회 성공", response);
+    }
+
+    @GetMapping("/api/v1/place/reverseGeocode")
+    public ApiResponse<ReverseGeocodeResponse> reverseGeocode(@ModelAttribute LocationRequest location) {
+        String address = placeService.reverseGeocode(location.toLocation());
+
+        return ApiResponse.success("주소 변환 성공", new ReverseGeocodeResponse(address));
     }
 }

@@ -138,7 +138,7 @@ class PlaceControllerTest extends RestDocsTest {
                                 fieldWithPath("data").type(JsonFieldType.OBJECT)
                                         .description("데이터"),
                                 fieldWithPath("data.place").type(JsonFieldType.OBJECT)
-                                                .description("플레이스"),
+                                        .description("플레이스"),
                                 fieldWithPath("data.place.id").type(JsonFieldType.STRING)
                                         .description("장소 아이디"),
                                 fieldWithPath("data.place.googlePlaceId").type(JsonFieldType.STRING)
@@ -192,11 +192,11 @@ class PlaceControllerTest extends RestDocsTest {
 
         // when & then
         mockMvc.perform(get("/api/v1/place")
-                .param("latitude", "37.5912474")
-                .param("longitude", "126.9184582")
-                .param("page", "0")
-                .param("size", "10")
-        )
+                        .param("latitude", "37.5912474")
+                        .param("longitude", "126.9184582")
+                        .param("page", "0")
+                        .param("size", "10")
+                )
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andDo(document("place-list-get",
@@ -259,5 +259,39 @@ class PlaceControllerTest extends RestDocsTest {
                                         .description("다음 페이지 존재 여부")
                         )
                 ));
+    }
+
+    @DisplayName("역지오코딩 API")
+    @Test
+    void reverseGeocode() throws Exception {
+        // given
+        given(placeService.reverseGeocode(any())).willReturn(
+                "226-19 Jamsil-dong, Songpa District, Seoul, South Korea"
+        );
+
+        // when & then
+        mockMvc.perform(get("/api/v1/place/reverseGeocode")
+                        .param("latitude", "37.5068006")
+                        .param("longitude", "127.0830179")
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("place-geocode",
+                        queryParameters(
+                                parameterWithName("latitude").description("유저 위도"),
+                                parameterWithName("longitude").description("유저 경도")
+                        ),
+                        responseFields(
+                                fieldWithPath("status").type(JsonFieldType.STRING)
+                                        .description("응답 상태"),
+                                fieldWithPath("message").type(JsonFieldType.STRING)
+                                        .description("메시지"),
+                                fieldWithPath("data").type(JsonFieldType.OBJECT)
+                                        .description("데이터"),
+                                fieldWithPath("data.formattedAddress").type(JsonFieldType.STRING)
+                                        .description("주소")
+                        )
+                ));
+
     }
 }
