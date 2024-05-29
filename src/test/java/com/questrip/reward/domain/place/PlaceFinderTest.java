@@ -1,8 +1,8 @@
 package com.questrip.reward.domain.place;
 
 import com.questrip.reward.fixture.PlaceFixture;
-import com.questrip.reward.storage.PlaceEntity;
-import com.questrip.reward.storage.PlaceMongoRepository;
+import com.questrip.reward.storage.mongo.PlaceEntity;
+import com.questrip.reward.storage.mongo.PlaceMongoRepository;
 import com.questrip.reward.support.response.SliceResult;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -12,7 +12,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ActiveProfiles("test")

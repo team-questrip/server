@@ -1,8 +1,8 @@
 package com.questrip.reward.domain.place;
 
 import com.questrip.reward.fixture.PlaceFixture;
-import com.questrip.reward.storage.PlaceEntity;
-import com.questrip.reward.storage.PlaceMongoRepository;
+import com.questrip.reward.storage.mongo.PlaceEntity;
+import com.questrip.reward.storage.mongo.PlaceMongoRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

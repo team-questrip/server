@@ -1,4 +1,4 @@
-package com.questrip.reward.storage;
+package com.questrip.reward.storage.mongo;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;

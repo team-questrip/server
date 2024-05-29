@@ -1,4 +1,4 @@
-package com.questrip.reward.storage;
+package com.questrip.reward.storage.mongo;
 
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;

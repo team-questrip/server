@@ -3,6 +3,8 @@ package com.questrip.reward.storage;
 import com.questrip.reward.domain.place.LatLng;
 import com.questrip.reward.domain.place.Place;
 import com.questrip.reward.domain.place.PlaceRepository;
+import com.questrip.reward.storage.mongo.PlaceEntity;
+import com.questrip.reward.storage.mongo.PlaceMongoRepository;
 import com.questrip.reward.support.error.ErrorCode;
 import com.questrip.reward.support.error.GlobalException;
 import com.questrip.reward.support.response.SliceResult;

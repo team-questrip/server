@@ -1,4 +1,4 @@
-package com.questrip.reward.storage;
+package com.questrip.reward.storage.mongo;
 
 import com.questrip.reward.domain.place.*;
 import jakarta.persistence.*;
