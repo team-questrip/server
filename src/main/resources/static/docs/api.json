@@ -14,7 +14,9 @@
   "paths" : {
     "/api/v1/place" : {
       "get" : {
-        "tags" : [ "api" ],
+        "tags" : [ "place" ],
+        "summary" : "장소 리스트 조회 API",
+        "description" : "장소 리스트 조회 API",
         "operationId" : "place-list-get",
         "parameters" : [ {
           "name" : "latitude",
@@ -59,7 +61,7 @@
                 },
                 "examples" : {
                   "place-list-get" : {
-                    "value" : "{\"status\":\"SUCCESS\",\"message\":\"장소 조회 성공\",\"data\":{\"content\":[{\"id\":\"6633897aa2757d5b1998ba0d\",\"googlePlaceId\":\"ChIJo0gMXbOlfDURSjmLcTy52qQ\",\"placeName\":\"Kkochijib\",\"primaryType\":\"japanese_restaurant\",\"formattedAddress\":\"South Korea, Seoul, Songpa-gu, 잠실본동 314-5\",\"location\":{\"latitude\":37.5051148,\"longitude\":127.08420179999999},\"content\":{\"recommendationReason\":\"testRecommend\",\"activity\":\"testActivity\"},\"images\":[{\"sequence\":1,\"url\":\"https://questrip-reward.s3.ap-northeast-2.amazonaws.com/836d62f7-b1a7-4550-b137-f292ea5f881c.HEIC\"},{\"sequence\":2,\"url\":\"https://questrip-reward.s3.ap-northeast-2.amazonaws.com/e2f8b8cc-fd53-47da-bea5-c113f8f6393c.jpeg\"}],\"openingHours\":[\"Monday: 5:00PM-2:00AM\",\"Tuesday: 5:00PM-2:00AM\",\"Wednesday: 5:00PM-2:00AM\",\"Thursday: 5:00PM-2:00AM\",\"Friday: 5:00PM-2:00AM\",\"Saturday: 5:00PM-2:00AM\",\"Sunday: 5:00PM-2:00AM\"],\"openNow\":\"CLOSE\",\"distance\":17.47104241758488}],\"page\":0,\"size\":10,\"numberOfElements\":1,\"hasNext\":false}}"
+                    "value" : "{\"status\":\"SUCCESS\",\"message\":\"장소 조회 성공\",\"data\":{\"content\":[{\"id\":\"6633897aa2757d5b1998ba0d\",\"googlePlaceId\":\"ChIJo0gMXbOlfDURSjmLcTy52qQ\",\"placeName\":\"Kkochijib\",\"primaryType\":\"japanese_restaurant\",\"formattedAddress\":\"South Korea, Seoul, Songpa-gu, 잠실본동 314-5\",\"location\":{\"latitude\":37.5051148,\"longitude\":127.08420179999999},\"content\":{\"recommendationReason\":\"testRecommend\",\"activity\":\"testActivity\"},\"images\":[{\"sequence\":1,\"url\":\"https://questrip-reward.s3.ap-northeast-2.amazonaws.com/836d62f7-b1a7-4550-b137-f292ea5f881c.HEIC\"},{\"sequence\":2,\"url\":\"https://questrip-reward.s3.ap-northeast-2.amazonaws.com/e2f8b8cc-fd53-47da-bea5-c113f8f6393c.jpeg\"}],\"openingHours\":[\"Monday: 5:00PM-2:00AM\",\"Tuesday: 5:00PM-2:00AM\",\"Wednesday: 5:00PM-2:00AM\",\"Thursday: 5:00PM-2:00AM\",\"Friday: 5:00PM-2:00AM\",\"Saturday: 5:00PM-2:00AM\",\"Sunday: 5:00PM-2:00AM\"],\"openNow\":\"OPEN\",\"distance\":17.47104241758488}],\"page\":0,\"size\":10,\"numberOfElements\":1,\"hasNext\":false}}"
                   }
                 }
               }
@@ -68,7 +70,9 @@
         }
       },
       "post" : {
-        "tags" : [ "api" ],
+        "tags" : [ "place" ],
+        "summary" : "장소 등록 API",
+        "description" : "장소 등록 API",
         "operationId" : "place-create",
         "requestBody" : {
           "content" : {
@@ -94,7 +98,7 @@
                 },
                 "examples" : {
                   "place-create" : {
-                    "value" : "{\"status\":\"SUCCESS\",\"message\":\"장소 저장 성공\",\"data\":{\"id\":\"6633897aa2757d5b1998ba0d\",\"googlePlaceId\":\"ChIJo0gMXbOlfDURSjmLcTy52qQ\",\"placeName\":\"Kkochijib\",\"primaryType\":\"japanese_restaurant\",\"formattedAddress\":\"South Korea, Seoul, Songpa-gu, 잠실본동 314-5\",\"location\":{\"latitude\":37.5051148,\"longitude\":127.08420179999999},\"content\":{\"recommendationReason\":\"testRecommend\",\"activity\":\"testActivity\"},\"images\":[{\"sequence\":1,\"url\":\"https://questrip-reward.s3.ap-northeast-2.amazonaws.com/836d62f7-b1a7-4550-b137-f292ea5f881c.HEIC\"},{\"sequence\":2,\"url\":\"https://questrip-reward.s3.ap-northeast-2.amazonaws.com/e2f8b8cc-fd53-47da-bea5-c113f8f6393c.jpeg\"}],\"openingHours\":[\"Monday: 5:00PM-2:00AM\",\"Tuesday: 5:00PM-2:00AM\",\"Wednesday: 5:00PM-2:00AM\",\"Thursday: 5:00PM-2:00AM\",\"Friday: 5:00PM-2:00AM\",\"Saturday: 5:00PM-2:00AM\",\"Sunday: 5:00PM-2:00AM\"],\"openNow\":\"CLOSE\"}}"
+                    "value" : "{\"status\":\"SUCCESS\",\"message\":\"장소 저장 성공\",\"data\":{\"id\":\"6633897aa2757d5b1998ba0d\",\"googlePlaceId\":\"ChIJo0gMXbOlfDURSjmLcTy52qQ\",\"placeName\":\"Kkochijib\",\"primaryType\":\"japanese_restaurant\",\"formattedAddress\":\"South Korea, Seoul, Songpa-gu, 잠실본동 314-5\",\"location\":{\"latitude\":37.5051148,\"longitude\":127.08420179999999},\"content\":{\"recommendationReason\":\"testRecommend\",\"activity\":\"testActivity\"},\"images\":[{\"sequence\":1,\"url\":\"https://questrip-reward.s3.ap-northeast-2.amazonaws.com/836d62f7-b1a7-4550-b137-f292ea5f881c.HEIC\"},{\"sequence\":2,\"url\":\"https://questrip-reward.s3.ap-northeast-2.amazonaws.com/e2f8b8cc-fd53-47da-bea5-c113f8f6393c.jpeg\"}],\"openingHours\":[\"Monday: 5:00PM-2:00AM\",\"Tuesday: 5:00PM-2:00AM\",\"Wednesday: 5:00PM-2:00AM\",\"Thursday: 5:00PM-2:00AM\",\"Friday: 5:00PM-2:00AM\",\"Saturday: 5:00PM-2:00AM\",\"Sunday: 5:00PM-2:00AM\"],\"openNow\":\"OPEN\"}}"
                   }
                 }
               }
@@ -105,7 +109,9 @@
     },
     "/api/v1/question" : {
       "post" : {
-        "tags" : [ "api" ],
+        "tags" : [ "question" ],
+        "summary" : "문의 등록 API",
+        "description" : "문의 등록 API",
         "operationId" : "question-post",
         "requestBody" : {
           "content" : {
@@ -142,7 +148,9 @@
     },
     "/api/v1/place/reverseGeocode" : {
       "get" : {
-        "tags" : [ "api" ],
+        "tags" : [ "place" ],
+        "summary" : "리버스 지오코딩 API",
+        "description" : "리버스 지오코딩 API",
         "operationId" : "place-geocode",
         "parameters" : [ {
           "name" : "latitude",
@@ -182,7 +190,9 @@
     },
     "/api/v1/place/{placeId}" : {
       "get" : {
-        "tags" : [ "api" ],
+        "tags" : [ "place" ],
+        "summary" : "장소 조회 API",
+        "description" : "장소 조회 API",
         "operationId" : "place-get",
         "parameters" : [ {
           "name" : "placeId",
@@ -219,7 +229,7 @@
                 },
                 "examples" : {
                   "place-get" : {
-                    "value" : "{\"status\":\"SUCCESS\",\"message\":\"장소 조회 성공\",\"data\":{\"place\":{\"id\":\"6633897aa2757d5b1998ba0d\",\"googlePlaceId\":\"ChIJo0gMXbOlfDURSjmLcTy52qQ\",\"placeName\":\"Kkochijib\",\"primaryType\":\"japanese_restaurant\",\"formattedAddress\":\"South Korea, Seoul, Songpa-gu, 잠실본동 314-5\",\"location\":{\"latitude\":37.5051148,\"longitude\":127.08420179999999},\"content\":{\"recommendationReason\":\"testRecommend\",\"activity\":\"testActivity\"},\"images\":[{\"sequence\":1,\"url\":\"https://questrip-reward.s3.ap-northeast-2.amazonaws.com/836d62f7-b1a7-4550-b137-f292ea5f881c.HEIC\"},{\"sequence\":2,\"url\":\"https://questrip-reward.s3.ap-northeast-2.amazonaws.com/e2f8b8cc-fd53-47da-bea5-c113f8f6393c.jpeg\"}],\"openingHours\":[\"Monday: 5:00PM-2:00AM\",\"Tuesday: 5:00PM-2:00AM\",\"Wednesday: 5:00PM-2:00AM\",\"Thursday: 5:00PM-2:00AM\",\"Friday: 5:00PM-2:00AM\",\"Saturday: 5:00PM-2:00AM\",\"Sunday: 5:00PM-2:00AM\"],\"openNow\":\"CLOSE\"},\"directionSummary\":{\"distance\":\"27.1 km\",\"duration\":\"1 hour 16 mins\"}}}"
+                    "value" : "{\"status\":\"SUCCESS\",\"message\":\"장소 조회 성공\",\"data\":{\"place\":{\"id\":\"6633897aa2757d5b1998ba0d\",\"googlePlaceId\":\"ChIJo0gMXbOlfDURSjmLcTy52qQ\",\"placeName\":\"Kkochijib\",\"primaryType\":\"japanese_restaurant\",\"formattedAddress\":\"South Korea, Seoul, Songpa-gu, 잠실본동 314-5\",\"location\":{\"latitude\":37.5051148,\"longitude\":127.08420179999999},\"content\":{\"recommendationReason\":\"testRecommend\",\"activity\":\"testActivity\"},\"images\":[{\"sequence\":1,\"url\":\"https://questrip-reward.s3.ap-northeast-2.amazonaws.com/836d62f7-b1a7-4550-b137-f292ea5f881c.HEIC\"},{\"sequence\":2,\"url\":\"https://questrip-reward.s3.ap-northeast-2.amazonaws.com/e2f8b8cc-fd53-47da-bea5-c113f8f6393c.jpeg\"}],\"openingHours\":[\"Monday: 5:00PM-2:00AM\",\"Tuesday: 5:00PM-2:00AM\",\"Wednesday: 5:00PM-2:00AM\",\"Thursday: 5:00PM-2:00AM\",\"Friday: 5:00PM-2:00AM\",\"Saturday: 5:00PM-2:00AM\",\"Sunday: 5:00PM-2:00AM\"],\"openNow\":\"OPEN\"},\"directionSummary\":{\"distance\":\"27.1 km\",\"duration\":\"1 hour 16 mins\"}}}"
                   }
                 }
               }

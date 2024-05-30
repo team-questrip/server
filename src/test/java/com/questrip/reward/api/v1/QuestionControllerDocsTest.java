@@ -10,16 +10,15 @@ import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
-import static org.junit.jupiter.api.Assertions.*;
+import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.resourceDetails;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-class QuestionControllerTest extends RestDocsTest {
+class QuestionControllerDocsTest extends RestDocsTest {
 
     private final QuestionService questionService = mock(QuestionService.class);
 
@@ -42,6 +41,9 @@ class QuestionControllerTest extends RestDocsTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andDo(document("question-post",
+                        resourceDetails()
+                                .tag("question")
+                                .description("문의 등록 API"),
                         requestFields(
                                 fieldWithPath("content").type(JsonFieldType.STRING)
                                         .description("내용"),

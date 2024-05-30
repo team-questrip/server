@@ -8,13 +8,12 @@ import com.questrip.reward.fixture.PlaceFixture;
 import com.questrip.reward.support.response.SliceResult;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.payload.JsonFieldType;
 
 import java.util.List;
 
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
+import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.resourceDetails;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.BDDMockito.given;
@@ -26,7 +25,7 @@ import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-class PlaceControllerTest extends RestDocsTest {
+class PlaceControllerDocsTest extends RestDocsTest {
 
     private final PlaceService placeService = mock(PlaceService.class);
 
@@ -53,6 +52,9 @@ class PlaceControllerTest extends RestDocsTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andDo(document("place-create",
+                        resourceDetails()
+                                .tag("place")
+                                .description("장소 등록 API"),
                         formParameters(
                                 parameterWithName("googlePlaceId").description("구글 플레이스 아이디"),
                                 parameterWithName("recommendationReason").description("추천 이유"),
@@ -123,6 +125,9 @@ class PlaceControllerTest extends RestDocsTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andDo(document("place-get",
+                        resourceDetails()
+                                .tag("place")
+                                .description("장소 조회 API"),
                         pathParameters(
                                 parameterWithName("placeId").description("플레이스 아이디(구글 x)")
                         ),
@@ -200,6 +205,9 @@ class PlaceControllerTest extends RestDocsTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andDo(document("place-list-get",
+                        resourceDetails()
+                                .tag("place")
+                                .description("장소 리스트 조회 API"),
                         queryParameters(
                                 parameterWithName("latitude").description("유저 위도"),
                                 parameterWithName("longitude").description("유저 경도"),
@@ -277,6 +285,9 @@ class PlaceControllerTest extends RestDocsTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andDo(document("place-geocode",
+                        resourceDetails()
+                                .tag("place")
+                                .description("리버스 지오코딩 API"),
                         queryParameters(
                                 parameterWithName("latitude").description("유저 위도"),
                                 parameterWithName("longitude").description("유저 경도")
