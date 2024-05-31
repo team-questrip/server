@@ -61,7 +61,7 @@
                 },
                 "examples" : {
                   "place-list-get" : {
-                    "value" : "{\"status\":\"SUCCESS\",\"message\":\"장소 조회 성공\",\"data\":{\"content\":[{\"id\":\"6633897aa2757d5b1998ba0d\",\"googlePlaceId\":\"ChIJo0gMXbOlfDURSjmLcTy52qQ\",\"placeName\":\"Kkochijib\",\"primaryType\":\"japanese_restaurant\",\"formattedAddress\":\"South Korea, Seoul, Songpa-gu, 잠실본동 314-5\",\"location\":{\"latitude\":37.5051148,\"longitude\":127.08420179999999},\"content\":{\"recommendationReason\":\"testRecommend\",\"activity\":\"testActivity\"},\"images\":[{\"sequence\":1,\"url\":\"https://questrip-reward.s3.ap-northeast-2.amazonaws.com/836d62f7-b1a7-4550-b137-f292ea5f881c.HEIC\"},{\"sequence\":2,\"url\":\"https://questrip-reward.s3.ap-northeast-2.amazonaws.com/e2f8b8cc-fd53-47da-bea5-c113f8f6393c.jpeg\"}],\"openingHours\":[\"Monday: 5:00PM-2:00AM\",\"Tuesday: 5:00PM-2:00AM\",\"Wednesday: 5:00PM-2:00AM\",\"Thursday: 5:00PM-2:00AM\",\"Friday: 5:00PM-2:00AM\",\"Saturday: 5:00PM-2:00AM\",\"Sunday: 5:00PM-2:00AM\"],\"openNow\":\"OPEN\",\"distance\":17.47104241758488}],\"page\":0,\"size\":10,\"numberOfElements\":1,\"hasNext\":false}}"
+                    "value" : "{\"status\":\"SUCCESS\",\"message\":\"장소 조회 성공\",\"data\":{\"content\":[{\"id\":\"6633897aa2757d5b1998ba0d\",\"googlePlaceId\":\"ChIJo0gMXbOlfDURSjmLcTy52qQ\",\"placeName\":\"Kkochijib\",\"primaryType\":\"japanese_restaurant\",\"formattedAddress\":\"South Korea, Seoul, Songpa-gu, 잠실본동 314-5\",\"location\":{\"latitude\":37.5051148,\"longitude\":127.08420179999999},\"content\":{\"recommendationReason\":\"testRecommend\",\"activity\":\"testActivity\"},\"images\":[{\"sequence\":1,\"url\":\"https://questrip-reward.s3.ap-northeast-2.amazonaws.com/836d62f7-b1a7-4550-b137-f292ea5f881c.HEIC\"},{\"sequence\":2,\"url\":\"https://questrip-reward.s3.ap-northeast-2.amazonaws.com/e2f8b8cc-fd53-47da-bea5-c113f8f6393c.jpeg\"}],\"openingHours\":[\"Monday: 5:00PM-2:00AM\",\"Tuesday: 5:00PM-2:00AM\",\"Wednesday: 5:00PM-2:00AM\",\"Thursday: 5:00PM-2:00AM\",\"Friday: 5:00PM-2:00AM\",\"Saturday: 5:00PM-2:00AM\",\"Sunday: 5:00PM-2:00AM\"],\"openNow\":\"CLOSE\",\"distance\":17.47104241758488}],\"page\":0,\"size\":10,\"numberOfElements\":1,\"hasNext\":false}}"
                   }
                 }
               }
@@ -98,7 +98,7 @@
                 },
                 "examples" : {
                   "place-create" : {
-                    "value" : "{\"status\":\"SUCCESS\",\"message\":\"장소 저장 성공\",\"data\":{\"id\":\"6633897aa2757d5b1998ba0d\",\"googlePlaceId\":\"ChIJo0gMXbOlfDURSjmLcTy52qQ\",\"placeName\":\"Kkochijib\",\"primaryType\":\"japanese_restaurant\",\"formattedAddress\":\"South Korea, Seoul, Songpa-gu, 잠실본동 314-5\",\"location\":{\"latitude\":37.5051148,\"longitude\":127.08420179999999},\"content\":{\"recommendationReason\":\"testRecommend\",\"activity\":\"testActivity\"},\"images\":[{\"sequence\":1,\"url\":\"https://questrip-reward.s3.ap-northeast-2.amazonaws.com/836d62f7-b1a7-4550-b137-f292ea5f881c.HEIC\"},{\"sequence\":2,\"url\":\"https://questrip-reward.s3.ap-northeast-2.amazonaws.com/e2f8b8cc-fd53-47da-bea5-c113f8f6393c.jpeg\"}],\"openingHours\":[\"Monday: 5:00PM-2:00AM\",\"Tuesday: 5:00PM-2:00AM\",\"Wednesday: 5:00PM-2:00AM\",\"Thursday: 5:00PM-2:00AM\",\"Friday: 5:00PM-2:00AM\",\"Saturday: 5:00PM-2:00AM\",\"Sunday: 5:00PM-2:00AM\"],\"openNow\":\"OPEN\"}}"
+                    "value" : "{\"status\":\"SUCCESS\",\"message\":\"장소 저장 성공\",\"data\":{\"id\":\"6633897aa2757d5b1998ba0d\",\"googlePlaceId\":\"ChIJo0gMXbOlfDURSjmLcTy52qQ\",\"placeName\":\"Kkochijib\",\"primaryType\":\"japanese_restaurant\",\"formattedAddress\":\"South Korea, Seoul, Songpa-gu, 잠실본동 314-5\",\"location\":{\"latitude\":37.5051148,\"longitude\":127.08420179999999},\"content\":{\"recommendationReason\":\"testRecommend\",\"activity\":\"testActivity\"},\"images\":[{\"sequence\":1,\"url\":\"https://questrip-reward.s3.ap-northeast-2.amazonaws.com/836d62f7-b1a7-4550-b137-f292ea5f881c.HEIC\"},{\"sequence\":2,\"url\":\"https://questrip-reward.s3.ap-northeast-2.amazonaws.com/e2f8b8cc-fd53-47da-bea5-c113f8f6393c.jpeg\"}],\"openingHours\":[\"Monday: 5:00PM-2:00AM\",\"Tuesday: 5:00PM-2:00AM\",\"Wednesday: 5:00PM-2:00AM\",\"Thursday: 5:00PM-2:00AM\",\"Friday: 5:00PM-2:00AM\",\"Saturday: 5:00PM-2:00AM\",\"Sunday: 5:00PM-2:00AM\"],\"openNow\":\"CLOSE\"}}"
                   }
                 }
               }
@@ -133,7 +133,7 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/api-v1-question1876876947"
+                  "$ref" : "#/components/schemas/api-v1-user-checkEmail1876876947"
                 },
                 "examples" : {
                   "question-post" : {
@@ -229,7 +229,124 @@
                 },
                 "examples" : {
                   "place-get" : {
-                    "value" : "{\"status\":\"SUCCESS\",\"message\":\"장소 조회 성공\",\"data\":{\"place\":{\"id\":\"6633897aa2757d5b1998ba0d\",\"googlePlaceId\":\"ChIJo0gMXbOlfDURSjmLcTy52qQ\",\"placeName\":\"Kkochijib\",\"primaryType\":\"japanese_restaurant\",\"formattedAddress\":\"South Korea, Seoul, Songpa-gu, 잠실본동 314-5\",\"location\":{\"latitude\":37.5051148,\"longitude\":127.08420179999999},\"content\":{\"recommendationReason\":\"testRecommend\",\"activity\":\"testActivity\"},\"images\":[{\"sequence\":1,\"url\":\"https://questrip-reward.s3.ap-northeast-2.amazonaws.com/836d62f7-b1a7-4550-b137-f292ea5f881c.HEIC\"},{\"sequence\":2,\"url\":\"https://questrip-reward.s3.ap-northeast-2.amazonaws.com/e2f8b8cc-fd53-47da-bea5-c113f8f6393c.jpeg\"}],\"openingHours\":[\"Monday: 5:00PM-2:00AM\",\"Tuesday: 5:00PM-2:00AM\",\"Wednesday: 5:00PM-2:00AM\",\"Thursday: 5:00PM-2:00AM\",\"Friday: 5:00PM-2:00AM\",\"Saturday: 5:00PM-2:00AM\",\"Sunday: 5:00PM-2:00AM\"],\"openNow\":\"OPEN\"},\"directionSummary\":{\"distance\":\"27.1 km\",\"duration\":\"1 hour 16 mins\"}}}"
+                    "value" : "{\"status\":\"SUCCESS\",\"message\":\"장소 조회 성공\",\"data\":{\"place\":{\"id\":\"6633897aa2757d5b1998ba0d\",\"googlePlaceId\":\"ChIJo0gMXbOlfDURSjmLcTy52qQ\",\"placeName\":\"Kkochijib\",\"primaryType\":\"japanese_restaurant\",\"formattedAddress\":\"South Korea, Seoul, Songpa-gu, 잠실본동 314-5\",\"location\":{\"latitude\":37.5051148,\"longitude\":127.08420179999999},\"content\":{\"recommendationReason\":\"testRecommend\",\"activity\":\"testActivity\"},\"images\":[{\"sequence\":1,\"url\":\"https://questrip-reward.s3.ap-northeast-2.amazonaws.com/836d62f7-b1a7-4550-b137-f292ea5f881c.HEIC\"},{\"sequence\":2,\"url\":\"https://questrip-reward.s3.ap-northeast-2.amazonaws.com/e2f8b8cc-fd53-47da-bea5-c113f8f6393c.jpeg\"}],\"openingHours\":[\"Monday: 5:00PM-2:00AM\",\"Tuesday: 5:00PM-2:00AM\",\"Wednesday: 5:00PM-2:00AM\",\"Thursday: 5:00PM-2:00AM\",\"Friday: 5:00PM-2:00AM\",\"Saturday: 5:00PM-2:00AM\",\"Sunday: 5:00PM-2:00AM\"],\"openNow\":\"CLOSE\"},\"directionSummary\":{\"distance\":\"27.1 km\",\"duration\":\"1 hour 16 mins\"}}}"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/user/checkEmail" : {
+      "post" : {
+        "tags" : [ "user" ],
+        "summary" : "이메일 중복검사 API",
+        "description" : "이메일 중복검사 API",
+        "operationId" : "user-checkEmail",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/api-v1-user-checkEmail1625218753"
+              },
+              "examples" : {
+                "user-checkEmail" : {
+                  "value" : "{\"email\":\"harok@questrips.com\"}"
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "200",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/api-v1-user-checkEmail1876876947"
+                },
+                "examples" : {
+                  "user-checkEmail" : {
+                    "value" : "{\"status\":\"SUCCESS\",\"message\":\"이메일 사용 가능\",\"data\":null}"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/user/join" : {
+      "post" : {
+        "tags" : [ "user" ],
+        "summary" : "회원가입 API",
+        "description" : "회원가입 API",
+        "operationId" : "user-create",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/api-v1-user-join-167844841"
+              },
+              "examples" : {
+                "user-create" : {
+                  "value" : "{\"username\":\"harok\",\"email\":\"harok@questrips.com\",\"password\":\"harok123\"}"
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "200",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/api-v1-user-login1984296762"
+                },
+                "examples" : {
+                  "user-create" : {
+                    "value" : "{\"status\":\"SUCCESS\",\"message\":\"회원가입 완료\",\"data\":{\"user\":{\"id\":1,\"username\":\"harok\",\"email\":\"harok@questrips.com\",\"role\":\"USER\"},\"accessToken\":\"accessToken\"}}"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/user/login" : {
+      "post" : {
+        "tags" : [ "user" ],
+        "summary" : "로그인 API",
+        "description" : "로그인 API",
+        "operationId" : "user-login",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/api-v1-user-login1120333644"
+              },
+              "examples" : {
+                "user-login" : {
+                  "value" : "{\"email\":\"harok@questrips.com\",\"password\":\"harok123\"}"
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "200",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/api-v1-user-login1984296762"
+                },
+                "examples" : {
+                  "user-login" : {
+                    "value" : "{\"status\":\"SUCCESS\",\"message\":\"로그인 완료\",\"data\":{\"user\":{\"id\":1,\"username\":\"harok\",\"email\":\"harok@questrips.com\",\"role\":\"USER\"},\"accessToken\":\"accessToken\"}}"
                   }
                 }
               }
@@ -440,6 +557,38 @@
           }
         }
       },
+      "api-v1-user-join-167844841" : {
+        "required" : [ "email", "password", "username" ],
+        "type" : "object",
+        "properties" : {
+          "password" : {
+            "type" : "string",
+            "description" : "비밀번호"
+          },
+          "email" : {
+            "type" : "string",
+            "description" : "유저 메일"
+          },
+          "username" : {
+            "type" : "string",
+            "description" : "유저 이름"
+          }
+        }
+      },
+      "api-v1-user-login1120333644" : {
+        "required" : [ "email", "password" ],
+        "type" : "object",
+        "properties" : {
+          "password" : {
+            "type" : "string",
+            "description" : "비밀번호"
+          },
+          "email" : {
+            "type" : "string",
+            "description" : "유저 메일"
+          }
+        }
+      },
       "api-v1-place-placeId-2120279981" : {
         "required" : [ "data", "message", "status" ],
         "type" : "object",
@@ -570,7 +719,7 @@
           }
         }
       },
-      "api-v1-question1876876947" : {
+      "api-v1-user-checkEmail1876876947" : {
         "required" : [ "data", "message", "status" ],
         "type" : "object",
         "properties" : {
@@ -689,6 +838,64 @@
           "status" : {
             "type" : "string",
             "description" : "응답 상태"
+          }
+        }
+      },
+      "api-v1-user-login1984296762" : {
+        "required" : [ "data", "message", "status" ],
+        "type" : "object",
+        "properties" : {
+          "data" : {
+            "required" : [ "accessToken", "user" ],
+            "type" : "object",
+            "properties" : {
+              "accessToken" : {
+                "type" : "string",
+                "description" : "토큰"
+              },
+              "user" : {
+                "required" : [ "email", "id", "role", "username" ],
+                "type" : "object",
+                "properties" : {
+                  "role" : {
+                    "type" : "string",
+                    "description" : "유저 권한"
+                  },
+                  "id" : {
+                    "type" : "number",
+                    "description" : "유저 아이디"
+                  },
+                  "email" : {
+                    "type" : "string",
+                    "description" : "유저 이메일"
+                  },
+                  "username" : {
+                    "type" : "string",
+                    "description" : "유저 이름"
+                  }
+                },
+                "description" : "유저"
+              }
+            },
+            "description" : "데이터"
+          },
+          "message" : {
+            "type" : "string",
+            "description" : "메시지"
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "응답 상태"
+          }
+        }
+      },
+      "api-v1-user-checkEmail1625218753" : {
+        "required" : [ "email" ],
+        "type" : "object",
+        "properties" : {
+          "email" : {
+            "type" : "string",
+            "description" : "유저 메일"
           }
         }
       }
