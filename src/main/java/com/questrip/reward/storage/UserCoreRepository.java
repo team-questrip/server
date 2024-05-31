@@ -32,7 +32,7 @@ public class UserCoreRepository implements UserRepository {
     @Override
     public void validateDuplicatedEmail(String email) {
         if(userJpaRepository.existsByEmail(email)) {
-            throw new GlobalException(ErrorCode.DUPLICATED_EMAIL, String.format("email is duplicated. request emila is %s", email));
+            throw new GlobalException(ErrorCode.DUPLICATED_EMAIL, String.format("email is duplicated. request email is %s", email));
         }
     }
 }

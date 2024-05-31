@@ -9,6 +9,6 @@ public class UserValidator {
     private final UserRepository userRepository;
 
     public void validateEmail(String email) {
-        userRepository.findByEmail(email);
+        userRepository.validateDuplicatedEmail(email);
     }
 }
