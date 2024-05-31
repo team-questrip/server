@@ -1,6 +1,5 @@
 package com.questrip.reward.domain.user;
 
-import com.questrip.reward.security.jwt.JwtUtils;
 import com.questrip.reward.support.error.ErrorCode;
 import com.questrip.reward.support.error.GlobalException;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +15,7 @@ public class UserLoginProcessor {
 
     public User login(String email, String password) {
         User user = userReader.read(email);
-        if(passwordEncoder.matches(password, user.getPassword())) {
+        if(!passwordEncoder.matches(password, user.getPassword())) {
             throw new GlobalException(ErrorCode.INVALID_PASSWORD);
         }
 
