@@ -19,6 +19,7 @@ public class UserEntity extends BaseEntity {
     private String username;
     private String email;
     private String password;
+    @Enumerated(value = EnumType.STRING)
     private User.Role role;
 
     public User toUser() {
