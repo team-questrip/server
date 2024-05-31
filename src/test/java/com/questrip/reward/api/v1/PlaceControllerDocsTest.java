@@ -8,6 +8,8 @@ import com.questrip.reward.fixture.PlaceFixture;
 import com.questrip.reward.support.response.SliceResult;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.restdocs.payload.JsonFieldType;
 
 import java.util.List;
@@ -17,7 +19,6 @@ import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.resour
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
@@ -25,14 +26,11 @@ import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@WebMvcTest(controllers = PlaceController.class)
 class PlaceControllerDocsTest extends RestDocsTest {
 
-    private final PlaceService placeService = mock(PlaceService.class);
-
-    @Override
-    protected Object initializeController() {
-        return new PlaceController(placeService);
-    }
+    @MockBean
+    PlaceService placeService;
 
     @DisplayName("장소 등록 API")
     @Test

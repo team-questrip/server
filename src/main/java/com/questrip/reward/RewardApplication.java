@@ -9,8 +9,6 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 
 @SpringBootApplication
 @EnableFeignClients
-@EnableMongoRepositories(basePackages = "com.questrip.reward.storage.mongo")
-@EnableJpaRepositories(basePackages = "com.questrip.reward.storage.mysql")
 public class RewardApplication {
 
     public static void main(String[] args) {

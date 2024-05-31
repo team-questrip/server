@@ -45,7 +45,7 @@ dependencies {
     testImplementation 'com.epages:restdocs-api-spec-mockmvc:0.18.4'
 
     // swagger
-    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
+    swaggerUI 'org.webjars:swagger-ui:4.11.1'
 
     // retry
     implementation 'org.springframework.retry:spring-retry'
@@ -69,13 +69,33 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
+swaggerSources {
+    sample {
+        setInputFile(file("build/api-spec/openapi3.yaml"))
+    }
+}
+
 tasks.withType(GenerateSwaggerUI) {
     dependsOn 'openapi3'
+    doFirst {
+        def swaggerUIFile = file("${openapi3.outputDirectory}/openapi3.yaml")
 
-    delete file('src/main/resources/static/docs/')
-    copy {
-        from "build/resources/main/static/docs"
-        into "src/main/resources/static/docs/"
+        def securitySchemesContent =  "  securitySchemes:\n" +  \
+                                      "    APIKey:\n" +  \
+                                      "      type: apiKey\n" +  \
+                                      "      name: Authorization\n" +  \
+                                      "      in: header\n" + \
+                                      "security:\n" +
+                "  - APIKey: []  # Apply the security scheme here"
+
+        swaggerUIFile.append securitySchemesContent
+    }
+}
+
+bootJar {
+    dependsOn generateSwaggerUISample
+    from("${generateSwaggerUISample.outputDir}") {
+        into 'static/docs'
     }
 }
 
@@ -87,12 +107,5 @@ openapi3 {
     title = 'QUESTRIP API'
     description = 'QUESTRIP API description'
     version = '1.0.0'
-    outputFileNamePrefix = 'api'
-    format = 'json'
-
-    outputDirectory = 'build/resources/main/static/docs'
-}
-
-bootJar {
-    dependsOn(':openapi3')
+    format = 'yaml'
 }

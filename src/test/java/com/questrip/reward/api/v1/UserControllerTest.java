@@ -5,18 +5,16 @@ import com.questrip.reward.api.v1.request.UserCreateRequest;
 import com.questrip.reward.api.v1.request.UserEmailValidateRequest;
 import com.questrip.reward.api.v1.request.UserLoginRequest;
 import com.questrip.reward.domain.user.UserService;
-import com.questrip.reward.domain.user.UserValidator;
 import com.questrip.reward.fixture.UserFixture;
-import com.questrip.reward.support.error.ErrorCode;
-import com.questrip.reward.support.error.GlobalException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.resourceDetails;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doThrow;
@@ -26,12 +24,11 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@WebMvcTest(controllers = UserController.class)
 class UserControllerTest extends RestDocsTest {
-    private final UserService userService = mock(UserService.class);
-    @Override
-    protected Object initializeController() {
-        return new UserController(userService);
-    }
+
+    @MockBean
+    UserService userService;
 
     @DisplayName("회원가입 API")
     @Test
