@@ -15,7 +15,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-@ActiveProfiles("test")
+//@ActiveProfiles("test")
 class PlaceAppenderTest {
 
     @Autowired
@@ -25,9 +25,9 @@ class PlaceAppenderTest {
     private PlaceMongoRepository placeMongoRepository;
 
     @AfterEach
-    void tearDown() {
-        placeMongoRepository.deleteAll();
-    }
+//    void tearDown() {
+//        placeMongoRepository.deleteAll();
+//    }
 
     @DisplayName("Place를 저장한다.")
     @Test

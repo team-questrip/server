@@ -11,6 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
@@ -123,5 +127,26 @@ class PlaceFinderTest {
                 .containsExactly(
                         홍대입구역, 롯데월드
                 );
+    }
+
+    @DisplayName("place id 리스트에 있는 장소는 제외하고 추천한다.")
+    @Test
+    void findRecommendPlace() {
+        // given
+        for(int i=0; i<10; i++) {
+            placeMongoRepository.save(PlaceEntity.from(PlaceFixture.get()));
+        }
+        List<String> placeIds = placeMongoRepository.findAll()
+                .stream()
+                .map(PlaceEntity::getId)
+                .collect(Collectors.toList());
+
+        LatLng location = new LatLng(37.5581082, 126.9259574);
+
+        // when
+        List<Place> recommendPlace = placeFinder.findRecommendPlace(location, List.of(placeIds.get(0), placeIds.get(1)));
+
+        // then
+        assertThat(recommendPlace.size()).isEqualTo(8);
     }
 }

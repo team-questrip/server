@@ -31,7 +31,7 @@ class RecommendRepositoryTest {
         recommendJpaRepository.deleteAllInBatch();
     }
 
-    @DisplayName("거절된 추천 장소는 추천하지 않는다.")
+    @DisplayName("거절된 추천 장소를 포함한다.")
     @Test
     void getExcludePlaceId() {
         // given
@@ -58,10 +58,10 @@ class RecommendRepositoryTest {
         // then
         assertThat(placeIds.size()).isEqualTo(2);
         assertThat(placeIds)
-                .contains("test3", "test4");
+                .contains("test1", "test2");
     }
 
-    @DisplayName("당일 수락, 저장된 추천 장소는 추천하지 않는다.")
+    @DisplayName("당일 수락, 저장된 추천 장소를 포함한다.")
     @Test
     void getExcludePlaceId2() {
         // given
@@ -87,7 +87,7 @@ class RecommendRepositoryTest {
         List<String> placeIds = recommendRepository.getExcludePlaceIds(1L, start, end);
 
         // then
-        assertThat(placeIds.size()).isZero();
+        assertThat(placeIds.size()).isEqualTo(4);
     }
 
     @DisplayName("")
@@ -98,13 +98,11 @@ class RecommendRepositoryTest {
         Long userId2 = 2L;
 
         Recommend reco1 = createRecommend("test1", userId, Recommend.Status.DENIED);
-        Recommend reco2 = createRecommend("test2", userId, Recommend.Status.DENIED);
+        Recommend reco2 = createRecommend("test2", userId2, Recommend.Status.DENIED);
         Recommend reco3 = createRecommend("test3", userId, Recommend.Status.ACCEPTED);
         Recommend reco4 = createRecommend("test4", userId, Recommend.Status.KEPT);
-        Recommend reco5 = createRecommend("test5", userId2, Recommend.Status.ACCEPTED);
-        Recommend reco6 = createRecommend("test6", userId2, Recommend.Status.KEPT);
 
-        List<RecommendEntity> recommends = List.of(reco1, reco2, reco3, reco4, reco5, reco6)
+        List<RecommendEntity> recommends = List.of(reco1, reco2, reco3, reco4)
                 .stream()
                 .map(RecommendEntity::from)
                 .collect(Collectors.toList());
@@ -118,8 +116,7 @@ class RecommendRepositoryTest {
         List<String> placeIds = recommendRepository.getExcludePlaceIds(1L, start, end);
 
         // then
-        assertThat(placeIds.size()).isEqualTo(2);
-        assertThat(placeIds).contains("test3", "test4");
+        assertThat(placeIds.size()).isEqualTo(1);
     }
 
     private Recommend createRecommend(String placeId, Long userId, Recommend.Status status) {

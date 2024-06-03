@@ -26,7 +26,15 @@ public class RecommendQueryRepository {
 
     private BooleanExpression cond(Long userId, LocalDateTime start, LocalDateTime end) {
         return recommendEntity.userId.eq(userId)
-                .and(recommendEntity.status.ne(Recommend.Status.DENIED))
-                .and(recommendEntity.createdAt.notBetween(start, end));
+                .and(recommendEntity.status.eq(Recommend.Status.DENIED))
+                .or(recommendEntity.placeId.in(getTodayCreatedRecommendPlace(userId, start, end)));
+    }
+
+    private List<String> getTodayCreatedRecommendPlace(Long userId, LocalDateTime start, LocalDateTime end) {
+        return jpaQueryFactory.select(recommendEntity.placeId)
+                .from(recommendEntity)
+                .where(recommendEntity.userId.eq(userId))
+                .where(recommendEntity.createdAt.between(start, end))
+                .fetch();
     }
 }

@@ -37,9 +37,9 @@ public abstract class RestDocsTest {
     void setUp(RestDocumentationContextProvider provider, WebApplicationContext context) {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(context)
                 .apply(documentationConfiguration(provider))
-                .defaultRequest(post("/**").with(csrf().asHeader()))
-                .defaultRequest(patch("/**").with(csrf().asHeader()))
-                .defaultRequest(delete("/**").with(csrf().asHeader()))
+//                .defaultRequest(post("/**").with(csrf().asHeader()))
+//                .defaultRequest(patch("/**").with(csrf().asHeader()))
+//                .defaultRequest(delete("/**").with(csrf().asHeader()))
                 .build();
     }
 }

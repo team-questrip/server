@@ -44,9 +44,9 @@ class RecommendControllerTest extends RestDocsTest {
 
         // when
         mockMvc.perform(get("/api/v1/recommend")
+                        .header(AUTHORIZATION, ACCESS_TOKEN)
                         .param("latitude", "37.5912474")
                         .param("longitude", "126.9184582")
-                        .header(AUTHORIZATION, ACCESS_TOKEN)
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
