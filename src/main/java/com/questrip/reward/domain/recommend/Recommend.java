@@ -12,6 +12,7 @@ public class Recommend {
     private Long userId;
     private Place place;
     private Status status;
+    private LocalDateTime createdAt;
 
     public enum Status {
         DENIED,
@@ -19,7 +20,6 @@ public class Recommend {
         ACCEPTED
     }
 
-    private LocalDateTime createdAt;
 
     @Builder
     private Recommend(Long id, Long userId, Place place, Status status, LocalDateTime createdAt) {

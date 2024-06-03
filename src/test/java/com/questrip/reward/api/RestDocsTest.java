@@ -21,6 +21,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 
 @ExtendWith(RestDocumentationExtension.class)
@@ -36,10 +37,11 @@ public abstract class RestDocsTest {
     @BeforeEach
     void setUp(RestDocumentationContextProvider provider, WebApplicationContext context) {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(context)
-                .apply(documentationConfiguration(provider))
-//                .defaultRequest(post("/**").with(csrf().asHeader()))
-//                .defaultRequest(patch("/**").with(csrf().asHeader()))
-//                .defaultRequest(delete("/**").with(csrf().asHeader()))
+                .apply(documentationConfiguration(provider)
+                        .operationPreprocessors()
+                        .withRequestDefaults(prettyPrint())
+                        .withResponseDefaults(prettyPrint())
+                )
                 .build();
     }
 }

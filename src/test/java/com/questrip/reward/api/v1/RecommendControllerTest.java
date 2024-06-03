@@ -1,16 +1,21 @@
 package com.questrip.reward.api.v1;
 
 import com.questrip.reward.api.RestDocsTest;
+import com.questrip.reward.api.v1.request.RecommendRequest;
 import com.questrip.reward.domain.place.Place;
+import com.questrip.reward.domain.recommend.Recommend;
 import com.questrip.reward.domain.recommend.RecommendService;
 import com.questrip.reward.fixture.PlaceFixture;
 import com.questrip.reward.mockuser.MockUser;
+import org.apache.http.auth.AUTH;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
@@ -20,8 +25,7 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -104,6 +108,97 @@ class RecommendControllerTest extends RestDocsTest {
                                         .description("현재 영업 여부 [OPEN, CLOSE, UNKNOWN]")
                         ))
 
+                );
+    }
+
+    @DisplayName("추천 내역 추가 API")
+    @MockUser
+    @Test
+    void save() throws Exception {
+        // given
+        RecommendRequest request = new RecommendRequest("test", Recommend.Status.ACCEPTED);
+        given(recommendService.save(any(), any(), any())).willReturn(
+                Recommend.builder()
+                        .id(1L)
+                        .userId(1L)
+                        .place(PlaceFixture.get("test"))
+                        .status(Recommend.Status.ACCEPTED)
+                        .createdAt(LocalDateTime.of(2024, 6, 3, 22, 19, 0))
+                        .build()
+        );
+
+        // when & then
+        mockMvc.perform(post("/api/v1/recommend")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request))
+                        .header(AUTHORIZATION, ACCESS_TOKEN)
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("recommend-post",
+                        resourceDetails()
+                                .tag("recommend")
+                                .description("추천 내역 추가 API"),
+                        requestHeaders(
+                                headerWithName(AUTHORIZATION).description(ACCESS_TOKEN).optional()
+                        ),
+                        requestFields(
+                                fieldWithPath("placeId").type(JsonFieldType.STRING)
+                                        .description("플레이스 아이디"),
+                                fieldWithPath("status").type(JsonFieldType.STRING)
+                                        .description("[ACCEPTED, DENIED, KEPT]")
+                        ),
+                        responseFields(
+                                fieldWithPath("status").type(JsonFieldType.STRING)
+                                        .description("응답 상태"),
+                                fieldWithPath("message").type(JsonFieldType.NULL)
+                                        .description("메시지"),
+                                fieldWithPath("data").type(JsonFieldType.OBJECT)
+                                        .description("데이터"),
+                                fieldWithPath("data.id").type(JsonFieldType.NUMBER)
+                                        .description("추천 아이디"),
+                                fieldWithPath("data.userId").type(JsonFieldType.NUMBER)
+                                        .description("유저 아이디"),
+                                fieldWithPath("data.status").type(JsonFieldType.STRING)
+                                        .description("상태"),
+                                fieldWithPath("data.createdAt").type(JsonFieldType.STRING)
+                                        .description("요청 시간"),
+                                fieldWithPath("data.place").type(JsonFieldType.OBJECT)
+                                        .description("장소 데이터"),
+                                fieldWithPath("data.place.id").type(JsonFieldType.STRING)
+                                        .description("장소 아이디"),
+                                fieldWithPath("data.place.googlePlaceId").type(JsonFieldType.STRING)
+                                        .description("구글 장소 아이디"),
+                                fieldWithPath("data.place.placeName").type(JsonFieldType.STRING)
+                                        .description("장소 이름"),
+                                fieldWithPath("data.place.primaryType").type(JsonFieldType.STRING)
+                                        .description("카테고리"),
+                                fieldWithPath("data.place.formattedAddress").type(JsonFieldType.STRING)
+                                        .description("주소"),
+                                fieldWithPath("data.place.location").type(JsonFieldType.OBJECT)
+                                        .description("위경도"),
+                                fieldWithPath("data.place.location.latitude").type(JsonFieldType.NUMBER)
+                                        .description("위도"),
+                                fieldWithPath("data.place.location.longitude").type(JsonFieldType.NUMBER)
+                                        .description("경도"),
+                                fieldWithPath("data.place.content").type(JsonFieldType.OBJECT)
+                                        .description("장소 설명"),
+                                fieldWithPath("data.place.content.recommendationReason").type(JsonFieldType.STRING)
+                                        .description("추천 이유"),
+                                fieldWithPath("data.place.content.activity").type(JsonFieldType.STRING)
+                                        .description("추천 활동"),
+                                fieldWithPath("data.place.images").type(JsonFieldType.ARRAY)
+                                        .description("장소 이미지"),
+                                fieldWithPath("data.place.images[].sequence").type(JsonFieldType.NUMBER)
+                                        .description("이미지 순서"),
+                                fieldWithPath("data.place.images[].url").type(JsonFieldType.STRING)
+                                        .description("이미지 url"),
+                                fieldWithPath("data.place.openingHours").type(JsonFieldType.ARRAY)
+                                        .description("영업시간"),
+                                fieldWithPath("data.place.openNow").type(JsonFieldType.STRING)
+                                        .description("현재 영업 여부 [OPEN, CLOSE, UNKNOWN]")
+                        )
+                        )
                 );
     }
 }

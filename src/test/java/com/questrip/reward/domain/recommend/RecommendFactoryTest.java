@@ -31,45 +31,6 @@ class RecommendFactoryTest {
                 .willReturn(PlaceFixture.get("test"));
     }
 
-    @DisplayName("recommendFactory deny의 상태는 DENIED다.")
-    @Test
-    void deny() {
-        // given
-        Place place = placeFinder.findById("test");
-
-        // when
-        Recommend recommend = recommendFactory.deny(place);
-
-        // then
-        assertThat(recommend.getStatus()).isEqualTo(Recommend.Status.DENIED);
-    }
-
-    @DisplayName("recommendFactory keep 상태는 KEPT다")
-    @Test
-    void keep() {
-        // given
-        Place place = placeFinder.findById("test");
-
-        // when
-        Recommend recommend = recommendFactory.keep(place);
-
-        // then
-        assertThat(recommend.getStatus()).isEqualTo(Recommend.Status.KEPT);
-    }
-
-    @DisplayName("recommendFactory accept 상태는 ACCEPTED다")
-    @Test
-    void accept() {
-        // given
-        Place place = placeFinder.findById("test");
-
-        // when
-        Recommend recommend = recommendFactory.accept(place);
-
-        // then
-        assertThat(recommend.getStatus()).isEqualTo(Recommend.Status.ACCEPTED);
-    }
-
     @DisplayName("")
     @Test
     void of() {
@@ -81,7 +42,7 @@ class RecommendFactoryTest {
                 .build();
 
         // when
-        Recommend recommend = recommendFactory.of(entity.toRecommend(), entity.getPlaceId());
+        Recommend recommend = recommendFactory.from(entity.toRecommend(), entity.getPlaceId());
 
         // then
         assertThat(recommend.getPlace().getId()).isEqualTo(entity.getPlaceId());

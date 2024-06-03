@@ -3,7 +3,7 @@ plugins {
     id 'org.springframework.boot' version '3.1.11'
     id 'io.spring.dependency-management' version '1.1.4'
     id 'com.epages.restdocs-api-spec' version '0.18.4'
-    id 'org.hidetake.swagger.generator' version '2.18.2'
+    id 'org.hidetake.swagger.generator' version '2.19.2'
 }
 
 group = 'com.questrip'
@@ -45,7 +45,7 @@ dependencies {
     testImplementation 'com.epages:restdocs-api-spec-mockmvc:0.18.4'
 
     // swagger
-    swaggerUI 'org.webjars:swagger-ui:4.11.1'
+    swaggerUI 'org.webjars:swagger-ui:5.17.7'
 
     // retry
     implementation 'org.springframework.retry:spring-retry'
