@@ -4,6 +4,8 @@ import com.questrip.reward.support.response.SliceResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 @RequiredArgsConstructor
 public class PlaceFinder {
@@ -16,5 +18,9 @@ public class PlaceFinder {
 
     public SliceResult<Place> findAllNear(LatLng userLocation, int page, int size) {
         return placeRepository.findAllNear(userLocation, page, size);
+    }
+
+    public List<Place> findRecommendPlace(LatLng userLocation, List<String> placeIds) {
+        return placeRepository.findRecommendPlace(userLocation, placeIds);
     }
 }

@@ -29,6 +29,9 @@ public abstract class RestDocsTest {
     protected MockMvc mockMvc;
     protected ObjectMapper objectMapper = new ObjectMapper();
 
+    public static final String AUTHORIZATION = "Authorization";
+    public static final String ACCESS_TOKEN = "Bearer Token";
+
 
     @BeforeEach
     void setUp(RestDocumentationContextProvider provider, WebApplicationContext context) {

@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 @Getter
 public class Recommend {
     private Long id;
+    private Long userId;
     private Place place;
     private Status status;
 
@@ -21,8 +22,9 @@ public class Recommend {
     private LocalDateTime createdAt;
 
     @Builder
-    private Recommend(Long id, Place place, Status status, LocalDateTime createdAt) {
+    private Recommend(Long id, Long userId, Place place, Status status, LocalDateTime createdAt) {
         this.id = id;
+        this.userId = userId;
         this.place = place;
         this.status = status;
         this.createdAt = createdAt;

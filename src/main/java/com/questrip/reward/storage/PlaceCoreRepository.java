@@ -14,6 +14,9 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.geo.Point;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Repository
 @RequiredArgsConstructor
 public class PlaceCoreRepository implements PlaceRepository {
@@ -35,9 +38,21 @@ public class PlaceCoreRepository implements PlaceRepository {
     @Override
     public SliceResult<Place> findAllNear(LatLng userLocation, int page, int size) {
         PageRequest pageRequest = PageRequest.of(page, size);
-        Slice<Place> slice = placeMongoRepository.findAllByLocationNear(new Point(userLocation.getLongitude(), userLocation.getLatitude()), pageRequest)
+        Slice<Place> slice = placeMongoRepository.findAllByLocationNear(toPoint(userLocation), pageRequest)
                 .map(PlaceEntity::toPlace);
 
         return new SliceResult<>(slice);
+    }
+
+    @Override
+    public List<Place> findRecommendPlace(LatLng userLocation, List<String> placeIds) {
+        return placeMongoRepository.findAllByLocationNearAndIdNotIn(toPoint(userLocation), placeIds)
+                .stream()
+                .map(PlaceEntity::toPlace)
+                .collect(Collectors.toList());
+    }
+
+    private Point toPoint(LatLng userLocation) {
+        return new Point(userLocation.getLongitude(), userLocation.getLatitude());
     }
 }
