@@ -5,6 +5,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -22,5 +25,11 @@ public class PlaceFinder {
 
     public List<Place> findRecommendPlace(LatLng userLocation, List<String> placeIds) {
         return placeRepository.findRecommendPlace(userLocation, placeIds);
+    }
+
+    public Map<String, Place> findMapIdIn(List<String> placeIds) {
+        return placeRepository.findAllByIdIn(placeIds)
+                .stream()
+                .collect(Collectors.toMap(Place::getId, Function.identity()));
     }
 }

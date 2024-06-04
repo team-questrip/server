@@ -18,8 +18,8 @@ public class RecommendFactory {
                 .build();
     }
 
-    public Recommend from(Recommend recommend, String placeId) {
-        Place place = placeFinder.findById(placeId);
+    public Recommend from(Recommend recommend) {
+        Place place = placeFinder.findById(recommend.getPlaceId());
 
         return Recommend.builder()
                 .id(recommend.getId())

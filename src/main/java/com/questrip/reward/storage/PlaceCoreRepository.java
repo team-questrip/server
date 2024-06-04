@@ -55,4 +55,12 @@ public class PlaceCoreRepository implements PlaceRepository {
     private Point toPoint(LatLng userLocation) {
         return new Point(userLocation.getLongitude(), userLocation.getLatitude());
     }
+
+    @Override
+    public List<Place> findAllByIdIn(List<String> placeIds) {
+        return placeMongoRepository.findAllByIdIn(placeIds)
+                .stream()
+                .map(PlaceEntity::toPlace)
+                .collect(Collectors.toList());
+    }
 }

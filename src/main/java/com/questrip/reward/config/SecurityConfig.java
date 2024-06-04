@@ -1,4 +1,4 @@
-package com.questrip.reward.security;
+package com.questrip.reward.config;
 
 import com.questrip.reward.security.filter.JwtTokenFilter;
 import com.questrip.reward.security.handler.CustomAccessDeniedHandler;
@@ -76,7 +76,7 @@ public class SecurityConfig {
                         .accessDeniedHandler(accessDeniedHandler)
                 )
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/api/v1/recommend").authenticated()
+                        .requestMatchers("/api/v1/recommend", "/api/v1/recommend/**").authenticated()
                         .anyRequest().permitAll()
                 )
                 .build();

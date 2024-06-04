@@ -7,6 +7,7 @@ import com.questrip.reward.storage.mongo.PlaceEntity;
 import com.questrip.reward.storage.mongo.PlaceMongoRepository;
 import com.questrip.reward.storage.mysql.RecommendEntity;
 import com.questrip.reward.storage.mysql.RecommendJpaRepository;
+import com.questrip.reward.support.response.SliceResult;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -111,6 +112,63 @@ class RecommendFinderTest {
 
         // then
         assertThat(recommendPlaces.size()).isZero();
+    }
+
+    @DisplayName("keep한 추천내역을 가져온다.")
+    @Test
+    void getKeptRecommends() {
+        // given
+        Long userId = 1L;
+        Recommend r1 = createRecommend(placeIds.get(0), userId, Recommend.Status.DENIED);
+        Recommend r2 = createRecommend(placeIds.get(1), userId, Recommend.Status.KEPT);
+        Recommend r3 = createRecommend(placeIds.get(2), userId, Recommend.Status.ACCEPTED);
+        Recommend r4 = createRecommend(placeIds.get(3), userId, Recommend.Status.KEPT);
+
+        List<RecommendEntity> entities = List.of(r1, r2, r3, r4)
+                .stream()
+                .map(RecommendEntity::from)
+                .collect(Collectors.toList());
+
+        recommendJpaRepository.saveAll(entities);
+
+        // when
+        SliceResult<Recommend> keptRecommends = recommendFinder.getKeptRecommends(userId, 0, 10);
+
+        // then
+        assertThat(keptRecommends.getNumberOfElements()).isEqualTo(2);
+    }
+
+    @DisplayName("keep한 추천내역을 가져온다.")
+    @Test
+    void getKeptRecommends2() {
+        // given
+        Long userId = 1L;
+        Recommend r1 = createRecommend(placeIds.get(0), userId, Recommend.Status.DENIED);
+        Recommend r2 = createRecommend(placeIds.get(1), userId, Recommend.Status.KEPT);
+        Recommend r3 = createRecommend(placeIds.get(2), userId, Recommend.Status.ACCEPTED);
+        Recommend r4 = createRecommend(placeIds.get(3), userId, Recommend.Status.KEPT);
+
+        List<RecommendEntity> entities = List.of(r1, r2, r3, r4)
+                .stream()
+                .map(RecommendEntity::from)
+                .collect(Collectors.toList());
+
+        recommendJpaRepository.saveAll(entities);
+
+        // when
+        SliceResult<Recommend> keptRecommends = recommendFinder.getKeptRecommends(userId, 0, 10);
+
+        // then
+        List<String> places = keptRecommends.getContent()
+                .stream()
+                .map(Recommend::getPlace)
+                .map(Place::getId)
+                .collect(Collectors.toList());
+
+        assertThat(places)
+                .containsExactlyInAnyOrder(
+                        placeIds.get(1), placeIds.get(3)
+                );
     }
 
     private Recommend createRecommend(String placeId, Long userId, Recommend.Status status) {

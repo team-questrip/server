@@ -34,6 +34,7 @@ public class RecommendEntity extends BaseEntity {
         return Recommend.builder()
                 .id(id)
                 .userId(userId)
+                .placeId(placeId)
                 .status(status)
                 .createdAt(getCreatedAt())
                 .build();

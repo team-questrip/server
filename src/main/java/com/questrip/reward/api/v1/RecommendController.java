@@ -9,6 +9,7 @@ import com.questrip.reward.domain.recommend.Recommend;
 import com.questrip.reward.domain.recommend.RecommendService;
 import com.questrip.reward.security.details.LoginUser;
 import com.questrip.reward.support.response.ApiResponse;
+import com.questrip.reward.support.response.SliceResult;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -35,5 +36,17 @@ public class RecommendController {
         Recommend recommend = recommendService.save(loginUser.getId(), request.placeId(), request.status());
 
         return ApiResponse.success(new RecommendResponse(recommend));
+    }
+
+    @GetMapping("/kept")
+    public ApiResponse<SliceResult<RecommendResponse>> getKeptRecommends(
+            @AuthenticationPrincipal LoginUser loginUser,
+            @RequestParam(defaultValue = "0", required = false) int page,
+            @RequestParam(defaultValue = "10", required = false) int size
+    ) {
+        SliceResult<RecommendResponse> response = recommendService.getKeptRecommends(loginUser.getId(), page, size)
+                .map(RecommendResponse::new);
+
+        return ApiResponse.success(response);
     }
 }

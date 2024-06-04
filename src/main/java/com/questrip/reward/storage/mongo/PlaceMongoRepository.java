@@ -12,4 +12,7 @@ public interface PlaceMongoRepository extends MongoRepository<PlaceEntity, Strin
     Slice<PlaceEntity> findAllByLocationNear(Point point, Pageable pageable);
 
     List<PlaceEntity> findAllByLocationNearAndIdNotIn(Point point, List<String> ids);
+
+    List<PlaceEntity> findAllByIdIn(List<String> placeIds);
+
 }

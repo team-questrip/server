@@ -3,6 +3,7 @@ package com.questrip.reward.domain.recommend;
 import com.questrip.reward.domain.place.LatLng;
 import com.questrip.reward.domain.place.Place;
 import com.questrip.reward.domain.place.PlaceFinder;
+import com.questrip.reward.support.response.SliceResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -25,5 +26,9 @@ public class RecommendService {
         Recommend initRecommend = recommendFactory.init(userId, place, status);
 
         return recommendAppender.append(place, initRecommend);
+    }
+
+    public SliceResult<Recommend> getKeptRecommends(Long userId, int page, int size) {
+        return recommendFinder.getKeptRecommends(userId, page, size);
     }
 }

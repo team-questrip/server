@@ -4,6 +4,10 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.questrip.reward.domain.recommend.Recommend;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -36,5 +40,25 @@ public class RecommendQueryRepository {
                 .where(recommendEntity.userId.eq(userId))
                 .where(recommendEntity.createdAt.between(start, end))
                 .fetch();
+    }
+
+    public Slice<RecommendEntity> findAllKeptRecommend(Long userId, Pageable pageable) {
+        List<RecommendEntity> content = jpaQueryFactory.select(recommendEntity)
+                .from(recommendEntity)
+                .where(recommendEntity.userId.eq(userId).and(recommendEntity.status.eq(Recommend.Status.KEPT)))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize()+1)
+                .orderBy(recommendEntity.createdAt.asc())
+                .fetch();
+
+        return new SliceImpl<>(content, pageable, hasNextPage(content, pageable.getPageSize()));
+    }
+
+    private boolean hasNextPage(List<RecommendEntity> contents, int pageSize) {
+        if (contents.size() > pageSize) {
+            contents.remove(pageSize);
+            return true;
+        }
+        return false;
     }
 }
