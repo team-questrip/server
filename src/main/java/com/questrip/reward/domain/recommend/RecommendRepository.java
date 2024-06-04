@@ -12,5 +12,5 @@ public interface RecommendRepository {
 
     List<String> getExcludePlaceIds(Long userId, LocalDateTime start, LocalDateTime end);
 
-    SliceResult<Recommend> findAllKeptRecommend(Long userId, int page, int size);
+    SliceResult<Recommend> findAllRecommendsWithStatus(Long userId, Recommend.Status status, int page, int size);
 }

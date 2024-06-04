@@ -25,7 +25,7 @@ public class RecommendController {
     private final RecommendService recommendService;
 
     @GetMapping
-    public ApiResponse<PlaceListResponse> getRecommends(@AuthenticationPrincipal LoginUser loginUser, LocationRequest request) {
+    public ApiResponse<PlaceListResponse> getStatusRecommends(@AuthenticationPrincipal LoginUser loginUser, LocationRequest request) {
         List<Place> recommendPlaces = recommendService.getRecommendPlaces(loginUser.getUser().getId(), request.toLocation());
 
         return ApiResponse.success("추천 장소 조회 완료", new PlaceListResponse(recommendPlaces));
@@ -38,13 +38,14 @@ public class RecommendController {
         return ApiResponse.success(new RecommendResponse(recommend));
     }
 
-    @GetMapping("/kept")
-    public ApiResponse<SliceResult<RecommendResponse>> getKeptRecommends(
+    @GetMapping("/{status}")
+    public ApiResponse<SliceResult<RecommendResponse>> getStatusRecommends(
             @AuthenticationPrincipal LoginUser loginUser,
+            @PathVariable Recommend.Status status,
             @RequestParam(defaultValue = "0", required = false) int page,
             @RequestParam(defaultValue = "10", required = false) int size
     ) {
-        SliceResult<RecommendResponse> response = recommendService.getKeptRecommends(loginUser.getId(), page, size)
+        SliceResult<RecommendResponse> response = recommendService.getRecommendsWithStatus(loginUser.getId(), status, page, size)
                 .map(RecommendResponse::new);
 
         return ApiResponse.success(response);

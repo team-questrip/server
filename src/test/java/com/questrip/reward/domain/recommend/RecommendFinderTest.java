@@ -132,13 +132,13 @@ class RecommendFinderTest {
         recommendJpaRepository.saveAll(entities);
 
         // when
-        SliceResult<Recommend> keptRecommends = recommendFinder.getKeptRecommends(userId, 0, 10);
+        SliceResult<Recommend> keptRecommends = recommendFinder.getRecommendsWithStatus(userId, Recommend.Status.KEPT, 0, 10);
 
         // then
         assertThat(keptRecommends.getNumberOfElements()).isEqualTo(2);
     }
 
-    @DisplayName("keep한 추천내역을 가져온다.")
+    @DisplayName("keep한 추천내역을 가져올 때 recommend의 place는 null이 아니다.")
     @Test
     void getKeptRecommends2() {
         // given
@@ -156,7 +156,7 @@ class RecommendFinderTest {
         recommendJpaRepository.saveAll(entities);
 
         // when
-        SliceResult<Recommend> keptRecommends = recommendFinder.getKeptRecommends(userId, 0, 10);
+        SliceResult<Recommend> keptRecommends = recommendFinder.getRecommendsWithStatus(userId, Recommend.Status.KEPT, 0, 10);
 
         // then
         List<String> places = keptRecommends.getContent()

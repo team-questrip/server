@@ -13,7 +13,6 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
@@ -33,8 +32,8 @@ public class RecommendCoreRepository implements RecommendRepository {
     }
 
     @Override
-    public SliceResult<Recommend> findAllKeptRecommend(Long userId, int page, int size) {
-        Slice<Recommend> recommends = recommendQueryRepository.findAllKeptRecommend(userId, PageRequest.of(page, size))
+    public SliceResult<Recommend> findAllRecommendsWithStatus(Long userId, Recommend.Status status, int page, int size) {
+        Slice<Recommend> recommends = recommendQueryRepository.findAllRecommendStatus(userId, PageRequest.of(page, size), Recommend.Status.KEPT)
                 .map(RecommendEntity::toRecommend);
 
         return new SliceResult<>(recommends);

@@ -37,8 +37,8 @@ public class RecommendFinder {
         return LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth(), 23, 59, 59);
     }
 
-    public SliceResult<Recommend> getKeptRecommends(Long userId, int page, int size) {
-        SliceResult<Recommend> allKeptRecommend = recommendRepository.findAllKeptRecommend(userId, page, size);
+    public SliceResult<Recommend> getRecommendsWithStatus(Long userId, Recommend.Status status, int page, int size) {
+        SliceResult<Recommend> allKeptRecommend = recommendRepository.findAllRecommendsWithStatus(userId, status, page, size);
         Map<String, Place> placeMap = placeFinder.findMapIdIn(extractPlaceIds(allKeptRecommend.getContent()));
 
         return allKeptRecommend.map(recommend -> recommendFactory.of(recommend, placeMap.get(recommend.getPlaceId())));

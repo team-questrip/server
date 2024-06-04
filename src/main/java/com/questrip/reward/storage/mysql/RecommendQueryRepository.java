@@ -4,7 +4,6 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.questrip.reward.domain.recommend.Recommend;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
@@ -42,10 +41,10 @@ public class RecommendQueryRepository {
                 .fetch();
     }
 
-    public Slice<RecommendEntity> findAllKeptRecommend(Long userId, Pageable pageable) {
+    public Slice<RecommendEntity> findAllRecommendStatus(Long userId, Pageable pageable, Recommend.Status status) {
         List<RecommendEntity> content = jpaQueryFactory.select(recommendEntity)
                 .from(recommendEntity)
-                .where(recommendEntity.userId.eq(userId).and(recommendEntity.status.eq(Recommend.Status.KEPT)))
+                .where(recommendEntity.userId.eq(userId).and(recommendEntity.status.eq(status)))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize()+1)
                 .orderBy(recommendEntity.createdAt.asc())

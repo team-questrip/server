@@ -28,7 +28,7 @@ public class RecommendService {
         return recommendAppender.append(place, initRecommend);
     }
 
-    public SliceResult<Recommend> getKeptRecommends(Long userId, int page, int size) {
-        return recommendFinder.getKeptRecommends(userId, page, size);
+    public SliceResult<Recommend> getRecommendsWithStatus(Long userId, Recommend.Status status, int page, int size) {
+        return recommendFinder.getRecommendsWithStatus(userId, status, page, size);
     }
 }

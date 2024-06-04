@@ -8,7 +8,6 @@ import com.questrip.reward.domain.recommend.RecommendService;
 import com.questrip.reward.fixture.PlaceFixture;
 import com.questrip.reward.mockuser.MockUser;
 import com.questrip.reward.support.response.SliceResult;
-import org.apache.http.auth.AUTH;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -28,8 +27,7 @@ import static org.springframework.restdocs.headers.HeaderDocumentation.headerWit
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -204,10 +202,10 @@ class RecommendControllerTest extends RestDocsTest {
                 );
     }
 
-    @DisplayName("추천 저장 내역 API")
+    @DisplayName("추천 내역 조회 API")
     @MockUser
     @Test
-    void kept() throws Exception {
+    void getStatusRecommends() throws Exception {
         // given
 
         Recommend r1 = Recommend.builder()
@@ -226,24 +224,27 @@ class RecommendControllerTest extends RestDocsTest {
                 .build();
         List<Recommend> recommends = List.of(r1, r2);
 
-        given(recommendService.getKeptRecommends(any(), anyInt(), anyInt())).willReturn(
+        given(recommendService.getRecommendsWithStatus(any(), any(), anyInt(), anyInt())).willReturn(
                 new SliceResult<>(recommends, 0, 10, 2, false)
         );
 
         // when & then
-        mockMvc.perform(get("/api/v1/recommend/kept")
+        mockMvc.perform(get("/api/v1/recommend/{status}", Recommend.Status.KEPT)
                         .param("page", "0")
                         .param("size", "10")
                         .header(AUTHORIZATION, ACCESS_TOKEN)
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andDo(document("recommend-get-kept",
+                .andDo(document("recommend-get-status",
                                 resourceDetails()
                                         .tag("recommend")
-                                        .description("추천 저장 내역 API"),
+                                        .description("추천 내역 조회 API"),
                                 requestHeaders(
                                         headerWithName(AUTHORIZATION).description(ACCESS_TOKEN).optional()
+                                ),
+                                pathParameters(
+                                        parameterWithName("status").description("[KEPT, DENIED, ACCEPTED")
                                 ),
                                 queryParameters(
                                         parameterWithName("page").description("요청 페이지 Default 0").optional(),
