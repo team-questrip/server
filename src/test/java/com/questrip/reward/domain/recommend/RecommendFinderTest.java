@@ -171,6 +171,30 @@ class RecommendFinderTest {
                 );
     }
 
+    @DisplayName("Accept한 추천내역을 가져온다.")
+    @Test
+    void getAcceptedRecommends() {
+        // given
+        Long userId = 1L;
+        Recommend r1 = createRecommend(placeIds.get(0), userId, Recommend.Status.DENIED);
+        Recommend r2 = createRecommend(placeIds.get(1), userId, Recommend.Status.KEPT);
+        Recommend r3 = createRecommend(placeIds.get(2), userId, Recommend.Status.ACCEPTED);
+        Recommend r4 = createRecommend(placeIds.get(3), userId, Recommend.Status.KEPT);
+
+        List<RecommendEntity> entities = List.of(r1, r2, r3, r4)
+                .stream()
+                .map(RecommendEntity::from)
+                .collect(Collectors.toList());
+
+        recommendJpaRepository.saveAll(entities);
+
+        // when
+        SliceResult<Recommend> keptRecommends = recommendFinder.getRecommendsWithStatus(userId, Recommend.Status.ACCEPTED, 0, 10);
+
+        // then
+        assertThat(keptRecommends.getNumberOfElements()).isEqualTo(1);
+    }
+
     private Recommend createRecommend(String placeId, Long userId, Recommend.Status status) {
         return Recommend.builder()
                 .place(PlaceFixture.get(placeId))
