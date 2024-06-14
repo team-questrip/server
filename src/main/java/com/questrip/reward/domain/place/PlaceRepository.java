@@ -16,4 +16,6 @@ public interface PlaceRepository {
     List<Place> findRecommendPlace(LatLng userLocation, List<String> placeIds);
 
     List<Place> findAllByIdIn(List<String> placeIds);
+
+    Place update(Place place);
 }

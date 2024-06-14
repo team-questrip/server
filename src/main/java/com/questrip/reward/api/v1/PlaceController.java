@@ -1,18 +1,18 @@
 package com.questrip.reward.api.v1;
 
 import com.questrip.reward.api.v1.request.LocationRequest;
+import com.questrip.reward.api.v1.request.MenuGroupListRequest;
 import com.questrip.reward.api.v1.request.PlaceCreateRequest;
-import com.questrip.reward.api.v1.response.PlaceAndDirectionResponse;
-import com.questrip.reward.api.v1.response.PlaceResponse;
-import com.questrip.reward.api.v1.response.PlaceWithDistanceResponse;
-import com.questrip.reward.api.v1.response.ReverseGeocodeResponse;
-import com.questrip.reward.domain.place.Place;
-import com.questrip.reward.domain.place.PlaceAndDirection;
-import com.questrip.reward.domain.place.PlaceService;
+import com.questrip.reward.api.v1.response.*;
+import com.questrip.reward.domain.place.*;
 import com.questrip.reward.support.response.ApiResponse;
 import com.questrip.reward.support.response.SliceResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -51,5 +51,19 @@ public class PlaceController {
         String address = placeService.reverseGeocode(location.toLocation());
 
         return ApiResponse.success("주소 변환 성공", new ReverseGeocodeResponse(address));
+    }
+
+    @GetMapping("/{placeId}/menu")
+    public ApiResponse<MenuGroupListResponse> retrieveMenuGroups(@PathVariable String placeId) {
+        Set<MenuGroup> menuGroups = placeService.findMenuGroups(placeId);
+
+        return ApiResponse.success(new MenuGroupListResponse(menuGroups));
+    }
+
+    @PostMapping("/menu")
+    public ApiResponse<PlaceResponse> addMenuGroup(@RequestBody MenuGroupListRequest request) {
+        Place place = placeService.addMenuGroups(request.placeId(), request.toGroups());
+
+        return ApiResponse.success(new PlaceResponse(place));
     }
 }

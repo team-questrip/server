@@ -6,9 +6,11 @@ import com.questrip.reward.support.response.SliceResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 @Slf4j
@@ -19,6 +21,7 @@ public class PlaceService {
     private final PlaceSearcher placeSearcher;
     private final PlaceImageUploader placeImageUploader;
     private final PlaceFinder placeFinder;
+    private final PlaceUpdater placeUpdater;
     private final DirectionSearcher directionSearcher;
 
     public Place save(String googlePlaceId, PlaceContent content, List<MultipartFile> files) {
@@ -44,5 +47,21 @@ public class PlaceService {
 
     public String reverseGeocode(LatLng latLng) {
         return placeSearcher.reverseGeocode(latLng).toAddress();
+    }
+
+    @Transactional
+    public Place addMenuGroups(String placeId, List<MenuGroup> menuGroups) {
+        Place place = placeFinder.findById(placeId);
+        for(MenuGroup menuGroup : menuGroups) {
+            place.addMenuGroup(menuGroup);
+        }
+
+        return placeUpdater.update(place);
+    }
+
+    public Set<MenuGroup> findMenuGroups(String placeId) {
+        Place place = placeFinder.findById(placeId);
+
+        return place.getMenuGroups();
     }
 }

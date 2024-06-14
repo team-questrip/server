@@ -1,8 +1,6 @@
 package com.questrip.reward.storage;
 
-import com.questrip.reward.domain.place.LatLng;
-import com.questrip.reward.domain.place.Place;
-import com.questrip.reward.domain.place.PlaceRepository;
+import com.questrip.reward.domain.place.*;
 import com.questrip.reward.storage.mongo.PlaceEntity;
 import com.questrip.reward.storage.mongo.PlaceMongoRepository;
 import com.questrip.reward.support.error.ErrorCode;
@@ -62,5 +60,12 @@ public class PlaceCoreRepository implements PlaceRepository {
                 .stream()
                 .map(PlaceEntity::toPlace)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Place update(Place place) {
+        PlaceEntity entity = placeMongoRepository.findById(place.getId()).orElseThrow();
+        entity.update(place);
+        return placeMongoRepository.save(entity).toPlace();
     }
 }

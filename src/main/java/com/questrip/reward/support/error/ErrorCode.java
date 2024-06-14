@@ -12,6 +12,7 @@ public enum ErrorCode {
     EXTERNAL_SERVER_ERROR(HttpStatus.SERVICE_UNAVAILABLE, "외부 API 서버 오류"),
     USER_NOT_FOUND(HttpStatus.BAD_REQUEST, "유저를 찾을 수 없습니다."),
     DUPLICATED_EMAIL(HttpStatus.CONFLICT, "이미 사용중인 이메일주소입니다."),
+    NOT_FOUND_MENU_GROUP(HttpStatus.BAD_REQUEST, "존재하지 않는 메뉴 그룹입니다."),
 
 
     // security

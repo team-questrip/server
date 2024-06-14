@@ -105,7 +105,19 @@ class RecommendControllerTest extends RestDocsTest {
                                 fieldWithPath("data.places[].openingHours").type(JsonFieldType.ARRAY)
                                         .description("영업시간"),
                                 fieldWithPath("data.places[].openNow").type(JsonFieldType.STRING)
-                                        .description("현재 영업 여부 [OPEN, CLOSE, UNKNOWN]")
+                                        .description("현재 영업 여부 [OPEN, CLOSE, UNKNOWN]"),
+                                fieldWithPath("data.places[].menuGroups[]").type(JsonFieldType.ARRAY)
+                                        .description("메뉴 그룹"),
+                                fieldWithPath("data.places[].menuGroups[].groupName").type(JsonFieldType.STRING)
+                                        .description("메뉴 그룹명"),
+                                fieldWithPath("data.places[].menuGroups[].menus[]").type(JsonFieldType.ARRAY)
+                                        .description("메뉴 목록"),
+                                fieldWithPath("data.places[].menuGroups[].menus[].menuName").type(JsonFieldType.STRING)
+                                        .description("메뉴 이름"),
+                                fieldWithPath("data.places[].menuGroups[].menus[].price").type(JsonFieldType.NUMBER)
+                                        .description("메뉴 가격"),
+                                fieldWithPath("data.places[].menuGroups[].menus[].description").type(JsonFieldType.STRING)
+                                        .description("메뉴 설명")
                         ))
 
                 );
@@ -196,7 +208,19 @@ class RecommendControllerTest extends RestDocsTest {
                                         fieldWithPath("data.place.openingHours").type(JsonFieldType.ARRAY)
                                                 .description("영업시간"),
                                         fieldWithPath("data.place.openNow").type(JsonFieldType.STRING)
-                                                .description("현재 영업 여부 [OPEN, CLOSE, UNKNOWN]")
+                                                .description("현재 영업 여부 [OPEN, CLOSE, UNKNOWN]"),
+                                        fieldWithPath("data.place.menuGroups[]").type(JsonFieldType.ARRAY)
+                                                .description("메뉴 그룹"),
+                                        fieldWithPath("data.place.menuGroups[].groupName").type(JsonFieldType.STRING)
+                                                .description("메뉴 그룹명"),
+                                        fieldWithPath("data.place.menuGroups[].menus[]").type(JsonFieldType.ARRAY)
+                                                .description("메뉴 목록"),
+                                        fieldWithPath("data.place.menuGroups[].menus[].menuName").type(JsonFieldType.STRING)
+                                                .description("메뉴 이름"),
+                                        fieldWithPath("data.place.menuGroups[].menus[].price").type(JsonFieldType.NUMBER)
+                                                .description("메뉴 가격"),
+                                        fieldWithPath("data.place.menuGroups[].menus[].description").type(JsonFieldType.STRING)
+                                                .description("메뉴 설명")
                                 )
                         )
                 );
@@ -308,7 +332,19 @@ class RecommendControllerTest extends RestDocsTest {
                                         fieldWithPath("data.content[].place.openingHours").type(JsonFieldType.ARRAY)
                                                 .description("영업시간"),
                                         fieldWithPath("data.content[].place.openNow").type(JsonFieldType.STRING)
-                                                .description("현재 영업 여부 [OPEN, CLOSE, UNKNOWN]")
+                                                .description("현재 영업 여부 [OPEN, CLOSE, UNKNOWN]"),
+                                        fieldWithPath("data.content[].place.menuGroups[]").type(JsonFieldType.ARRAY)
+                                                .description("메뉴 그룹"),
+                                        fieldWithPath("data.content[].place.menuGroups[].groupName").type(JsonFieldType.STRING)
+                                                .description("메뉴 그룹명"),
+                                        fieldWithPath("data.content[].place.menuGroups[].menus[]").type(JsonFieldType.ARRAY)
+                                                .description("메뉴 목록"),
+                                        fieldWithPath("data.content[].place.menuGroups[].menus[].menuName").type(JsonFieldType.STRING)
+                                                .description("메뉴 이름"),
+                                        fieldWithPath("data.content[].place.menuGroups[].menus[].price").type(JsonFieldType.NUMBER)
+                                                .description("메뉴 가격"),
+                                        fieldWithPath("data.content[].place.menuGroups[].menus[].description").type(JsonFieldType.STRING)
+                                                .description("메뉴 설명")
                                 )
                         )
                 );

@@ -11,7 +11,9 @@ import org.springframework.data.mongodb.core.index.GeoSpatialIndexType;
 import org.springframework.data.mongodb.core.index.GeoSpatialIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -30,6 +32,7 @@ public class PlaceEntity extends BaseEntity {
     private List<String> openingHours;
     private List<Period> openPeriods;
     private List<PlaceImage> images;
+    private Set<MenuGroup> menuGroups = new HashSet<>();
 
     public Place toPlace() {
         return Place.builder()
@@ -43,6 +46,7 @@ public class PlaceEntity extends BaseEntity {
                 .openingHours(openingHours)
                 .openPeriods(openPeriods)
                 .images(images)
+                .menuGroups(menuGroups)
                 .build();
     }
 
@@ -58,11 +62,25 @@ public class PlaceEntity extends BaseEntity {
                 .openingHours(place.getOpeningHours())
                 .openPeriods(place.getOpenPeriods().getPeriods())
                 .images(place.getImages())
+                .menuGroups(place.getMenuGroups())
                 .build();
     }
 
+    public void update(Place place) {
+        this.googlePlaceId = place.getGooglePlaceId();
+        this.placeName = place.getPlaceName();
+        this.primaryType = place.getPrimaryType();
+        this.formattedAddress = place.getFormattedAddress();
+        this.location = new Point(place.getLocation().getLongitude(), place.getLocation().getLatitude());
+        this.content = place.getContent();
+        this.openingHours = place.getOpeningHours();
+        this.openPeriods = place.getOpenPeriods().getPeriods();
+        this.images = place.getImages();
+        this.menuGroups = place.getMenuGroups();
+    }
+
     @Builder
-    private PlaceEntity(String id, String googlePlaceId, String placeName, String primaryType, String formattedAddress, Point location, PlaceContent content, List<String> openingHours, List<Period> openPeriods, List<PlaceImage> images) {
+    private PlaceEntity(String id, String googlePlaceId, String placeName, String primaryType, String formattedAddress, Point location, PlaceContent content, List<String> openingHours, List<Period> openPeriods, List<PlaceImage> images, Set<MenuGroup> menuGroups) {
         this.id = id;
         this.googlePlaceId = googlePlaceId;
         this.placeName = placeName;
@@ -73,5 +91,6 @@ public class PlaceEntity extends BaseEntity {
         this.openingHours = openingHours;
         this.openPeriods = openPeriods;
         this.images = images;
+        this.menuGroups = menuGroups;
     }
 }
