@@ -1,11 +1,10 @@
 package com.questrip.reward.fixture;
 
-import com.questrip.reward.domain.place.LatLng;
-import com.questrip.reward.domain.place.Place;
-import com.questrip.reward.domain.place.PlaceContent;
-import com.questrip.reward.domain.place.PlaceImage;
+import com.questrip.reward.domain.place.*;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class PlaceFixture {
     public static Place get() {
@@ -26,6 +25,7 @@ public class PlaceFixture {
                 .openPeriods(OpenPeriodsFixture.get())
                 .content(getContent())
                 .images(getImages())
+                .menuGroups(getMenuGroups())
                 .build();
     }
 
@@ -48,6 +48,7 @@ public class PlaceFixture {
                 .openPeriods(OpenPeriodsFixture.get())
                 .content(getContent())
                 .images(getImages())
+                .menuGroups(getMenuGroups())
                 .build();
     }
 
@@ -69,6 +70,7 @@ public class PlaceFixture {
                 .openPeriods(OpenPeriodsFixture.get())
                 .content(getContent())
                 .images(getImages())
+                .menuGroups(getMenuGroups())
                 .build();
     }
 
@@ -81,5 +83,19 @@ public class PlaceFixture {
         PlaceImage img2 = new PlaceImage(2, "https://questrip-reward.s3.ap-northeast-2.amazonaws.com/e2f8b8cc-fd53-47da-bea5-c113f8f6393c.jpeg");
 
         return List.of(img1, img2);
+    }
+
+    public static Set<MenuGroup> getMenuGroups() {
+        Menu 볶음밥 = new Menu("볶음밥", 8000, "고슬고슬 맛있는 볶음밥");
+        Menu 짜장밥 = new Menu("짜장밥", 9000, "짜장소스 추가");
+        MenuGroup menuGroup = new MenuGroup("밥류", Set.of(볶음밥, 짜장밥));
+
+        Menu 짬뽕 = new Menu("짬뽕", 10000, "얼큰 짬뽕");
+        Menu 짜장면 = new Menu("짜장면", 7000, "자신없어요");
+        MenuGroup menuGroup2 = new MenuGroup("면류", Set.of(짬뽕, 짜장면));
+
+        HashSet<MenuGroup> hashSet = new HashSet<>();
+        hashSet.addAll(List.of(menuGroup, menuGroup2));
+        return hashSet;
     }
 }

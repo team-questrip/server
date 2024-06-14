@@ -1,23 +1,31 @@
 package com.questrip.reward.api.v1;
 
 import com.questrip.reward.api.RestDocsTest;
+import com.questrip.reward.api.v1.request.MenuGroupListRequest;
+import com.questrip.reward.api.v1.request.MenuGroupRequest;
+import com.questrip.reward.api.v1.request.MenuRequest;
 import com.questrip.reward.domain.direction.DirectionSummary;
+import com.questrip.reward.domain.place.Menu;
+import com.questrip.reward.domain.place.MenuGroup;
 import com.questrip.reward.domain.place.PlaceAndDirection;
 import com.questrip.reward.domain.place.PlaceService;
 import com.questrip.reward.fixture.PlaceFixture;
 import com.questrip.reward.support.response.SliceResult;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 
 import java.util.List;
+import java.util.Set;
 
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.resourceDetails;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
@@ -25,14 +33,11 @@ import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@WebMvcTest(controllers = PlaceController.class)
 class PlaceControllerDocsTest extends RestDocsTest {
 
-    private final PlaceService placeService = mock(PlaceService.class);
-
-    @Override
-    protected Object initializeController() {
-        return new PlaceController(placeService);
-    }
+    @MockBean
+    PlaceService placeService;
 
     @DisplayName("장소 등록 API")
     @Test
@@ -98,9 +103,20 @@ class PlaceControllerDocsTest extends RestDocsTest {
                                 fieldWithPath("data.openingHours").type(JsonFieldType.ARRAY)
                                         .description("영업시간"),
                                 fieldWithPath("data.openNow").type(JsonFieldType.STRING)
-                                        .description("현재 영업 여부 [OPEN, CLOSE, UNKNOWN]")
+                                        .description("현재 영업 여부 [OPEN, CLOSE, UNKNOWN]"),
+                                fieldWithPath("data.menuGroups[]").type(JsonFieldType.ARRAY)
+                                        .description("메뉴 그룹"),
+                                fieldWithPath("data.menuGroups[].groupName").type(JsonFieldType.STRING)
+                                        .description("메뉴 그룹명"),
+                                fieldWithPath("data.menuGroups[].menus[]").type(JsonFieldType.ARRAY)
+                                        .description("메뉴 목록"),
+                                fieldWithPath("data.menuGroups[].menus[].menuName").type(JsonFieldType.STRING)
+                                        .description("메뉴 이름"),
+                                fieldWithPath("data.menuGroups[].menus[].price").type(JsonFieldType.NUMBER)
+                                        .description("메뉴 가격"),
+                                fieldWithPath("data.menuGroups[].menus[].description").type(JsonFieldType.STRING)
+                                        .description("메뉴 설명")
                         )
-
                 ));
     }
 
@@ -176,6 +192,18 @@ class PlaceControllerDocsTest extends RestDocsTest {
                                         .description("영업시간"),
                                 fieldWithPath("data.place.openNow").type(JsonFieldType.STRING)
                                         .description("현재 영업 여부 [OPEN, CLOSE, UNKNOWN]"),
+                                fieldWithPath("data.place.menuGroups[]").type(JsonFieldType.ARRAY)
+                                        .description("메뉴 그룹"),
+                                fieldWithPath("data.place.menuGroups[].groupName").type(JsonFieldType.STRING)
+                                        .description("메뉴 그룹명"),
+                                fieldWithPath("data.place.menuGroups[].menus[]").type(JsonFieldType.ARRAY)
+                                        .description("메뉴 목록"),
+                                fieldWithPath("data.place.menuGroups[].menus[].menuName").type(JsonFieldType.STRING)
+                                        .description("메뉴 이름"),
+                                fieldWithPath("data.place.menuGroups[].menus[].price").type(JsonFieldType.NUMBER)
+                                        .description("메뉴 가격"),
+                                fieldWithPath("data.place.menuGroups[].menus[].description").type(JsonFieldType.STRING)
+                                        .description("메뉴 설명"),
                                 fieldWithPath("data.directionSummary").type(JsonFieldType.OBJECT)
                                         .description("길찾기 요약 정보"),
                                 fieldWithPath("data.directionSummary.distance").type(JsonFieldType.STRING)
@@ -253,6 +281,18 @@ class PlaceControllerDocsTest extends RestDocsTest {
                                         .description("이미지 url"),
                                 fieldWithPath("data.content[].openingHours").type(JsonFieldType.ARRAY)
                                         .description("영업시간"),
+                                fieldWithPath("data.content[].menuGroups[]").type(JsonFieldType.ARRAY)
+                                        .description("메뉴 그룹"),
+                                fieldWithPath("data.content[].menuGroups[].groupName").type(JsonFieldType.STRING)
+                                        .description("메뉴 그룹명"),
+                                fieldWithPath("data.content[].menuGroups[].menus[]").type(JsonFieldType.ARRAY)
+                                        .description("메뉴 목록"),
+                                fieldWithPath("data.content[].menuGroups[].menus[].menuName").type(JsonFieldType.STRING)
+                                        .description("메뉴 이름"),
+                                fieldWithPath("data.content[].menuGroups[].menus[].price").type(JsonFieldType.NUMBER)
+                                        .description("메뉴 가격"),
+                                fieldWithPath("data.content[].menuGroups[].menus[].description").type(JsonFieldType.STRING)
+                                        .description("메뉴 설명"),
                                 fieldWithPath("data.content[].openNow").type(JsonFieldType.STRING)
                                         .description("현재 영업 여부 [OPEN, CLOSE, UNKNOWN]"),
                                 fieldWithPath("data.content[].distance").type(JsonFieldType.NUMBER)
@@ -304,5 +344,133 @@ class PlaceControllerDocsTest extends RestDocsTest {
                         )
                 ));
 
+    }
+
+    @DisplayName("메뉴 추가 API")
+    @Test
+    void addMenuGroup() throws Exception {
+        // given
+        given(placeService.addMenuGroups(any(), any())).willReturn(
+                PlaceFixture.get("6633897aa2757d5b1998ba0d")
+        );
+
+        MenuRequest 볶음밥 = new MenuRequest("볶음밥", 8000, "고슬고슬 맛있는 볶음밥");
+        MenuRequest 짜장밥 = new MenuRequest("짜장밥", 9000, "짜장소스 추가");
+        MenuGroupRequest 밥류 = new MenuGroupRequest("밥류", List.of(볶음밥, 짜장밥));
+
+        MenuRequest 짬뽕 = new MenuRequest("짬뽕", 10000, "얼큰 짬뽕");
+        MenuRequest 짜장면 = new MenuRequest("짜장면", 7000, "자신없어요");
+        MenuGroupRequest 면류 = new MenuGroupRequest("면류", List.of(짬뽕, 짜장면));
+        MenuGroupListRequest request = new MenuGroupListRequest("6633897aa2757d5b1998ba0d", List.of(밥류, 면류));
+
+        // when & then
+        mockMvc.perform(post("/api/v1/place/menu")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request))
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("place-menu-create",
+                        resourceDetails()
+                                .tag("place")
+                                .description("메뉴 추가 API"),
+                        responseFields(
+                                fieldWithPath("status").type(JsonFieldType.STRING)
+                                        .description("응답 상태"),
+                                fieldWithPath("message").type(JsonFieldType.NULL)
+                                        .description("메시지"),
+                                fieldWithPath("data").type(JsonFieldType.OBJECT)
+                                        .description("데이터"),
+                                fieldWithPath("data.id").type(JsonFieldType.STRING)
+                                        .description("장소 아이디"),
+                                fieldWithPath("data.googlePlaceId").type(JsonFieldType.STRING)
+                                        .description("구글 장소 아이디"),
+                                fieldWithPath("data.placeName").type(JsonFieldType.STRING)
+                                        .description("장소 이름"),
+                                fieldWithPath("data.primaryType").type(JsonFieldType.STRING)
+                                        .description("카테고리"),
+                                fieldWithPath("data.formattedAddress").type(JsonFieldType.STRING)
+                                        .description("주소"),
+                                fieldWithPath("data.location").type(JsonFieldType.OBJECT)
+                                        .description("위경도"),
+                                fieldWithPath("data.location.latitude").type(JsonFieldType.NUMBER)
+                                        .description("위도"),
+                                fieldWithPath("data.location.longitude").type(JsonFieldType.NUMBER)
+                                        .description("경도"),
+                                fieldWithPath("data.content").type(JsonFieldType.OBJECT)
+                                        .description("장소 설명"),
+                                fieldWithPath("data.content.recommendationReason").type(JsonFieldType.STRING)
+                                        .description("추천 이유"),
+                                fieldWithPath("data.content.activity").type(JsonFieldType.STRING)
+                                        .description("추천 활"),
+                                fieldWithPath("data.images").type(JsonFieldType.ARRAY)
+                                        .description("장소 이미지"),
+                                fieldWithPath("data.images[].sequence").type(JsonFieldType.NUMBER)
+                                        .description("이미지 순서"),
+                                fieldWithPath("data.images[].url").type(JsonFieldType.STRING)
+                                        .description("이미지 url"),
+                                fieldWithPath("data.openingHours").type(JsonFieldType.ARRAY)
+                                        .description("영업시간"),
+                                fieldWithPath("data.openNow").type(JsonFieldType.STRING)
+                                        .description("현재 영업 여부 [OPEN, CLOSE, UNKNOWN]"),
+                                fieldWithPath("data.menuGroups[]").type(JsonFieldType.ARRAY)
+                                        .description("메뉴 그룹"),
+                                fieldWithPath("data.menuGroups[].groupName").type(JsonFieldType.STRING)
+                                        .description("메뉴 그룹명"),
+                                fieldWithPath("data.menuGroups[].menus[]").type(JsonFieldType.ARRAY)
+                                        .description("메뉴 목록"),
+                                fieldWithPath("data.menuGroups[].menus[].menuName").type(JsonFieldType.STRING)
+                                        .description("메뉴 이름"),
+                                fieldWithPath("data.menuGroups[].menus[].price").type(JsonFieldType.NUMBER)
+                                        .description("메뉴 가격"),
+                                fieldWithPath("data.menuGroups[].menus[].description").type(JsonFieldType.STRING)
+                                        .description("메뉴 설명")
+                        )
+                ));
+    }
+
+    @DisplayName("메뉴 조회 API")
+    @Test
+    void retrieveMenuGroups() throws Exception {
+        // given
+        given(placeService.findMenuGroups(any()))
+                .willReturn(
+                        PlaceFixture.getMenuGroups()
+                );
+
+
+        // when & then
+        mockMvc.perform(get("/api/v1/place/{placeId}/menu", "6633897aa2757d5b1998ba0d")
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("place-menu-get",
+                        resourceDetails()
+                                .tag("place")
+                                .description("장소 메뉴 조회 API"),
+                        pathParameters(
+                                parameterWithName("placeId").description("플레이스 아이디(구글 x)")
+                        ),
+                        responseFields(
+                                fieldWithPath("status").type(JsonFieldType.STRING)
+                                        .description("응답 상태"),
+                                fieldWithPath("message").type(JsonFieldType.NULL)
+                                        .description("메시지"),
+                                fieldWithPath("data").type(JsonFieldType.OBJECT)
+                                        .description("데이터"),
+                                fieldWithPath("data.menuGroups[]").type(JsonFieldType.ARRAY)
+                                        .description("메뉴 그룹"),
+                                fieldWithPath("data.menuGroups[].groupName").type(JsonFieldType.STRING)
+                                        .description("메뉴 그룹명"),
+                                fieldWithPath("data.menuGroups[].menus[]").type(JsonFieldType.ARRAY)
+                                        .description("메뉴 목록"),
+                                fieldWithPath("data.menuGroups[].menus[].menuName").type(JsonFieldType.STRING)
+                                        .description("메뉴 이름"),
+                                fieldWithPath("data.menuGroups[].menus[].price").type(JsonFieldType.NUMBER)
+                                        .description("메뉴 가격"),
+                                fieldWithPath("data.menuGroups[].menus[].description").type(JsonFieldType.STRING)
+                                        .description("메뉴 설명")
+                        )
+                ));
     }
 }

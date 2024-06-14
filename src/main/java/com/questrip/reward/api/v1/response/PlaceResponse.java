@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor
@@ -20,6 +21,7 @@ public class PlaceResponse {
     private List<PlaceImage> images;
     private List<String> openingHours;
     private OpenStatus openNow;
+    private List<MenuGroupResponse> menuGroups;
 
     public PlaceResponse(Place place) {
         this.id = place.getId();
@@ -32,5 +34,11 @@ public class PlaceResponse {
         this.images = place.getImages();
         this.openingHours = place.getOpeningHours();
         this.openNow = place.getOpenPeriods().isOpen(LocalDateTime.now());
+        this.menuGroups = place.getMenuGroups() == null
+                ? List.of()
+                : place.getMenuGroups()
+                .stream()
+                .map(MenuGroupResponse::new)
+                .collect(Collectors.toList());
     }
 }

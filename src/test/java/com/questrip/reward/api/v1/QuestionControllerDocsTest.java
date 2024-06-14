@@ -6,26 +6,23 @@ import com.questrip.reward.domain.question.Question;
 import com.questrip.reward.domain.question.QuestionService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.resourceDetails;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@WebMvcTest(controllers = QuestionController.class)
 class QuestionControllerDocsTest extends RestDocsTest {
 
-    private final QuestionService questionService = mock(QuestionService.class);
-
-    @Override
-    protected Object initializeController() {
-        return new QuestionController(questionService);
-    }
+    @MockBean
+    QuestionService questionService;
 
     @DisplayName("문의 등록 API")
     @Test

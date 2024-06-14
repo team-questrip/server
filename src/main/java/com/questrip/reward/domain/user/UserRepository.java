@@ -1,0 +1,13 @@
+package com.questrip.reward.domain.user;
+
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface UserRepository {
+
+    User save(User user);
+
+    User findByEmail(String email);
+
+    void validateDuplicatedEmail(String email);
+}
