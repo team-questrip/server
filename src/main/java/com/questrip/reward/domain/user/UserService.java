@@ -13,6 +13,7 @@ public class UserService {
     private final UserValidator userValidator;
 
     public UserWithToken register(User initUser) {
+        validateDuplicatedEmail(initUser.getEmail());
         User user = userAppender.append(initUser);
         String token = JwtUtils.generateAccessToken(user);
 
