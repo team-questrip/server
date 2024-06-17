@@ -38,12 +38,14 @@ public class SecurityConfig {
     private final CustomAuthenticationEntryPoint authenticationEntryPoint;
     private final UserDetailsService userDetailService;
 
-    private final String[] API_WHITE_LIST = {
+    private final List<String> API_WHITE_LIST = List.of(
             "/api/v1/place",
-            "/api/v1/place/**",
+            "/api/v1/place/.*",
             "/api/v1/question",
-            "/api/v1/user/**"
-    };
+            "/api/v1/user/.*",
+            "/batch"
+    );
+
 
     @Bean
     BCryptPasswordEncoder passwordEncoder() {
@@ -58,7 +60,7 @@ public class SecurityConfig {
 
     @Bean
     public JwtTokenFilter authenticationJwtTokenFilter() {
-        return new JwtTokenFilter();
+        return new JwtTokenFilter(API_WHITE_LIST);
     }
 
     @Bean
@@ -104,11 +106,5 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", configuration);
 
         return source;
-    }
-
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring()
-                .requestMatchers(API_WHITE_LIST);
     }
 }
