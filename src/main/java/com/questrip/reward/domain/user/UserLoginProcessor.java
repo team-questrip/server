@@ -14,7 +14,7 @@ public class UserLoginProcessor {
     private final PasswordEncoder passwordEncoder;
 
     public User login(String email, String password) {
-        User user = userReader.read(email);
+        User user = userReader.readLoginUserEmail(email);
         if(!passwordEncoder.matches(password, user.getPassword())) {
             throw new GlobalException(ErrorCode.INVALID_PASSWORD);
         }
