@@ -2,6 +2,7 @@ package com.questrip.reward.domain.user;
 
 import com.questrip.reward.fixture.UserFixture;
 import com.questrip.reward.storage.mysql.UserJpaRepository;
+import com.questrip.reward.support.error.ErrorCode;
 import com.questrip.reward.support.error.GlobalException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -53,7 +54,7 @@ class UserLoginProcessorTest {
     void login2() {
         assertThatThrownBy(() -> userLoginProcessor.login("test@email.com", "test"))
                 .isInstanceOf(GlobalException.class)
-                .hasMessageContaining("유저를 찾을 수 없습니다.");
+                .hasMessageContaining(ErrorCode.USERNAME_NOT_FOUND.getMessage());
     }
 
     @DisplayName("비밀번호가 일치하지 않을 경우 로그인 할 수 없다.")
@@ -65,6 +66,6 @@ class UserLoginProcessorTest {
 
         assertThatThrownBy(() -> userLoginProcessor.login(initUser.getEmail(), "test"))
                 .isInstanceOf(GlobalException.class)
-                .hasMessageContaining("패스워드가 불일치합니다.");
+                .hasMessageContaining(ErrorCode.INVALID_PASSWORD.getMessage());
     }
 }

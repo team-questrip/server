@@ -1,6 +1,7 @@
 package com.questrip.reward.domain.user;
 
 import com.questrip.reward.fixture.UserFixture;
+import com.questrip.reward.support.error.ErrorCode;
 import com.questrip.reward.support.error.GlobalException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -30,6 +31,6 @@ class UserValidatorTest {
         // when & then
         assertThatThrownBy(() -> userValidator.validateEmail(append.getEmail()))
                 .isInstanceOf(GlobalException.class)
-                .hasMessageContaining("이미 사용중인 이메일주소입니다.");
+                .hasMessageContaining(ErrorCode.DUPLICATED_EMAIL.getMessage());
     }
 }
