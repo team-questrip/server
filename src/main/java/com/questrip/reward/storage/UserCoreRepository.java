@@ -9,8 +9,6 @@ import com.questrip.reward.support.error.GlobalException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
-
 @Repository
 @RequiredArgsConstructor
 public class UserCoreRepository implements UserRepository {

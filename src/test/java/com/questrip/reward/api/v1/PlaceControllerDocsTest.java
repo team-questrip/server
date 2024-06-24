@@ -5,8 +5,6 @@ import com.questrip.reward.api.v1.request.MenuGroupListRequest;
 import com.questrip.reward.api.v1.request.MenuGroupRequest;
 import com.questrip.reward.api.v1.request.MenuRequest;
 import com.questrip.reward.domain.direction.DirectionSummary;
-import com.questrip.reward.domain.place.Menu;
-import com.questrip.reward.domain.place.MenuGroup;
 import com.questrip.reward.domain.place.PlaceAndDirection;
 import com.questrip.reward.domain.place.PlaceService;
 import com.questrip.reward.fixture.PlaceFixture;
