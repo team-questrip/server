@@ -15,6 +15,7 @@ public class RecommendService {
     private final RecommendFinder recommendFinder;
     private final RecommendFactory recommendFactory;
     private final RecommendAppender recommendAppender;
+    private final RecommendUpdater recommendUpdater;
     private final PlaceFinder placeFinder;
 
     public List<Place> getRecommendPlaces(Long userId, LatLng userLocation) {
@@ -30,5 +31,21 @@ public class RecommendService {
 
     public SliceResult<Recommend> getRecommendsWithStatus(Long userId, Recommend.Status status, int page, int size) {
         return recommendFinder.getRecommendsWithStatus(userId, status, page, size);
+    }
+
+    public Recommend retrieveProgressRecommend(Long userId) {
+        return recommendFinder.retrieveProgressRecommend(userId);
+    }
+
+    public Recommend updateRecommendStatus(Long userId, LatLng userLocation, Recommend.Status status) {
+        Recommend recommend = recommendFinder.retrieveProgressRecommend(userId);
+
+        if(status == Recommend.Status.COMPLETED) {
+            recommend.complete(userLocation);
+        } else {
+            recommend.revoke();
+        }
+
+        return recommendUpdater.update(recommend);
     }
 }

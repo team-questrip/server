@@ -8,3 +8,4 @@ public interface ContentMongoRepository extends MongoRepository<ContentEntity, S
 
     Slice<ContentEntity> findAllByOrderByCreatedAtDesc(Pageable pageable);
 }
+

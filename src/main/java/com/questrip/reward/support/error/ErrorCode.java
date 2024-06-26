@@ -14,6 +14,8 @@ public enum ErrorCode {
     DUPLICATED_EMAIL(HttpStatus.CONFLICT, "Email address is already in use."),
     NOT_FOUND_MENU_GROUP(HttpStatus.BAD_REQUEST, "Menu group does not exist."),
     CONTENT_NOT_FOUND(HttpStatus.BAD_REQUEST, "Content not found."),
+    PROGRESS_RECOMMEND_NOT_FOUND(HttpStatus.BAD_REQUEST, "Progress recommendation not found"),
+    DISTANCE_CHECK_FAILED(HttpStatus.BAD_REQUEST, "Distance check failed"),
 
     // security
     INVALID_PASSWORD(HttpStatus.UNAUTHORIZED, "Incorrect password."),

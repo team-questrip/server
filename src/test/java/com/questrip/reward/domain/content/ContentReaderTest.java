@@ -55,12 +55,9 @@ class ContentReaderTest {
     @Test
     void findAllBy() {
         // given
-        List<ContentEntity> contents = new ArrayList<>();
         for(int i=0; i<10; i++) {
-            contents.add(ContentEntity.from(ContentFixture.get(i)));
+            contentMongoRepository.save(ContentEntity.from(ContentFixture.get(i)));
         }
-
-        contentMongoRepository.saveAll(contents);
 
         // when
         SliceResult<Content> result = contentReader.findAllBy(0, 5);
@@ -79,12 +76,9 @@ class ContentReaderTest {
     @Test
     void findAllBy2() {
         // given
-        List<ContentEntity> contents = new ArrayList<>();
         for(int i=0; i<10; i++) {
-            contents.add(ContentEntity.from(ContentFixture.get(i)));
+            contentMongoRepository.save(ContentEntity.from(ContentFixture.get(i)));
         }
-
-        contentMongoRepository.saveAll(contents);
 
         // when
         SliceResult<Content> result = contentReader.findAllBy(1, 5);

@@ -40,6 +40,10 @@ public class RecommendEntity extends BaseEntity {
                 .build();
     }
 
+    public void updateStatus(Recommend.Status status) {
+        this.status = status;
+    }
+
     @Builder
     private RecommendEntity(Long id, String placeId, Long userId, Recommend.Status status) {
         this.id = id;

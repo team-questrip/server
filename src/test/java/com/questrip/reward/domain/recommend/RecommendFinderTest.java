@@ -7,6 +7,8 @@ import com.questrip.reward.storage.mongo.PlaceEntity;
 import com.questrip.reward.storage.mongo.PlaceMongoRepository;
 import com.questrip.reward.storage.mysql.RecommendEntity;
 import com.questrip.reward.storage.mysql.RecommendJpaRepository;
+import com.questrip.reward.support.error.ErrorCode;
+import com.questrip.reward.support.error.GlobalException;
 import com.questrip.reward.support.response.SliceResult;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,6 +25,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -201,5 +204,34 @@ class RecommendFinderTest {
                 .userId(userId)
                 .status(status)
                 .build();
+    }
+
+    @DisplayName("진행중인 recommend를 가져온다.")
+    @Test
+    void retrieveProgressRecommend() {
+        // given
+        Long userId = 1L;
+        Recommend init = createRecommend(placeIds.get(0), userId, Recommend.Status.ACCEPTED);
+
+        RecommendEntity saved = recommendJpaRepository.save(RecommendEntity.from(init));
+
+        // when
+        Recommend recommend = recommendFinder.retrieveProgressRecommend(1L);
+
+        // then
+        assertThat(recommend.getId()).isEqualTo(saved.getId());
+        assertThat(recommend.getPlace().getId()).isEqualTo(placeIds.get(0));
+    }
+
+    @DisplayName("진행중인 recommend가 없을 경우 예외가 발생한다.")
+    @Test
+    void retrieveProgressRecommend2() {
+        // given
+        Long userId = 1L;
+
+        // when & then
+        assertThatThrownBy(() -> recommendFinder.retrieveProgressRecommend(1L))
+                .isInstanceOf(GlobalException.class)
+                .hasMessageContaining(ErrorCode.PROGRESS_RECOMMEND_NOT_FOUND.getMessage());
     }
 }

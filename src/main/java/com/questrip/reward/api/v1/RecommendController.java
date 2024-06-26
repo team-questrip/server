@@ -50,4 +50,15 @@ public class RecommendController {
 
         return ApiResponse.success(response);
     }
+
+    @PutMapping("/{status}")
+    public ApiResponse<Void> recommendStatusUpdate(
+            @PathVariable Recommend.Status status,
+            @AuthenticationPrincipal LoginUser loginUser,
+            LocationRequest request
+    ) {
+        recommendService.updateRecommendStatus(loginUser.getId(), request.toLocation(), status);
+
+        return ApiResponse.success("처리 완료");
+    }
 }

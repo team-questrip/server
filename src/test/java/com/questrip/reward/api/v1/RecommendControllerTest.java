@@ -349,4 +349,40 @@ class RecommendControllerTest extends RestDocsTest {
                         )
                 );
     }
+
+    @DisplayName("추천 상태 업데이트 API")
+    @MockUser
+    @Test
+    void recommendStatusUpdate() throws Exception {
+        // given & when & then
+        mockMvc.perform(put("/api/v1/recommend/{status}?latitude=375912474&longitude=126.9184582", Recommend.Status.COMPLETED)
+                        .header(AUTHORIZATION, ACCESS_TOKEN)
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("recommend-put-status",
+                                resourceDetails()
+                                        .tag("recommend")
+                                        .description("CHECK IN / GIVE UP API"),
+                                requestHeaders(
+                                        headerWithName(AUTHORIZATION).description(ACCESS_TOKEN).optional()
+                                ),
+                                pathParameters(
+                                        parameterWithName("status").description("[COMPLETED, REVOKED]")
+                                ),
+                                queryParameters(
+                                        parameterWithName("latitude").description("유저 위도"),
+                                        parameterWithName("longitude").description("유저 경도")
+                                ),
+                                responseFields(
+                                        fieldWithPath("status").type(JsonFieldType.STRING)
+                                                .description("응답 상태"),
+                                        fieldWithPath("message").type(JsonFieldType.STRING)
+                                                .description("메시지"),
+                                        fieldWithPath("data").type(JsonFieldType.NULL)
+                                                .description("데이터")
+                                )
+                        )
+                );
+    }
 }

@@ -21,7 +21,7 @@ public class ApiControllerAdvice {
         log.error("error occur {}", e.getMessage());
 
         return ResponseEntity.status(e.getErrorCode().getStatus())
-                .body(ApiResponse.error(e.getErrorCode().getMessage()));
+                .body(ApiResponse.error(e.getMessage()));
     }
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
