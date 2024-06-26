@@ -37,6 +37,7 @@ public class RecommendEntity extends BaseEntity {
                 .placeId(placeId)
                 .status(status)
                 .createdAt(getCreatedAt())
+                .updatedAt(getUpdatedAt())
                 .build();
     }
 

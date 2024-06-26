@@ -61,4 +61,11 @@ public class RecommendController {
 
         return ApiResponse.success("처리 완료");
     }
+
+    @GetMapping("/progress")
+    public ApiResponse<RecommendResponse> retrieveProgressRecommend(@AuthenticationPrincipal LoginUser loginUser) {
+        Recommend recommend = recommendService.retrieveProgressRecommend(loginUser.getId());
+
+        return ApiResponse.success(new RecommendResponse(recommend));
+    }
 }
