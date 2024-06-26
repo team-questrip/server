@@ -63,6 +63,32 @@ class RecommendServiceTest {
         assertThat(recommends.size()).isEqualTo(1);
     }
 
+    @DisplayName("진행중인 추천이 있을경우 예외가 발생한다.")
+    @Test
+    void save2() {
+        // given
+        PlaceEntity place = placeMongoRepository.save(PlaceEntity.from(PlaceFixture.get()));
+        Recommend recommend = recommendService.save(1L, place.getId(), Recommend.Status.ACCEPTED);
+
+        // when & then
+        assertThatThrownBy(() -> recommendService.save(1L, place.getId(), Recommend.Status.ACCEPTED))
+                .isInstanceOf(GlobalException.class)
+                .hasMessageContaining(ErrorCode.ALREADY_EXIST_PROGRESS_RECOMMEND.getMessage());
+    }
+
+    @DisplayName("진행중인 추천이 있을경우 추천을 받을 수 없다.")
+    @Test
+    void getRecommendPlaces() {
+        // given
+        PlaceEntity place = placeMongoRepository.save(PlaceEntity.from(PlaceFixture.get()));
+        Recommend recommend = recommendService.save(1L, place.getId(), Recommend.Status.ACCEPTED);
+
+        // when & then
+        assertThatThrownBy(() -> recommendService.getRecommendPlaces(1L, new LatLng(35.123, 123.23)))
+                .isInstanceOf(GlobalException.class)
+                .hasMessageContaining(ErrorCode.ALREADY_EXIST_PROGRESS_RECOMMEND.getMessage());
+    }
+
     @DisplayName("Recommend 상태를 업데이트한다.")
     @Test
     void updateRecommendStatus() {

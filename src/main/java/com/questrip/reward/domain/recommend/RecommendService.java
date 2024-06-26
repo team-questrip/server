@@ -16,13 +16,16 @@ public class RecommendService {
     private final RecommendFactory recommendFactory;
     private final RecommendAppender recommendAppender;
     private final RecommendUpdater recommendUpdater;
+    private final RecommendValidator recommendValidator;
     private final PlaceFinder placeFinder;
 
     public List<Place> getRecommendPlaces(Long userId, LatLng userLocation) {
+        recommendValidator.validateProgressRecommend(userId);
         return recommendFinder.getRecommends(userId, userLocation);
     }
 
     public Recommend save(Long userId, String placeId, Recommend.Status status) {
+        recommendValidator.validateProgressRecommend(userId);
         Place place = placeFinder.findById(placeId);
         Recommend initRecommend = recommendFactory.init(userId, place, status);
 

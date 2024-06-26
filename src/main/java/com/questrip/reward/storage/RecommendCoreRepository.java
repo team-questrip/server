@@ -56,4 +56,12 @@ public class RecommendCoreRepository implements RecommendRepository {
         recommendEntity.updateStatus(recommend.getStatus());
         return recommendEntity.toRecommend();
     }
+
+    @Override
+    public void checkForExistingInProgressRecommendation(Long userId) {
+        recommendJpaRepository.findByUserIdAndStatus(userId, Recommend.Status.ACCEPTED)
+                .ifPresent(recommend -> {
+                        throw new GlobalException(ErrorCode.ALREADY_EXIST_PROGRESS_RECOMMEND);
+                });
+    }
 }

@@ -17,4 +17,6 @@ public interface RecommendRepository {
     Recommend findProgressRecommend(Long userId);
 
     Recommend update(Recommend recommend);
+
+    void checkForExistingInProgressRecommendation(Long userId);
 }

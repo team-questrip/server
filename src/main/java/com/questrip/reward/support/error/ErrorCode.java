@@ -16,6 +16,7 @@ public enum ErrorCode {
     CONTENT_NOT_FOUND(HttpStatus.BAD_REQUEST, "Content not found."),
     PROGRESS_RECOMMEND_NOT_FOUND(HttpStatus.BAD_REQUEST, "Progress recommendation not found"),
     DISTANCE_CHECK_FAILED(HttpStatus.BAD_REQUEST, "Distance check failed"),
+    ALREADY_EXIST_PROGRESS_RECOMMEND(HttpStatus.BAD_REQUEST, "Recommendation in progress already exists."),
 
     // security
     INVALID_PASSWORD(HttpStatus.UNAUTHORIZED, "Incorrect password."),
