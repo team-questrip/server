@@ -13,13 +13,16 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -32,12 +35,12 @@ class RecommendServiceTest {
     PlaceMongoRepository placeMongoRepository;
 
     @Autowired
-    RecommendJpaRepository recommendRepository;
+    RecommendJpaRepository recommendJpaRepository;
 
     @AfterEach
     void tearDown() {
         placeMongoRepository.deleteAll();
-        recommendRepository.deleteAllInBatch();
+        recommendJpaRepository.deleteAllInBatch();
     }
 
     @DisplayName("추천 내용을 저장한다.")
@@ -59,7 +62,7 @@ class RecommendServiceTest {
                 .containsExactly(
                         1L, Recommend.Status.KEPT
                 );
-        List<RecommendEntity> recommends = recommendRepository.findAll();
+        List<RecommendEntity> recommends = recommendJpaRepository.findAll();
         assertThat(recommends.size()).isEqualTo(1);
     }
 
@@ -117,7 +120,7 @@ class RecommendServiceTest {
         // when & then
         assertThatThrownBy(() -> recommendService.updateRecommendStatus(userId, userLocation, Recommend.Status.COMPLETED))
                 .isInstanceOf(GlobalException.class)
-                        .hasMessageContaining(ErrorCode.DISTANCE_CHECK_FAILED.getMessage());
+                .hasMessageContaining(ErrorCode.DISTANCE_CHECK_FAILED.getMessage());
 
         Recommend recommend = recommendService.retrieveProgressRecommend(userId);
 

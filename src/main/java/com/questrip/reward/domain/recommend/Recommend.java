@@ -28,12 +28,20 @@ public class Recommend {
     }
 
     public void complete(LatLng userLocation) {
+        validateStatus();
         place.checkIn(userLocation);
         this.status = Status.COMPLETED;
     }
 
     public void revoke() {
+        validateStatus();
         this.status = Status.REVOKED;
+    }
+
+    private void validateStatus() {
+        if(this.status != Status.ACCEPTED) {
+            throw new GlobalException(ErrorCode.CAN_NOT_UPDATE_STATUS);
+        }
     }
 
 
