@@ -7,7 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 public class GooglePlaceSearchResponse {
@@ -43,7 +45,7 @@ public class GooglePlaceSearchResponse {
         return Place.builder()
                 .googlePlaceId(id)
                 .placeName(displayName.getText())
-                .primaryType(primaryType)
+                .primaryType(parseType(primaryType))
                 .formattedAddress(formattedAddress)
                 .location(location)
                 .content(content)
@@ -51,5 +53,11 @@ public class GooglePlaceSearchResponse {
                 .openingHours(regularOpeningHours.getWeekdayDescriptions())
                 .openPeriods(regularOpeningHours.getPeriods())
                 .build();
+    }
+
+    private String parseType(String type) {
+        return Arrays.stream(type.split("_"))
+                .map(s -> s.substring(0, 1).toUpperCase() + s.substring(1))
+                .collect(Collectors.joining(" "));
     }
 }
