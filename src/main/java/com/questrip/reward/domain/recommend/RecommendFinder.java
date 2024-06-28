@@ -49,4 +49,10 @@ public class RecommendFinder {
                 .map(Recommend::getPlaceId)
                 .collect(Collectors.toList());
     }
+
+    public Recommend retrieveProgressRecommend(Long userId) {
+        Recommend find = recommendRepository.findProgressRecommend(userId);
+
+        return recommendFactory.from(find);
+    }
 }

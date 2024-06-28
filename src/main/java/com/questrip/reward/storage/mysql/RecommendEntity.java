@@ -2,6 +2,8 @@ package com.questrip.reward.storage.mysql;
 
 import com.questrip.reward.domain.place.Place;
 import com.questrip.reward.domain.recommend.Recommend;
+import com.questrip.reward.support.error.ErrorCode;
+import com.questrip.reward.support.error.GlobalException;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -37,7 +39,19 @@ public class RecommendEntity extends BaseEntity {
                 .placeId(placeId)
                 .status(status)
                 .createdAt(getCreatedAt())
+                .updatedAt(getUpdatedAt())
                 .build();
+    }
+
+    public void updateStatus(Recommend.Status status) {
+        validateStatus();
+        this.status = status;
+    }
+
+    private void validateStatus() {
+        if(this.status != Recommend.Status.ACCEPTED) {
+            throw new GlobalException(ErrorCode.CAN_NOT_UPDATE_STATUS);
+        }
     }
 
     @Builder

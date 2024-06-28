@@ -6,12 +6,14 @@ import com.questrip.reward.security.handler.CustomAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
 import org.springframework.security.config.annotation.web.configurers.FormLoginConfigurer;
@@ -36,6 +38,15 @@ public class SecurityConfig {
     private final CustomAuthenticationEntryPoint authenticationEntryPoint;
     private final UserDetailsService userDetailService;
 
+    private final List<String> API_WHITE_LIST = List.of(
+            "/api/v1/place",
+            "/api/v1/place/.*",
+            "/api/v1/question",
+            "/api/v1/user/.*",
+            "/batch"
+    );
+
+
     @Bean
     BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -49,7 +60,7 @@ public class SecurityConfig {
 
     @Bean
     public JwtTokenFilter authenticationJwtTokenFilter() {
-        return new JwtTokenFilter();
+        return new JwtTokenFilter(API_WHITE_LIST);
     }
 
     @Bean

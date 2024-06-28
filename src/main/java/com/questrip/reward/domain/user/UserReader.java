@@ -12,4 +12,8 @@ public class UserReader {
     public User read(String email) {
         return userRepository.findByEmail(email);
     }
+
+    public User readLoginUserEmail(String email) {
+        return userRepository.findUserByEmail(email);
+    }
 }

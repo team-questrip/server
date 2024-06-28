@@ -10,4 +10,6 @@ public interface UserRepository {
     User findByEmail(String email);
 
     void validateDuplicatedEmail(String email);
+
+    User findUserByEmail(String email);
 }

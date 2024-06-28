@@ -39,7 +39,7 @@ class PlaceSearcherTest {
         // when
         assertThatThrownBy(() -> placeSearcher.searchPlace("1234"))
                 .isInstanceOf(GlobalException.class)
-                .hasMessageContaining("외부 API 서버 오류");
+                .hasMessageContaining("External API server error");
 
         // then
         verify(googlePlaceClient, times(3)).placeDetails(any(), any(), any(), any());

@@ -10,6 +10,8 @@ import java.util.*;
 
 @Getter
 public class Place {
+    private static final double CHECK_IN_SUCCESS_DISTANCE = 0.5;
+
     private String id;
     private String googlePlaceId;
     private String placeName;
@@ -30,6 +32,13 @@ public class Place {
 
         double earthRadius = 6371;
         return earthRadius * Math.acos(Math.sin(lat) * Math.sin(placeLat) + Math.cos(lat) * Math.cos(placeLat) * Math.cos(lon - placeLon));
+    }
+
+    public void checkIn(LatLng userLocation) {
+        double distance = calculateDistance(userLocation);
+        if(distance > CHECK_IN_SUCCESS_DISTANCE) {
+            throw new GlobalException(ErrorCode.DISTANCE_CHECK_FAILED, "User is %.2f kilometers away from the location, which is greater than allowed distance (%.2f kilometers).".formatted(distance, CHECK_IN_SUCCESS_DISTANCE));
+        }
     }
 
     @Builder

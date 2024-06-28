@@ -9,8 +9,6 @@ import com.questrip.reward.support.error.GlobalException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
-
 @Repository
 @RequiredArgsConstructor
 public class UserCoreRepository implements UserRepository {
@@ -34,5 +32,12 @@ public class UserCoreRepository implements UserRepository {
         if(userJpaRepository.existsByEmail(email)) {
             throw new GlobalException(ErrorCode.DUPLICATED_EMAIL, String.format("email is duplicated. request email is %s", email));
         }
+    }
+
+    @Override
+    public User findUserByEmail(String email) {
+        return userJpaRepository.findByEmail(email).orElseThrow(
+                () -> new GlobalException(ErrorCode.USERNAME_NOT_FOUND, String.format("user not found. user email is %s", email))
+        ).toUser();
     }
 }

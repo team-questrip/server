@@ -29,7 +29,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
         } else if (authException.getClass().equals(BadCredentialsException.class)) {
             setResponse(response, BAD_CREDENTIALS);
         } else if(authException.getClass().equals(InsufficientAuthenticationException.class)) {
-            setResponse(response, NOT_FOUND_TOKEN);
+            setResponse(response, INVALID_JWT_TOKEN);
         }
     }
 
