@@ -1,9 +1,9 @@
 package com.questrip.reward.api.v1;
 
 import com.questrip.reward.api.RestDocsTest;
-import com.questrip.reward.domain.content.Content;
 import com.questrip.reward.domain.content.ContentService;
-import com.questrip.reward.fixture.ContentFixture;
+import com.questrip.reward.fixture.BlockFixture;
+import com.questrip.reward.fixture.PageFixture;
 import com.questrip.reward.support.response.SliceResult;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,134 +31,87 @@ class ContentControllerTest extends RestDocsTest {
     @MockBean
     ContentService contentService;
 
-    @DisplayName("컨텐츠 조회 API")
-    @Test
-    void findContent() throws Exception {
-        // given
-        given(contentService.findContent(any()))
-                .willReturn(ContentFixture.get("contentId"));
-
-        // when
-        mockMvc.perform(get("/api/v1/content/{contentId}", "contentId"))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andDo(document("content-get",
-                                resourceDetails()
-                                        .tag("content")
-                                        .description("컨텐츠 조회 API"),
-                                pathParameters(
-                                        parameterWithName("contentId").description("컨텐츠 아이디")
-                                ),
-                                responseFields(
-                                        fieldWithPath("status").type(JsonFieldType.STRING)
-                                                .description("응답 상태"),
-                                        fieldWithPath("message").type(JsonFieldType.NULL)
-                                                .description("메시지"),
-                                        fieldWithPath("data").type(JsonFieldType.OBJECT)
-                                                .description("데이터"),
-                                        fieldWithPath("data.id").type(JsonFieldType.STRING)
-                                                .description("컨텐츠 id"),
-                                        fieldWithPath("data.title").type(JsonFieldType.STRING)
-                                                .description("컨텐츠 제목"),
-                                        fieldWithPath("data.category").type(JsonFieldType.STRING)
-                                                .description("컨텐츠 카테고리"),
-                                        fieldWithPath("data.tags").type(JsonFieldType.ARRAY)
-                                                .description("컨텐츠 태그"),
-                                        fieldWithPath("data.images").type(JsonFieldType.STRING)
-                                                .description("컨텐츠 이미지"),
-                                        fieldWithPath("data.sections[]").type(JsonFieldType.ARRAY)
-                                                .description("컨텐츠 섹션"),
-                                        fieldWithPath("data.sections[].title").type(JsonFieldType.STRING)
-                                                .description("섹션 제목"),
-                                        fieldWithPath("data.sections[].content").type(JsonFieldType.STRING)
-                                                .description("섹션 내용"),
-                                        fieldWithPath("data.sections[].image").type(JsonFieldType.STRING)
-                                                .description("섹션 이미지"),
-                                        fieldWithPath("data.sections[].bulletedList[]").type(JsonFieldType.ARRAY)
-                                                .description("섹션 bullet list"),
-                                        fieldWithPath("data.sections[].bulletedList[].title").type(JsonFieldType.STRING)
-                                                .description("bullet list 제목"),
-                                        fieldWithPath("data.sections[].bulletedList[].items[]").type(JsonFieldType.ARRAY)
-                                                .description("섹션 bullet list 제목 내용")
-                                )
-                        )
-                );
-
-
-        // then
-    }
-
-    @DisplayName("컨텐츠 리스트 조회 API")
+    @DisplayName("페이지 조회 API")
     @Test
     void findContents() throws Exception {
         // given
-        List<Content> contents = new ArrayList<>();
-
-        for (int i = 0; i < 5; i++) {
-            contents.add(ContentFixture.get("contentId" + i));
-        }
-        given(contentService.findContentsBy(anyInt(), anyInt()))
-                .willReturn(new SliceResult<>(contents, 0, 5, 5, false));
+        given(contentService.getPages())
+                .willReturn(
+                        List.of(PageFixture.get())
+                );
 
         // when
-        mockMvc.perform(get("/api/v1/content")
-                        .param("page", "0")
-                        .param("size", "5")
-                )
+        mockMvc.perform(get("/api/v1/content"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andDo(document("content-list-get",
                                 resourceDetails()
                                         .tag("content")
-                                        .description("컨텐츠 리스트 조회 API"),
-                                queryParameters(
-                                        parameterWithName("page").description("요청 페이지 (default 0)"),
-                                        parameterWithName("size").description("요청 사이즈 (default 5)")
+                                        .description("컨텐츠 전체 조회 API"),
+                                responseFields(
+                                        fieldWithPath("status").type(JsonFieldType.STRING)
+                                                .description("응답 상태"),
+                                        fieldWithPath("message").type(JsonFieldType.NULL)
+                                                .description("메시지"),
+                                        fieldWithPath("data").type(JsonFieldType.ARRAY)
+                                                .description("데이터"),
+                                        fieldWithPath("data[].pageId").type(JsonFieldType.STRING)
+                                                .description("페이지 id"),
+                                        fieldWithPath("data[].id").type(JsonFieldType.STRING)
+                                                .description("노션 id"),
+                                        fieldWithPath("data[].title").type(JsonFieldType.STRING)
+                                                .description("컨텐츠 제목"),
+                                        fieldWithPath("data[].tags").type(JsonFieldType.ARRAY)
+                                                .description("태그 목록"),
+                                        fieldWithPath("data[].category").type(JsonFieldType.ARRAY)
+                                                .description("카테고리 목록"),
+                                        fieldWithPath("data[].menuItems").type(JsonFieldType.ARRAY)
+                                                .description("메뉴 아이템 목록"),
+                                        fieldWithPath("data[].thumbnailImage").type(JsonFieldType.STRING)
+                                                .description("썸네일 이미지")
+                                )
+                        )
+                );
+    }
+
+    @DisplayName("페이지 조회 API")
+    @Test
+    void getBlocks() throws Exception {
+        // given
+        given(contentService.getBlocks(any()))
+                .willReturn(
+                        BlockFixture.get()
+                );
+
+        // when
+        mockMvc.perform(get("/api/v1/content/{pageId}", "8860f178-e89f-488c-b68b-a0ac414e25de"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("content-get",
+                                resourceDetails()
+                                        .tag("content")
+                                        .description("컨텐츠 상세 조회 API"),
+                                pathParameters(
+                                        parameterWithName("pageId").description("페이지 아이디")
                                 ),
                                 responseFields(
                                         fieldWithPath("status").type(JsonFieldType.STRING)
                                                 .description("응답 상태"),
                                         fieldWithPath("message").type(JsonFieldType.NULL)
                                                 .description("메시지"),
-                                        fieldWithPath("data").type(JsonFieldType.OBJECT)
+                                        fieldWithPath("data").type(JsonFieldType.ARRAY)
                                                 .description("데이터"),
-                                        fieldWithPath("data.content[].id").type(JsonFieldType.STRING)
-                                                .description("컨텐츠 id"),
-                                        fieldWithPath("data.content[].title").type(JsonFieldType.STRING)
-                                                .description("컨텐츠 제목"),
-                                        fieldWithPath("data.content[].category").type(JsonFieldType.STRING)
-                                                .description("컨텐츠 카테고리"),
-                                        fieldWithPath("data.content[].tags").type(JsonFieldType.ARRAY)
-                                                .description("컨텐츠 태그"),
-                                        fieldWithPath("data.content[].images").type(JsonFieldType.STRING)
-                                                .description("컨텐츠 이미지"),
-                                        fieldWithPath("data.content[].sections[]").type(JsonFieldType.ARRAY)
-                                                .description("컨텐츠 섹션"),
-                                        fieldWithPath("data.content[].sections[].title").type(JsonFieldType.STRING)
-                                                .description("섹션 제목"),
-                                        fieldWithPath("data.content[].sections[].content").type(JsonFieldType.STRING)
-                                                .description("섹션 내용"),
-                                        fieldWithPath("data.content[].sections[].image").type(JsonFieldType.STRING)
-                                                .description("섹션 이미지"),
-                                        fieldWithPath("data.content[].sections[].bulletedList[]").type(JsonFieldType.ARRAY)
-                                                .description("섹션 bullet list"),
-                                        fieldWithPath("data.content[].sections[].bulletedList[].title").type(JsonFieldType.STRING)
-                                                .description("bullet list 제목"),
-                                        fieldWithPath("data.content[].sections[].bulletedList[].items[]").type(JsonFieldType.ARRAY)
-                                                .description("섹션 bullet list 제목 내용"),
-                                        fieldWithPath("data.page").type(JsonFieldType.NUMBER)
-                                                .description("요청 페이지"),
-                                        fieldWithPath("data.size").type(JsonFieldType.NUMBER)
-                                                .description("요청 사이즈"),
-                                        fieldWithPath("data.numberOfElements").type(JsonFieldType.NUMBER)
-                                                .description("실제 데이터 개수"),
-                                        fieldWithPath("data.hasNext").type(JsonFieldType.BOOLEAN)
-                                                .description("다음 페이지 존재 여부")
+                                        fieldWithPath("data[].type").type(JsonFieldType.STRING).optional()
+                                                .description("페이지 타입"),
+                                        fieldWithPath("data[].url").type(JsonFieldType.STRING).optional()
+                                                .description("이미지 url"),
+                                        fieldWithPath("data[].caption").type(JsonFieldType.STRING).optional()
+                                                .description("이미지 캡션"),
+                                        fieldWithPath("data[].text").type(JsonFieldType.STRING).optional()
+                                                .description("내용")
                                 )
                         )
                 );
-
-
-        // then
     }
+
 }

@@ -1,13 +1,14 @@
 package com.questrip.reward.api.v1;
 
-import com.questrip.reward.api.v1.request.ContentRequest;
-import com.questrip.reward.api.v1.response.ContentResponse;
-import com.questrip.reward.domain.content.Content;
+import com.questrip.reward.api.v1.response.BlockResponse;
+import com.questrip.reward.api.v1.response.PageResponse;
 import com.questrip.reward.domain.content.ContentService;
 import com.questrip.reward.support.response.ApiResponse;
-import com.questrip.reward.support.response.SliceResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -16,24 +17,22 @@ public class ContentController {
 
     private final ContentService contentService;
 
-    @PostMapping
-    public ApiResponse publish(@RequestBody ContentRequest request) {
-        contentService.publish(request.toContent());
-
-        return ApiResponse.success(null);
-    }
-
-    @GetMapping("/{contentId}")
-    public ApiResponse<ContentResponse> findContent(@PathVariable String contentId) {
-        Content content = contentService.findContent(contentId);
-
-        return ApiResponse.success(new ContentResponse(content));
-    }
-
     @GetMapping
-    public ApiResponse<SliceResult<ContentResponse>> findContents(@RequestParam(required = false, defaultValue = "0") int page, @RequestParam(required = false, defaultValue = "5") int size){
-        var result = contentService.findContentsBy(page, size)
-                .map(ContentResponse::new);
+    public ApiResponse<List<PageResponse>> getPages() {
+        List<PageResponse> result = contentService.getPages()
+                .stream()
+                .map(PageResponse::new)
+                .collect(Collectors.toList());
+
+        return ApiResponse.success(result);
+    }
+
+    @GetMapping("/{pageId}")
+    public ApiResponse<List<BlockResponse>> getBlocks(@PathVariable String pageId) {
+        List<BlockResponse> result = contentService.getBlocks(pageId)
+                .stream()
+                .map(b -> BlockResponse.fromBlock(b))
+                .collect(Collectors.toList());
 
         return ApiResponse.success(result);
     }

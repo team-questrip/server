@@ -1,27 +1,30 @@
 package com.questrip.reward.domain.content;
 
+import com.questrip.reward.api.v1.response.BlockResponse;
+import com.questrip.reward.api.v1.response.PageResponse;
+import com.questrip.reward.client.NotionClient;
+import com.questrip.reward.client.response.NotionPageResult;
 import com.questrip.reward.support.response.SliceResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class ContentService {
 
-    private final ContentAppender contentAppender;
-    private final ContentReader contentReader;
+    private final NotionClient notionClient;
 
-    @Transactional
-    public void publish(Content content) {
-        contentAppender.append(content);
+    public List<Page> getPages() {
+        return notionClient.getPageList("183385c0793a49859c61806b09d08cbc")
+                .getResults();
     }
 
-    public Content findContent(String id) {
-        return contentReader.findContentById(id);
-    }
-
-    public SliceResult<Content> findContentsBy(int page, int size) {
-        return contentReader.findAllBy(page, size);
+    public List<Block> getBlocks(String pageId) {
+        return notionClient.getBlocks(pageId)
+                .results();
     }
 }
