@@ -3,6 +3,7 @@ package com.questrip.reward.api.v1;
 import com.questrip.reward.api.RestDocsTest;
 import com.questrip.reward.domain.content.ContentService;
 import com.questrip.reward.fixture.BlockFixture;
+import com.questrip.reward.fixture.ContentFixture;
 import com.questrip.reward.fixture.PageFixture;
 import com.questrip.reward.support.response.SliceResult;
 import org.junit.jupiter.api.DisplayName;
@@ -35,19 +36,24 @@ class ContentControllerTest extends RestDocsTest {
     @Test
     void findContents() throws Exception {
         // given
-        given(contentService.getPages())
+        given(contentService.findAllTranslatedContent(any()))
                 .willReturn(
-                        List.of(PageFixture.get())
+                        List.of(ContentFixture.getTranslate())
                 );
 
         // when
-        mockMvc.perform(get("/api/v1/content"))
+        mockMvc.perform(get("/api/v1/content")
+                        .param("language", "EN")
+                )
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andDo(document("content-list-get",
                                 resourceDetails()
                                         .tag("content")
                                         .description("컨텐츠 전체 조회 API"),
+                                queryParameters(
+                                        parameterWithName("language").description("번역 언어 default 영어").optional()
+                                ),
                                 responseFields(
                                         fieldWithPath("status").type(JsonFieldType.STRING)
                                                 .description("응답 상태"),
@@ -57,8 +63,8 @@ class ContentControllerTest extends RestDocsTest {
                                                 .description("데이터"),
                                         fieldWithPath("data[].pageId").type(JsonFieldType.STRING)
                                                 .description("페이지 id"),
-                                        fieldWithPath("data[].id").type(JsonFieldType.STRING)
-                                                .description("노션 id"),
+                                        fieldWithPath("data[].id").type(JsonFieldType.NUMBER)
+                                                .description("데이터베이스 게시글 id"),
                                         fieldWithPath("data[].title").type(JsonFieldType.STRING)
                                                 .description("컨텐츠 제목"),
                                         fieldWithPath("data[].tags").type(JsonFieldType.ARRAY)
