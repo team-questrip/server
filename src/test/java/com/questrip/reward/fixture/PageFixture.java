@@ -4,7 +4,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.questrip.reward.domain.content.Page;
+import com.questrip.reward.domain.content.TranslatedPage;
 import org.junit.jupiter.api.BeforeEach;
+
+import java.util.List;
 
 public class PageFixture {
     private static final ObjectMapper objectMapper = new ObjectMapper();
@@ -184,7 +187,7 @@ public class PageFixture {
         return objectMapper.readValue(str, Page.class);
     }
 
-    public static void main(String[] args) throws JsonProcessingException {
-        System.out.println(PageFixture.get());
+    public static TranslatedPage getTranslate() {
+        return new TranslatedPage("pageId", "id", "test title", List.of("태그1"), List.of("카테고리"), List.of("메뉴"), "thumbnail");
     }
 }

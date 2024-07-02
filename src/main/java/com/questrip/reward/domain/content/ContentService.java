@@ -1,22 +1,17 @@
 package com.questrip.reward.domain.content;
 
-import com.questrip.reward.api.v1.response.BlockResponse;
-import com.questrip.reward.api.v1.response.PageResponse;
 import com.questrip.reward.client.NotionClient;
-import com.questrip.reward.client.response.NotionPageResult;
-import com.questrip.reward.support.response.SliceResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class ContentService {
 
     private final NotionClient notionClient;
+    private final ContentTranslator contentTranslator;
 
     public List<Page> getPages() {
         return notionClient.getPageList("183385c0793a49859c61806b09d08cbc")
@@ -27,4 +22,15 @@ public class ContentService {
         return notionClient.getBlocks(pageId)
                 .results();
     }
+
+    public List<TranslatedPage> getTranslatedPages(String sourceLang, String targetLang) {
+        List<Page> pages = getPages();
+        return contentTranslator.translateAllPages(pages, sourceLang, targetLang);
+    }
+
+    public List<TranslatedBlock> getTranslatedBlocks(String pageId, String sourceLang, String targetLang) {
+        List<Block> blocks = getBlocks(pageId);
+        return contentTranslator.translateAllBlocks(blocks, sourceLang, targetLang);
+    }
+
 }

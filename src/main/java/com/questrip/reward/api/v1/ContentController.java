@@ -31,7 +31,29 @@ public class ContentController {
     public ApiResponse<List<BlockResponse>> getBlocks(@PathVariable String pageId) {
         List<BlockResponse> result = contentService.getBlocks(pageId)
                 .stream()
-                .map(b -> BlockResponse.fromBlock(b))
+                .map(BlockResponse::fromBlock)
+                .collect(Collectors.toList());
+
+        return ApiResponse.success(result);
+    }
+
+    @GetMapping("/translate")
+    public ApiResponse<List<PageResponse>> getTranslatedPages(@RequestParam String sourceLang, @RequestParam String targetLang) {
+        List<PageResponse> result = contentService.getTranslatedPages(sourceLang, targetLang)
+                .stream()
+                .map(PageResponse::new)
+                .collect(Collectors.toList());
+
+        return ApiResponse.success(result);
+    }
+
+    @GetMapping("/translate/{pageId}")
+    public ApiResponse<List<BlockResponse>> getTranslatedBlocks(@PathVariable String pageId,
+                                                                @RequestParam String sourceLang,
+                                                                @RequestParam String targetLang) {
+        List<BlockResponse> result = contentService.getTranslatedBlocks(pageId, sourceLang, targetLang)
+                .stream()
+                .map(BlockResponse::fromTranslatedBlcok)
                 .collect(Collectors.toList());
 
         return ApiResponse.success(result);

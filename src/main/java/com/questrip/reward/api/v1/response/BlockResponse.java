@@ -2,6 +2,7 @@ package com.questrip.reward.api.v1.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.questrip.reward.domain.content.Block;
+import com.questrip.reward.domain.content.TranslatedBlock;
 import com.questrip.reward.support.error.ErrorCode;
 import com.questrip.reward.support.error.GlobalException;
 
@@ -58,6 +59,25 @@ public record BlockResponse(
                 );
             default:
                 throw new GlobalException(ErrorCode.UN_SUPPORTED_BLOCK_TYPE, "block type is %s".formatted(block.getType()));
+        }
+    }
+
+    public static BlockResponse fromTranslatedBlcok(TranslatedBlock block) {
+        switch (block.getType()) {
+            case "image":
+                return new BlockResponse(
+                        block.getType(),
+                        block.getUrl(),
+                        block.getCaption(),
+                        null
+                );
+            default:
+                return new BlockResponse(
+                        block.getType(),
+                        null,
+                        null,
+                        block.getText()
+                );
         }
     }
 }

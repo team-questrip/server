@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.questrip.reward.domain.content.Block;
+import com.questrip.reward.domain.content.TranslatedBlock;
 
 import java.util.List;
 
@@ -821,5 +822,9 @@ public class BlockFixture {
                 "    ]";
 
         return objectMapper.readValue(str, new TypeReference<>() {});
+    }
+
+    public static TranslatedBlock getTranslatedBlock() {
+        return new TranslatedBlock("image", "questrips.com", "퀘스트립", null);
     }
 }

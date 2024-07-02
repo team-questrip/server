@@ -30,6 +30,18 @@ public class Page {
         public String getId() {
             return cleanText(id.getTitle().stream().map(TitleElement::getPlainText).collect(Collectors.joining()));
         }
+
+        public String getCategoriesToString() {
+            return category.getMultiSelect().stream()
+                    .map(MultiSelect::getName)
+                    .collect(Collectors.joining(","));
+        }
+
+        public String getTagsToString() {
+            return tags.multiSelect.stream()
+                    .map(MultiSelect::getName)
+                    .collect(Collectors.joining(","));
+        }
     }
 
     public static class ThumbnailImage {
