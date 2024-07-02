@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -61,5 +62,18 @@ public class ContentTranslator {
             case "bulleted_list_item" -> block.getBulletedListItem().concat();
             default -> "image";
         };
+    }
+
+    public TranslatedItem translateContent(Content content, String language) {
+        List<String> candidates = List.of(content.getTitle(), content.getTags(), content.getCategory());
+
+        List<String> translatedTexts = client.getTranslate(new DeeplTranslateRequest(candidates, "en", language)).getTexts();
+
+        return new TranslatedItem(
+                translatedTexts.get(0),
+                Arrays.asList(translatedTexts.get(1).split(",")),
+                Arrays.asList(translatedTexts.get(2).split(",")),
+                language
+        );
     }
 }

@@ -1,6 +1,7 @@
 package com.questrip.reward.api.v1;
 
 import com.questrip.reward.api.v1.response.BlockResponse;
+import com.questrip.reward.api.v1.response.ContentResponse;
 import com.questrip.reward.api.v1.response.PageResponse;
 import com.questrip.reward.domain.content.ContentService;
 import com.questrip.reward.support.response.ApiResponse;
@@ -18,10 +19,10 @@ public class ContentController {
     private final ContentService contentService;
 
     @GetMapping
-    public ApiResponse<List<PageResponse>> getPages() {
-        List<PageResponse> result = contentService.getPages()
+    public ApiResponse<List<ContentResponse>> getPages(@RequestParam(required = false, defaultValue = "EN") String language) {
+        var result = contentService.findAllTranslatedContent(language)
                 .stream()
-                .map(PageResponse::new)
+                .map(ContentResponse::new)
                 .collect(Collectors.toList());
 
         return ApiResponse.success(result);
@@ -57,5 +58,10 @@ public class ContentController {
                 .collect(Collectors.toList());
 
         return ApiResponse.success(result);
+    }
+
+    @PostMapping("/{pageId}/translate")
+    public void translateAll(@PathVariable String pageId) {
+        contentService.translateAll(pageId);
     }
 }
