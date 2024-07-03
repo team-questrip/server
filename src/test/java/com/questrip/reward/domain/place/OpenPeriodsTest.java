@@ -350,4 +350,69 @@ class OpenPeriodsTest {
         // then
         assertThat(새벽두시오십분).isEqualTo(OpenStatus.CLOSE);
     }
+
+    @DisplayName("브레이크 타임이 포함된 영업시간 테스트")
+    @Test
+    void isOpenWithBreakTime() throws JsonProcessingException {
+        // given
+        String periods = "[\n" +
+                "          {\n" +
+                "            \"open\": {\n" +
+                "              \"day\": 1,\n" +
+                "              \"hour\": 11,\n" +
+                "              \"minute\": 30\n" +
+                "            },\n" +
+                "            \"close\": {\n" +
+                "              \"day\": 1,\n" +
+                "              \"hour\": 15,\n" +
+                "              \"minute\": 0\n" +
+                "            }\n" +
+                "          },\n" +
+                "          {\n" +
+                "            \"open\": {\n" +
+                "              \"day\": 1,\n" +
+                "              \"hour\": 17,\n" +
+                "              \"minute\": 0\n" +
+                "            },\n" +
+                "            \"close\": {\n" +
+                "              \"day\": 2,\n" +
+                "              \"hour\": 2,\n" +
+                "              \"minute\": 0\n" +
+                "            }\n" +
+                "          }\n" +
+                "        ]";
+
+        /**
+         * 월요일 11:30 ~ 15:00, 17:00 ~ 02:00 (다음날)
+         */
+        List<Period> list = objectMapper.readValue(periods, new TypeReference<List<Period>>() {});
+
+        OpenPeriods openPeriods = new OpenPeriods(list);
+
+        LocalDateTime beforeOpen = LocalDateTime.of(2024, 3, 25, 11, 29, 0);  // 월요일 11:29
+        LocalDateTime beforeOpen2 = LocalDateTime.of(2024, 3, 25, 11, 30, 0);  // 월요일 11:30
+        LocalDateTime duringFirstPeriod = LocalDateTime.of(2024, 3, 25, 13, 0, 0);  // 월요일 13:00
+        LocalDateTime duringBreakTime = LocalDateTime.of(2024, 3, 25, 16, 0, 0);  // 월요일 16:00
+        LocalDateTime duringSecondPeriod = LocalDateTime.of(2024, 3, 25, 20, 0, 0);  // 월요일 20:00
+        LocalDateTime afterMidnight = LocalDateTime.of(2024, 3, 26, 1, 0, 0);  // 화요일 01:00
+        LocalDateTime afterClose = LocalDateTime.of(2024, 3, 26, 3, 0, 0);  // 화요일 03:00
+
+        // when
+        OpenStatus beforeOpenStatus = openPeriods.isOpen(beforeOpen);
+        OpenStatus beforeOpenStatus2 = openPeriods.isOpen(beforeOpen2);
+        OpenStatus duringFirstPeriodStatus = openPeriods.isOpen(duringFirstPeriod);
+        OpenStatus duringBreakTimeStatus = openPeriods.isOpen(duringBreakTime);
+        OpenStatus duringSecondPeriodStatus = openPeriods.isOpen(duringSecondPeriod);
+        OpenStatus afterMidnightStatus = openPeriods.isOpen(afterMidnight);
+        OpenStatus afterCloseStatus = openPeriods.isOpen(afterClose);
+
+        // then
+        assertThat(beforeOpenStatus).isEqualTo(OpenStatus.CLOSE);
+        assertThat(beforeOpenStatus2).isEqualTo(OpenStatus.OPEN);
+        assertThat(duringFirstPeriodStatus).isEqualTo(OpenStatus.OPEN);
+        assertThat(duringBreakTimeStatus).isEqualTo(OpenStatus.CLOSE);
+        assertThat(duringSecondPeriodStatus).isEqualTo(OpenStatus.OPEN);
+        assertThat(afterMidnightStatus).isEqualTo(OpenStatus.OPEN);
+        assertThat(afterCloseStatus).isEqualTo(OpenStatus.CLOSE);
+    }
 }
