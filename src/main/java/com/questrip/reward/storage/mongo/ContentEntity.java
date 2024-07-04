@@ -40,6 +40,7 @@ public class ContentEntity {
     }
 
     public void update(Content content) {
+        thumbnailImage = content.getThumbnailImage();
         translatedList = content.getTranslatedList();
     }
 

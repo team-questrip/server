@@ -41,4 +41,8 @@ public class Content {
                 .findFirst()
                 .orElseGet(() -> new TranslatedItem("empty", List.of("empty"), List.of("empty"), language));
     }
+
+    public void updateImage(String imgUrl) {
+        this.thumbnailImage = imgUrl;
+    }
 }

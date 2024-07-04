@@ -1,5 +1,6 @@
 package com.questrip.reward.api.v1;
 
+import com.questrip.reward.api.v1.response.ContentBlockResponse;
 import com.questrip.reward.api.v1.response.ContentResponse;
 import com.questrip.reward.domain.content.ContentService;
 import com.questrip.reward.support.response.ApiResponse;
@@ -18,7 +19,7 @@ public class ContentController {
 
     @GetMapping
     public ApiResponse<List<ContentResponse>> getPages(@RequestParam(required = false, defaultValue = "EN") String language) {
-        var result = contentService.findAllTranslatedContent(language)
+        var result = contentService.findAllTranslatedContent(toUppercase(language))
                 .stream()
                 .map(ContentResponse::new)
                 .collect(Collectors.toList());
@@ -26,23 +27,19 @@ public class ContentController {
         return ApiResponse.success(result);
     }
 
-//    @GetMapping("/{pageId}")
-//    public ApiResponse<List<BlockResponse>> getBlocks(@PathVariable String pageId) {
-//        List<BlockResponse> result = contentService.getBlocks(pageId)
-//                .stream()
-//                .map(BlockResponse::fromBlock)
-//                .collect(Collectors.toList());
-//
-//        return ApiResponse.success(result);
-//    }
+    @GetMapping("/{pageId}")
+    public ApiResponse<ContentBlockResponse> getBlocks(@PathVariable String pageId, @RequestParam(required = false, defaultValue = "EN") String language) {
+        var contentBlock = contentService.getBlocks(pageId, toUppercase(language));
 
-    @PostMapping("/{pageId}/translate")
-    public void translateAll(@PathVariable String pageId) {
-        contentService.translateAll(pageId);
+        return ApiResponse.success(new ContentBlockResponse(contentBlock));
     }
 
-    @PostMapping("/{pageId}")
-    public void postDefaultBlock(@PathVariable String pageId) {
+    private String toUppercase(String str) {
+        return str.toUpperCase();
+    }
 
+    @PostMapping("/{pageId}/init")
+    public void init(@PathVariable String pageId) {
+        contentService.init(pageId);
     }
 }

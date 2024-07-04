@@ -15,4 +15,6 @@ public interface ContentRepository {
     List<Content> findAll();
 
     ContentBlock saveBlock(ContentBlock contentBlock);
+
+    Optional<ContentBlock> findContentBlock(String pageId, String language);
 }

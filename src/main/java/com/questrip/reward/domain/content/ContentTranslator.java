@@ -16,37 +16,27 @@ public class ContentTranslator {
 
     private final DeeplTranslateClient client;
 
-//    public List<TranslatedBlock> translateAllBlocks(List<Block> blocks, String sourceLang, String targetLang) {
-//        List<String> candidates = blocks.stream().map(block -> getBlockContent(block))
-//                .filter(content -> !content.equals("image"))
-//                .collect(Collectors.toList());
-//
-//        List<String> translatedTexts = client.getTranslate(new DeeplTranslateRequest(candidates, sourceLang, targetLang)).getTexts();
-//        int idx = 0;
-//        List<TranslatedBlock> result = new ArrayList<>();
-//        for (var block : blocks) {
-//            if(block.getType().equals("image")) {
-//                result.add(TranslatedBlock.fromBlock(block, ""));
-//                continue;
-//            }
-//
-//            result.add(TranslatedBlock.fromBlock(block, translatedTexts.get(idx++)));
-//        }
-//
-//        return result;
-//    }
-//
-//    private String getBlockContent(Block block) {
-//        String type = block.getType();
-//        return switch (type) {
-//            case "heading_1" -> block.getHeading1().concat();
-//            case "heading_2" -> block.getHeading2().concat();
-//            case "heading_3" -> block.getHeading3().concat();
-//            case "paragraph" -> block.getParagraph().concat();
-//            case "bulleted_list_item" -> block.getBulletedListItem().concat();
-//            default -> "image";
-//        };
-//    }
+    public ContentBlock translateAllBlocks(List<ContentBlock.Block> blocks, String pageId, String targetLang) {
+        List<String> candidates = blocks.stream()
+                .filter(block -> !block.getType().equals("image"))
+                .filter(block -> !block.getText().isEmpty())
+                .map(ContentBlock.Block::getText)
+                .collect(Collectors.toList());
+
+        List<String> translatedTexts = client.getTranslate(new DeeplTranslateRequest(candidates, "EN", targetLang)).getTexts();
+        int idx = 0;
+        List<ContentBlock.Block> result = new ArrayList<>();
+        for (var block : blocks) {
+            if(block.getType().equals("image") || block.getText().isEmpty()) {
+                result.add(block);
+                continue;
+            }
+
+            result.add(new ContentBlock.Block(block.getType(), null, null, translatedTexts.get(idx++)));
+        }
+
+        return new ContentBlock(pageId, targetLang, result);
+    }
 
     public TranslatedItem translateContent(Content content, String language) {
         List<String> candidates = List.of(content.getTitle(), content.getTags(), content.getCategory());

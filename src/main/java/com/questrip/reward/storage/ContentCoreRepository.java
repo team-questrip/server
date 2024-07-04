@@ -51,4 +51,10 @@ public class ContentCoreRepository implements ContentRepository {
         return contentBlockMongoRepository.save(ContentBlockEntity.from(contentBlock))
                 .toBlock();
     }
+
+    @Override
+    public Optional<ContentBlock> findContentBlock(String pageId, String language) {
+        return contentBlockMongoRepository.findByPageIdAndLanguage(pageId, language)
+                .map(ContentBlockEntity::toBlock);
+    }
 }
