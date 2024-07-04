@@ -4,6 +4,7 @@ import lombok.Getter;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Objects;
 
 @Getter
 public class OpenPeriods {
@@ -49,5 +50,17 @@ public class OpenPeriods {
 
     private int getDayOfWeek(LocalDateTime currentTime) {
         return currentTime.getDayOfWeek().getValue() % 7;  // 0(일요일)부터 6(토요일)
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof OpenPeriods that)) return false;
+        return Objects.equals(getPeriods(), that.getPeriods());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getPeriods());
     }
 }
