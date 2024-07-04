@@ -1,8 +1,6 @@
 package com.questrip.reward.api.v1.response;
 
-import com.questrip.reward.domain.content.Page;
 import com.questrip.reward.domain.content.TranslatedContent;
-import com.questrip.reward.domain.content.TranslatedPage;
 
 import java.util.List;
 

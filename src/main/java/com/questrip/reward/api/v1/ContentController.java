@@ -1,8 +1,6 @@
 package com.questrip.reward.api.v1;
 
-import com.questrip.reward.api.v1.response.BlockResponse;
 import com.questrip.reward.api.v1.response.ContentResponse;
-import com.questrip.reward.api.v1.response.PageResponse;
 import com.questrip.reward.domain.content.ContentService;
 import com.questrip.reward.support.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -28,40 +26,23 @@ public class ContentController {
         return ApiResponse.success(result);
     }
 
-    @GetMapping("/{pageId}")
-    public ApiResponse<List<BlockResponse>> getBlocks(@PathVariable String pageId) {
-        List<BlockResponse> result = contentService.getBlocks(pageId)
-                .stream()
-                .map(BlockResponse::fromBlock)
-                .collect(Collectors.toList());
-
-        return ApiResponse.success(result);
-    }
-
-    @GetMapping("/translate")
-    public ApiResponse<List<PageResponse>> getTranslatedPages(@RequestParam String sourceLang, @RequestParam String targetLang) {
-        List<PageResponse> result = contentService.getTranslatedPages(sourceLang, targetLang)
-                .stream()
-                .map(PageResponse::new)
-                .collect(Collectors.toList());
-
-        return ApiResponse.success(result);
-    }
-
-    @GetMapping("/translate/{pageId}")
-    public ApiResponse<List<BlockResponse>> getTranslatedBlocks(@PathVariable String pageId,
-                                                                @RequestParam String sourceLang,
-                                                                @RequestParam String targetLang) {
-        List<BlockResponse> result = contentService.getTranslatedBlocks(pageId, sourceLang, targetLang)
-                .stream()
-                .map(BlockResponse::fromTranslatedBlcok)
-                .collect(Collectors.toList());
-
-        return ApiResponse.success(result);
-    }
+//    @GetMapping("/{pageId}")
+//    public ApiResponse<List<BlockResponse>> getBlocks(@PathVariable String pageId) {
+//        List<BlockResponse> result = contentService.getBlocks(pageId)
+//                .stream()
+//                .map(BlockResponse::fromBlock)
+//                .collect(Collectors.toList());
+//
+//        return ApiResponse.success(result);
+//    }
 
     @PostMapping("/{pageId}/translate")
     public void translateAll(@PathVariable String pageId) {
         contentService.translateAll(pageId);
+    }
+
+    @PostMapping("/{pageId}")
+    public void postDefaultBlock(@PathVariable String pageId) {
+
     }
 }

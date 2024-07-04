@@ -13,4 +13,6 @@ public interface ContentRepository {
     void update(Content content);
 
     List<Content> findAll();
+
+    ContentBlock saveBlock(ContentBlock contentBlock);
 }

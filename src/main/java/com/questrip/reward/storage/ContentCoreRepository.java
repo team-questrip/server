@@ -1,7 +1,10 @@
 package com.questrip.reward.storage;
 
 import com.questrip.reward.domain.content.Content;
+import com.questrip.reward.domain.content.ContentBlock;
 import com.questrip.reward.domain.content.ContentRepository;
+import com.questrip.reward.storage.mongo.ContentBlockEntity;
+import com.questrip.reward.storage.mongo.ContentBlockMongoRepository;
 import com.questrip.reward.storage.mongo.ContentEntity;
 import com.questrip.reward.storage.mongo.ContentMongoRepository;
 import com.questrip.reward.support.error.ErrorCode;
@@ -18,6 +21,7 @@ import java.util.stream.Collectors;
 public class ContentCoreRepository implements ContentRepository {
 
     private final ContentMongoRepository contentMongoRepository;
+    private final ContentBlockMongoRepository contentBlockMongoRepository;
 
     @Override
     public Content findByPageId(String pageId) {
@@ -40,5 +44,11 @@ public class ContentCoreRepository implements ContentRepository {
                 .stream()
                 .map(ContentEntity::toContent)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public ContentBlock saveBlock(ContentBlock contentBlock) {
+        return contentBlockMongoRepository.save(ContentBlockEntity.from(contentBlock))
+                .toBlock();
     }
 }

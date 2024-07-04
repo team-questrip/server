@@ -3,7 +3,6 @@ package com.questrip.reward.fixture;
 import com.questrip.reward.domain.content.Content;
 import com.questrip.reward.domain.content.TranslatedContent;
 import com.questrip.reward.domain.content.TranslatedItem;
-import com.questrip.reward.domain.content.TranslatedPage;
 
 import java.util.List;
 
