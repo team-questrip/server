@@ -36,7 +36,7 @@ public class ContentImageUploader {
                 try (InputStream inputStream = connection.getInputStream()) {
                     byte[] imageBytes = inputStream.readAllBytes();
 
-                    String fileName = UUID.randomUUID().toString() + ".jpg";
+                    String fileName = UUID.randomUUID() + ".jpg";
                     String folderPath = "content_" + contentSequence + "/";
                     String fullPath = folderPath + fileName;
                     ObjectMetadata metadata = new ObjectMetadata();
