@@ -19,6 +19,7 @@ public enum ErrorCode {
     ALREADY_EXIST_PROGRESS_RECOMMEND(HttpStatus.BAD_REQUEST, "Recommendation in progress already exists."),
     CAN_NOT_UPDATE_STATUS(HttpStatus.BAD_REQUEST, "Recommend status is not ACCEPTED"),
     UN_SUPPORTED_BLOCK_TYPE(HttpStatus.BAD_REQUEST, "Unsupported block type"),
+    UN_SUPPORTED_LANGUAGE(HttpStatus.BAD_REQUEST, "Unsupported language"),
 
     // security
     INVALID_PASSWORD(HttpStatus.UNAUTHORIZED, "Incorrect password."),
