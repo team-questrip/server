@@ -92,13 +92,6 @@ public class PlaceEntity extends BaseEntity {
         this.translations = translations;
     }
 
-    public void addMenu(String language, Set<MenuGroup> menuGroups) {
-        TranslatedInfo translatedInfo = translations.get(language);
-        for(var group : menuGroups) {
-            translatedInfo.addMenuGroup(group);
-        }
-    }
-
     public void update(Place place) {
         this.googlePlaceId = place.getGooglePlaceId();
         this.placeName = place.getPlaceName();
