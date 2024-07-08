@@ -68,4 +68,20 @@ class UserLoginProcessorTest {
                 .isInstanceOf(GlobalException.class)
                 .hasMessageContaining(ErrorCode.INVALID_PASSWORD.getMessage());
     }
+
+    @DisplayName("로그인 시 refreshToken이 발행된다.")
+    @Test
+    void login4() {
+        // given
+        User initUser = UserFixture.get();
+        String password = initUser.getPassword();
+        userAppender.append(initUser);
+
+        // when
+        User loginUser = userLoginProcessor.login(initUser.getEmail(), password);
+
+        // then
+        String refreshToken = userJpaRepository.findById(loginUser.getId()).get().getRefreshToken();
+        assertThat(loginUser.getRefreshToken()).isEqualTo(refreshToken);
+    }
 }

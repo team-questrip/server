@@ -1,5 +1,6 @@
 package com.questrip.reward.domain.user;
 
+import com.questrip.reward.security.jwt.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -13,6 +14,7 @@ public class UserAppender {
 
     public User append(User user) {
         user.encodePassword(passwordEncoder.encode(user.getPassword()));
+        user.issueRefreshToken();
 
         return userRepository.save(user);
     }

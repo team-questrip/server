@@ -19,6 +19,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -74,7 +76,9 @@ class UserControllerTest extends RestDocsTest {
                                 fieldWithPath("data.user.role").type(JsonFieldType.STRING)
                                         .description("유저 권한"),
                                 fieldWithPath("data.accessToken").type(JsonFieldType.STRING)
-                                        .description("토큰")
+                                        .description("액세스 토큰"),
+                                fieldWithPath("data.refreshToken").type(JsonFieldType.STRING)
+                                        .description("리프레시 토큰")
                         )
                 ));
     }
@@ -121,7 +125,9 @@ class UserControllerTest extends RestDocsTest {
                                 fieldWithPath("data.user.role").type(JsonFieldType.STRING)
                                         .description("유저 권한"),
                                 fieldWithPath("data.accessToken").type(JsonFieldType.STRING)
-                                        .description("토큰")
+                                        .description("토큰"),
+                                fieldWithPath("data.refreshToken").type(JsonFieldType.STRING)
+                                        .description("리프레시 토큰")
                         )
                 ));
     }
@@ -154,6 +160,51 @@ class UserControllerTest extends RestDocsTest {
                                         .description("메시지"),
                                 fieldWithPath("data").type(JsonFieldType.NULL)
                                         .description("데이터")
+                        )
+                ));
+    }
+
+    @DisplayName("토큰 재발행 API")
+    @Test
+    void reissue() throws Exception {
+        // given
+        given(userService.reIssue(any())).willReturn(UserFixture.getUserWithToken());
+
+        // when
+        mockMvc.perform(post("/api/v1/user/reissue")
+                        .header(AUTHORIZATION, REFRESH_TOKEN)
+                        .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("user-reissue",
+                        resourceDetails()
+                                .tag("user")
+                                .description("토큰 재발행 API"),
+                        requestHeaders(
+                                headerWithName(AUTHORIZATION).description(REFRESH_TOKEN)
+                        ),
+                        responseFields(
+                                fieldWithPath("status").type(JsonFieldType.STRING)
+                                        .description("응답 상태"),
+                                fieldWithPath("message").type(JsonFieldType.NULL)
+                                        .description("메시지"),
+                                fieldWithPath("data").type(JsonFieldType.OBJECT)
+                                        .description("데이터"),
+                                fieldWithPath("data.user").type(JsonFieldType.OBJECT)
+                                        .description("유저"),
+                                fieldWithPath("data.user.id").type(JsonFieldType.NUMBER)
+                                        .description("유저 아이디"),
+                                fieldWithPath("data.user.username").type(JsonFieldType.STRING)
+                                        .description("유저 이름"),
+                                fieldWithPath("data.user.email").type(JsonFieldType.STRING)
+                                        .description("유저 이메일"),
+                                fieldWithPath("data.user.role").type(JsonFieldType.STRING)
+                                        .description("유저 권한"),
+                                fieldWithPath("data.accessToken").type(JsonFieldType.STRING)
+                                        .description("토큰"),
+                                fieldWithPath("data.refreshToken").type(JsonFieldType.STRING)
+                                        .description("리프레시 토큰")
                         )
                 ));
     }

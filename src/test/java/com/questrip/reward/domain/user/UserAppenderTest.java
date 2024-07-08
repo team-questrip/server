@@ -65,4 +65,32 @@ class UserAppenderTest {
         assertThat(appended.getPassword()).isNotEqualTo(password);
         assertThat(passwordEncoder.matches(password, appended.getPassword())).isTrue();
     }
+
+    @DisplayName("유저 등록 시 refreshToken이 발급된다.")
+    @Test
+    void append3() {
+        // given
+        User user = UserFixture.get();
+
+        // when
+        User appended = userAppender.append(user);
+
+        // then
+        assertThat(appended.getRefreshToken()).isNotNull();
+    }
+
+    @DisplayName("유저 등록 시 refreshToken이 발급된다.")
+    @Test
+    void append4() {
+        // given
+        User user = UserFixture.get();
+
+        // when
+        User appended = userAppender.append(user);
+
+        // then
+        String refreshToken = userJpaRepository.findById(appended.getId()).get().getRefreshToken();
+        assertThat(appended.getRefreshToken()).isNotNull();
+        assertThat(appended.getRefreshToken()).isEqualTo(refreshToken);
+    }
 }

@@ -28,7 +28,7 @@ public enum ErrorCode {
     NOT_FOUND_TOKEN(HttpStatus.UNAUTHORIZED, "Token not found."),
     NO_ACCESS(HttpStatus.FORBIDDEN, "Access denied."),
     INVALID_JWT_TOKEN(HttpStatus.UNAUTHORIZED, "Invalid JWT token."),
-    EXPIRED_ACCESS_TOKEN(HttpStatus.UNAUTHORIZED, "JWT token has expired."),
+    EXPIRED_TOKEN(HttpStatus.UNAUTHORIZED, "JWT token has expired."),
     UNSUPPORTED_JWT_TOKEN(HttpStatus.UNAUTHORIZED, "Unsupported token.");
 
     private final HttpStatus status;

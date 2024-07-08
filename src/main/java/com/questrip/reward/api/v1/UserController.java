@@ -7,6 +7,7 @@ import com.questrip.reward.api.v1.response.UserWithTokenResponse;
 import com.questrip.reward.domain.user.UserService;
 import com.questrip.reward.domain.user.UserWithToken;
 import com.questrip.reward.support.response.ApiResponse;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,5 +41,13 @@ public class UserController {
         userService.validateDuplicatedEmail(request.email());
 
         return ApiResponse.success("이메일 사용 가능");
+    }
+
+    @PostMapping("/reissue")
+    public ApiResponse<UserWithTokenResponse> reIssue(HttpServletRequest request) {
+        String token = request.getHeader("Authorization");
+        UserWithToken userWithToken = userService.reIssue(token);
+
+        return ApiResponse.success(new UserWithTokenResponse(userWithToken));
     }
 }

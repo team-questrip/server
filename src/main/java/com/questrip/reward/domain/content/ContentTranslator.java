@@ -18,7 +18,7 @@ public class ContentTranslator {
     private final DeeplTranslateClient client;
     private final ContentUpdater contentUpdater;
 
-    private static final List<String> languageList = List.of(
+    private static final List<String> LANGUAGE_LIST = List.of(
             "DA",  // Danish
             "DE",  // German
             "EN",  // English
@@ -72,13 +72,13 @@ public class ContentTranslator {
     }
 
     public void translateAll(Content content) {
-        if(content.getTranslatedList().size() == languageList.size()) {
+        if(content.getTranslatedList().size() == LANGUAGE_LIST.size()) {
             return;
         }
 
         List<String> alreadyTranslated = content.getTranslatedList().stream().map(TranslatedItem::getLanguage).collect(Collectors.toList());
 
-        List<CompletableFuture<TranslatedItem>> futures = languageList.stream()
+        List<CompletableFuture<TranslatedItem>> futures = LANGUAGE_LIST.stream()
                 .filter(language -> !alreadyTranslated.contains(language))
                 .map(language -> CompletableFuture.supplyAsync(() ->
                         translateContent(content, language)))

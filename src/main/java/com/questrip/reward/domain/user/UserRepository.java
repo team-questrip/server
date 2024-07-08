@@ -12,4 +12,6 @@ public interface UserRepository {
     void validateDuplicatedEmail(String email);
 
     User findUserByEmail(String email);
+
+    void updateRefreshToken(User user);
 }

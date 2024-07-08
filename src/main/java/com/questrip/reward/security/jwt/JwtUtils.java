@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.questrip.reward.domain.user.User;
 import com.questrip.reward.security.details.LoginUser;
 import com.questrip.reward.support.error.ErrorCode;
+import com.questrip.reward.support.error.GlobalException;
 import com.questrip.reward.support.response.ApiResponse;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -52,6 +53,15 @@ public class JwtUtils {
                 .compact();
     }
 
+    public static String generateRefreshToken(User user) {
+        return Jwts.builder()
+                .claim("email", user.getEmail())
+                .setIssuedAt(new Date())
+                .setExpiration(new Date((new Date()).getTime() + REFRESH_TOKEN_EXPIRE_TIME))
+                .signWith(getKey(), SignatureAlgorithm.HS256)
+                .compact();
+    }
+
     public static String parseJwtToken(HttpServletRequest request) {
         String token = request.getHeader(HEADER_STRING);
         if (StringUtils.hasText(token) && token.startsWith(TOKEN_PREFIX)) {
@@ -67,11 +77,28 @@ public class JwtUtils {
         } catch (MalformedJwtException e) {
             setResponse(response, INVALID_JWT_TOKEN);
         } catch (ExpiredJwtException e) {
-            setResponse(response, EXPIRED_ACCESS_TOKEN);
+            setResponse(response, EXPIRED_TOKEN);
         } catch (UnsupportedJwtException e) {
             setResponse(response, UNSUPPORTED_JWT_TOKEN);
         }
         return false;
+    }
+
+    public static String getEmailFromToken(String refreshToken) {
+        try {
+            return Jwts.parserBuilder()
+                    .setSigningKey(getKey())
+                    .build()
+                    .parseClaimsJws(refreshToken)
+                    .getBody()
+                    .get("email", String.class);
+        } catch (MalformedJwtException e) {
+            throw new GlobalException(INVALID_JWT_TOKEN);
+        } catch (ExpiredJwtException e) {
+            throw new GlobalException(EXPIRED_TOKEN);
+        } catch (UnsupportedJwtException e) {
+            throw new GlobalException(UNSUPPORTED_JWT_TOKEN);
+        }
     }
 
     private static void setResponse(HttpServletResponse response, ErrorCode errorCode) throws IOException {

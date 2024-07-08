@@ -4,9 +4,10 @@ import com.questrip.reward.domain.user.UserWithToken;
 
 public record UserWithTokenResponse(
         UserResponse user,
-        String accessToken
+        String accessToken,
+        String refreshToken
 ) {
     public UserWithTokenResponse(UserWithToken userWithToken) {
-        this(new UserResponse(userWithToken.getUser()), userWithToken.getAccessToken());
+        this(new UserResponse(userWithToken.getUser()), userWithToken.getAccessToken(), userWithToken.getRefreshToken());
     }
 }

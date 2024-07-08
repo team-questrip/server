@@ -11,6 +11,7 @@ public class UserFixture {
                 .email("harok@questrips.com")
                 .password("harok123")
                 .role(User.Role.USER)
+                .refreshToken("refreshToken")
                 .build();
     }
 
@@ -21,10 +22,11 @@ public class UserFixture {
                 .email("harok@questrips.com")
                 .password("harok123")
                 .role(User.Role.USER)
+                .refreshToken("refreshToken")
                 .build();
     }
 
     public static UserWithToken getUserWithToken() {
-        return new UserWithToken(get(1L), "accessToken");
+        return new UserWithToken(get(1L), "accessToken", "refreshToken");
     }
 }

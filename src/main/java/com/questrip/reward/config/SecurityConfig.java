@@ -43,6 +43,8 @@ public class SecurityConfig {
             "/api/v1/place/.*",
             "/api/v1/question",
             "/api/v1/user/.*",
+            "/api/v1/content",
+            "/api/v1/content/.*",
             "/batch"
     );
 

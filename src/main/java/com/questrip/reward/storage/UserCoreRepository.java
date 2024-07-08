@@ -8,6 +8,7 @@ import com.questrip.reward.support.error.ErrorCode;
 import com.questrip.reward.support.error.GlobalException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @RequiredArgsConstructor
@@ -39,5 +40,13 @@ public class UserCoreRepository implements UserRepository {
         return userJpaRepository.findByEmail(email).orElseThrow(
                 () -> new GlobalException(ErrorCode.USERNAME_NOT_FOUND, String.format("user not found. user email is %s", email))
         ).toUser();
+    }
+
+    @Transactional
+    @Override
+    public void updateRefreshToken(User user) {
+        userJpaRepository.findById(user.getId())
+                .orElseThrow()
+                .updateRefreshToken(user.getRefreshToken());
     }
 }

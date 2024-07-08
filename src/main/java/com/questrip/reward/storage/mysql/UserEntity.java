@@ -21,6 +21,7 @@ public class UserEntity extends BaseEntity {
     private String password;
     @Enumerated(value = EnumType.STRING)
     private User.Role role;
+    private String refreshToken;
 
     public User toUser() {
         return User.builder()
@@ -29,6 +30,7 @@ public class UserEntity extends BaseEntity {
                 .email(email)
                 .password(password)
                 .role(role)
+                .refreshToken(refreshToken)
                 .build();
     }
 
@@ -38,14 +40,20 @@ public class UserEntity extends BaseEntity {
                 .email(user.getEmail())
                 .password(user.getPassword())
                 .role(user.getRole())
+                .refreshToken(user.getRefreshToken())
                 .build();
     }
 
+    public void updateRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
+
     @Builder
-    private UserEntity(String username, String email, String password, User.Role role) {
+    private UserEntity(String username, String email, String password, User.Role role, String refreshToken) {
         this.username = username;
         this.email = email;
         this.password = password;
         this.role = role;
+        this.refreshToken = refreshToken;
     }
 }

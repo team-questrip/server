@@ -12,12 +12,15 @@ public class UserLoginProcessor {
 
     private final UserReader userReader;
     private final PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
 
     public User login(String email, String password) {
         User user = userReader.readLoginUserEmail(email);
         if(!passwordEncoder.matches(password, user.getPassword())) {
             throw new GlobalException(ErrorCode.INVALID_PASSWORD);
         }
+        user.issueRefreshToken();
+        userRepository.updateRefreshToken(user);
 
         return user;
     }

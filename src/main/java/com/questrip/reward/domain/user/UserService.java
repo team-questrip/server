@@ -1,6 +1,8 @@
 package com.questrip.reward.domain.user;
 
 import com.questrip.reward.security.jwt.JwtUtils;
+import com.questrip.reward.support.error.ErrorCode;
+import com.questrip.reward.support.error.GlobalException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -11,23 +13,39 @@ public class UserService {
     private final UserAppender userAppender;
     private final UserLoginProcessor userLoginProcessor;
     private final UserValidator userValidator;
+    private final UserReader userReader;
 
     public UserWithToken register(User initUser) {
         validateDuplicatedEmail(initUser.getEmail());
         User user = userAppender.append(initUser);
-        String token = JwtUtils.generateAccessToken(user);
+        String accessToken = JwtUtils.generateAccessToken(user);
 
-        return new UserWithToken(user, token);
+        return new UserWithToken(user, accessToken, user.getRefreshToken());
     }
 
     public UserWithToken login(String email, String password) {
         User user = userLoginProcessor.login(email, password);
-        String token = JwtUtils.generateAccessToken(user);
+        String accessToken = JwtUtils.generateAccessToken(user);
 
-        return new UserWithToken(user, token);
+        return new UserWithToken(user, accessToken, user.getRefreshToken());
     }
 
     public void validateDuplicatedEmail(String email) {
         userValidator.validateEmail(email);
+    }
+
+    public UserWithToken reIssue(String refreshToken) {
+        if(refreshToken == null) {
+            throw new GlobalException(ErrorCode.NOT_FOUND_TOKEN);
+        }
+
+        String emailFromToken = JwtUtils.getEmailFromToken(refreshToken);
+        User user = userReader.read(emailFromToken);
+        if (!user.getRefreshToken().equals(refreshToken)) {
+            throw new GlobalException(ErrorCode.INVALID_JWT_TOKEN);
+        }
+        String newToken = JwtUtils.generateAccessToken(user);
+
+        return new UserWithToken(user, newToken, user.getRefreshToken());
     }
 }
