@@ -2,7 +2,7 @@ package com.questrip.reward.client;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.questrip.reward.api.v1.request.DeeplTranslateRequest;
+import com.questrip.reward.client.request.DeeplTranslateRequest;
 import com.questrip.reward.client.response.DeeplTranslateResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -10,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class DeeplTranslateClientTest {

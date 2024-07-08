@@ -7,6 +7,7 @@ import lombok.Getter;
 import org.springframework.util.ObjectUtils;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 @Getter
 public class Place {
@@ -23,6 +24,19 @@ public class Place {
     private OpenPeriods openPeriods;
     private List<PlaceImage> images;
     private Set<MenuGroup> menuGroups;
+
+    public List<String> getTranslateCandidates() {
+        List<String> candidates = new ArrayList<>(List.of(
+                placeName,
+                primaryType,
+                formattedAddress,
+                content.getRecommendationReason(),
+                content.getActivity()
+        ));
+        candidates.addAll(openingHours);
+
+        return candidates;
+    }
 
     public double calculateDistance(LatLng userLocation) {
         double lat = Math.toRadians(userLocation.getLatitude());

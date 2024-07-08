@@ -1,6 +1,7 @@
 package com.questrip.reward.client;
 
-import com.questrip.reward.api.v1.request.DeeplTranslateRequest;
+import com.questrip.reward.client.request.DeeplTargetRequest;
+import com.questrip.reward.client.request.DeeplTranslateRequest;
 import com.questrip.reward.client.response.DeeplTranslateResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,4 +12,7 @@ public interface DeeplTranslateClient {
 
     @PostMapping
     DeeplTranslateResponse getTranslate(@RequestBody DeeplTranslateRequest request);
+
+    @PostMapping
+    DeeplTranslateResponse getTranslate(@RequestBody DeeplTargetRequest request);
 }

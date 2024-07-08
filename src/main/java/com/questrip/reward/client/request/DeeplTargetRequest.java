@@ -1,4 +1,4 @@
-package com.questrip.reward.api.v1.request;
+package com.questrip.reward.client.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
@@ -8,16 +8,13 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor
-public class DeeplTranslateRequest {
+public class DeeplTargetRequest {
     private List<String> text;
-    @JsonProperty("source_lang")
-    private String sourceLang;
     @JsonProperty("target_lang")
     private String targetLang;
 
-    public DeeplTranslateRequest(List<String> text, String sourceLang, String targetLang) {
+    public DeeplTargetRequest(List<String> text, String targetLang) {
         this.text = text;
-        this.sourceLang = sourceLang;
         this.targetLang = targetLang;
     }
 }

@@ -11,9 +11,8 @@ import org.springframework.data.mongodb.core.index.GeoSpatialIndexType;
 import org.springframework.data.mongodb.core.index.GeoSpatialIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -33,13 +32,14 @@ public class PlaceEntity extends BaseEntity {
     private List<Period> openPeriods;
     private List<PlaceImage> images;
     private Set<MenuGroup> menuGroups = new HashSet<>();
+    private Map<String, TranslatedInfo> translations = new HashMap<>();
 
     public Place toPlace() {
         return Place.builder()
                 .id(id)
                 .googlePlaceId(googlePlaceId)
                 .placeName(placeName)
-                .primaryType(primaryType)
+                .primaryType(parseType(primaryType))
                 .formattedAddress(formattedAddress)
                 .location(new LatLng(location.getY(), location.getX()))
                 .content(content)
@@ -47,6 +47,28 @@ public class PlaceEntity extends BaseEntity {
                 .openPeriods(openPeriods)
                 .images(images)
                 .menuGroups(menuGroups)
+                .build();
+    }
+
+    public Place toPlace(String language) {
+        if(language.equals("EN")) {
+            return toPlace();
+        }
+
+        TranslatedInfo info = translations.getOrDefault(language, translations.get("EN"));
+
+        return Place.builder()
+                .id(id)
+                .googlePlaceId(googlePlaceId)
+                .placeName(info.getPlaceName())
+                .primaryType(parseType(info.getPrimaryType()))
+                .formattedAddress(info.getFormattedAddress())
+                .location(new LatLng(location.getY(), location.getX()))
+                .content(info.getContent())
+                .openingHours(info.getOpeningHours())
+                .openPeriods(openPeriods)
+                .images(images)
+                .menuGroups(info.getMenuGroups())
                 .build();
     }
 
@@ -64,6 +86,17 @@ public class PlaceEntity extends BaseEntity {
                 .images(place.getImages())
                 .menuGroups(place.getMenuGroups())
                 .build();
+    }
+
+    public void addTranslation(Map<String, TranslatedInfo> translations) {
+        this.translations = translations;
+    }
+
+    public void addMenu(String language, Set<MenuGroup> menuGroups) {
+        TranslatedInfo translatedInfo = translations.get(language);
+        for(var group : menuGroups) {
+            translatedInfo.addMenuGroup(group);
+        }
     }
 
     public void update(Place place) {
@@ -92,5 +125,11 @@ public class PlaceEntity extends BaseEntity {
         this.openPeriods = openPeriods;
         this.images = images;
         this.menuGroups = menuGroups;
+    }
+
+    private String parseType(String type) {
+        return Arrays.stream(type.split("_"))
+                .map(s -> s.substring(0, 1).toUpperCase() + s.substring(1))
+                .collect(Collectors.joining(" "));
     }
 }

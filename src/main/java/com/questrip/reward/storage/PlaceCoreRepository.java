@@ -6,13 +6,14 @@ import com.questrip.reward.storage.mongo.PlaceMongoRepository;
 import com.questrip.reward.support.error.ErrorCode;
 import com.questrip.reward.support.error.GlobalException;
 import com.questrip.reward.support.response.SliceResult;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.geo.Point;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Repository
@@ -67,5 +68,30 @@ public class PlaceCoreRepository implements PlaceRepository {
         PlaceEntity entity = placeMongoRepository.findById(place.getId()).orElseThrow();
         entity.update(place);
         return placeMongoRepository.save(entity).toPlace();
+    }
+
+    @Override
+    public void addTranslateAll(String placeId, Map<String, TranslatedInfo> translatedInfos) {
+        PlaceEntity placeEntity = placeMongoRepository.findById(placeId)
+                .orElseThrow(() -> new GlobalException(ErrorCode.NOT_EXIST_PLACE, "can't add translated info place id : %s".formatted(placeId)));
+
+        placeEntity.addTranslation(translatedInfos);
+        placeMongoRepository.save(placeEntity);
+    }
+
+    @Override
+    @Transactional
+    public void addTranslateMenuAll(String placeId, Map<String, Set<MenuGroup>> translatedMenuGroups) {
+        PlaceEntity placeEntity = placeMongoRepository.findById(placeId)
+                .orElseThrow(() -> new GlobalException(ErrorCode.NOT_EXIST_PLACE, "can't add translated menu for place id : %s".formatted(placeId)));
+
+        translatedMenuGroups.forEach((language, menuGroups) -> {
+            TranslatedInfo translatedInfo = placeEntity.getTranslations().computeIfAbsent(language, k -> new TranslatedInfo());
+            for (MenuGroup group : menuGroups) {
+                translatedInfo.addMenuGroup(group);
+            }
+        });
+
+        placeMongoRepository.save(placeEntity);
     }
 }
