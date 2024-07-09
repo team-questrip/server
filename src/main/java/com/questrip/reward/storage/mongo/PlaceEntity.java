@@ -51,10 +51,6 @@ public class PlaceEntity extends BaseEntity {
     }
 
     public Place toPlace(String language) {
-        if(language.equals("EN")) {
-            return toPlace();
-        }
-
         TranslatedInfo info = translations.getOrDefault(language, translations.get("EN"));
 
         return Place.builder()

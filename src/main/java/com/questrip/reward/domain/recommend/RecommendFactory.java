@@ -30,6 +30,18 @@ public class RecommendFactory {
                 .build();
     }
 
+    public Recommend from(Recommend recommend, String language) {
+        Place place = placeFinder.findByIdWithLanguage(recommend.getPlaceId(), language);
+
+        return Recommend.builder()
+                .id(recommend.getId())
+                .place(place)
+                .userId(recommend.getUserId())
+                .status(recommend.getStatus())
+                .createdAt(recommend.getCreatedAt())
+                .build();
+    }
+
     public Recommend of(Recommend recommend, Place place) {
         return Recommend.builder()
                 .id(recommend.getId())

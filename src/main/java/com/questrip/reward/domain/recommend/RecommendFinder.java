@@ -25,6 +25,11 @@ public class RecommendFinder {
         return placeFinder.findRecommendPlace(userLocation, placeIds);
     }
 
+    public List<Place> getRecommends(Long userId, LatLng userLocation, String language) {
+        List<String> placeIds = recommendRepository.getExcludePlaceIds(userId, calculateStartDateTime(), calculateEndDateTime());
+        return placeFinder.findRecommendPlace(userLocation, placeIds, language);
+    }
+
     private LocalDateTime calculateStartDateTime() {
         LocalDateTime now = LocalDateTime.now();
 
@@ -44,6 +49,13 @@ public class RecommendFinder {
         return allKeptRecommend.map(recommend -> recommendFactory.of(recommend, placeMap.get(recommend.getPlaceId())));
     }
 
+    public SliceResult<Recommend> getRecommendsWithStatus(Long userId, Recommend.Status status, int page, int size, String language) {
+        SliceResult<Recommend> allKeptRecommend = recommendRepository.findAllRecommendsWithStatus(userId, status, page, size);
+        Map<String, Place> placeMap = placeFinder.findMapIdIn(extractPlaceIds(allKeptRecommend.getContent()), language);
+
+        return allKeptRecommend.map(recommend -> recommendFactory.of(recommend, placeMap.get(recommend.getPlaceId())));
+    }
+
     private List<String> extractPlaceIds(List<Recommend> recommends) {
         return recommends.stream()
                 .map(Recommend::getPlaceId)
@@ -54,5 +66,11 @@ public class RecommendFinder {
         Recommend find = recommendRepository.findProgressRecommend(userId);
 
         return recommendFactory.from(find);
+    }
+
+    public Recommend retrieveProgressRecommend(Long userId, String language) {
+        Recommend find = recommendRepository.findProgressRecommend(userId);
+
+        return recommendFactory.from(find, language);
     }
 }

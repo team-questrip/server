@@ -44,10 +44,27 @@ public class PlaceCoreRepository implements PlaceRepository {
     }
 
     @Override
+    public SliceResult<Place> findAllNear(String language, LatLng userLocation, int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page, size);
+        Slice<Place> slice = placeMongoRepository.findAllByLocationNear(toPoint(userLocation), pageRequest)
+                .map(placeEntity -> placeEntity.toPlace(language));
+
+        return new SliceResult<>(slice);
+    }
+
+    @Override
     public List<Place> findRecommendPlace(LatLng userLocation, List<String> placeIds) {
         return placeMongoRepository.findAllByLocationNearAndIdNotIn(toPoint(userLocation), placeIds)
                 .stream()
                 .map(PlaceEntity::toPlace)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Place> findRecommendPlace(LatLng userLocation, List<String> placeIds, String language) {
+        return placeMongoRepository.findAllByLocationNearAndIdNotIn(toPoint(userLocation), placeIds)
+                .stream()
+                .map(placeEntity -> placeEntity.toPlace(language))
                 .collect(Collectors.toList());
     }
 
@@ -60,6 +77,14 @@ public class PlaceCoreRepository implements PlaceRepository {
         return placeMongoRepository.findAllByIdIn(placeIds)
                 .stream()
                 .map(PlaceEntity::toPlace)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Place> findAllByIdIn(List<String> placeIds, String language) {
+        return placeMongoRepository.findAllByIdIn(placeIds)
+                .stream()
+                .map(placeEntity -> placeEntity.toPlace(language))
                 .collect(Collectors.toList());
     }
 
@@ -93,5 +118,20 @@ public class PlaceCoreRepository implements PlaceRepository {
         });
 
         placeMongoRepository.save(placeEntity);
+    }
+
+    @Override
+    public Place findByIdWithLanguage(String id, String language) {
+        return placeMongoRepository.findById(id)
+                .orElseThrow(() -> new GlobalException(ErrorCode.NOT_EXIST_PLACE, "can't add translated menu for place id : %s".formatted(id)))
+                .toPlace(language);
+    }
+
+    @Override
+    public List<Place> findAll() {
+        return placeMongoRepository.findAll()
+                .stream()
+                .map(PlaceEntity::toPlace)
+                .collect(Collectors.toList());
     }
 }

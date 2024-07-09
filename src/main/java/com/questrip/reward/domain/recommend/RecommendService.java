@@ -24,6 +24,11 @@ public class RecommendService {
         return recommendFinder.getRecommends(userId, userLocation);
     }
 
+    public List<Place> getRecommendPlaces(Long userId, LatLng userLocation, String language) {
+        recommendValidator.validateProgressRecommend(userId);
+        return recommendFinder.getRecommends(userId, userLocation, language);
+    }
+
     public Recommend save(Long userId, String placeId, Recommend.Status status) {
         recommendValidator.validateProgressRecommend(userId);
         Place place = placeFinder.findById(placeId);
@@ -36,8 +41,16 @@ public class RecommendService {
         return recommendFinder.getRecommendsWithStatus(userId, status, page, size);
     }
 
+    public SliceResult<Recommend> getRecommendsWithStatus(Long userId, Recommend.Status status, int page, int size, String language) {
+        return recommendFinder.getRecommendsWithStatus(userId, status, page, size, language);
+    }
+
     public Recommend retrieveProgressRecommend(Long userId) {
         return recommendFinder.retrieveProgressRecommend(userId);
+    }
+
+    public Recommend retrieveProgressRecommend(Long userId, String language) {
+        return recommendFinder.retrieveProgressRecommend(userId, language);
     }
 
     public Recommend updateRecommendStatus(Long userId, LatLng userLocation, Recommend.Status status) {

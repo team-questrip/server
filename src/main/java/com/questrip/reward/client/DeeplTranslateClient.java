@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @FeignClient(value = "deeplApi", url = "https://api-free.deepl.com/v2/translate", configuration = FeignConfig.class)
+//@FeignClient(value = "deeplApi", url = "https://api.deepl.com/v2/translate", configuration = FeignConfig.class)
 public interface DeeplTranslateClient {
 
     @PostMapping

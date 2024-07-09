@@ -28,7 +28,6 @@ public class PlaceTranslator {
         Map<String, TranslatedInfo> translatedInfoMap = new ConcurrentHashMap<>();
 
         List<CompletableFuture<Void>> futures = LANGUAGE_LIST.stream()
-                .filter(language -> !language.equals("EN"))
                 .map(language -> CompletableFuture.runAsync(() -> {
                     TranslatedInfo translatedInfo = translateAll(place, language);
                     translatedInfoMap.put(language, translatedInfo);
@@ -77,7 +76,6 @@ public class PlaceTranslator {
         Map<String, Set<MenuGroup>> translatedMenuGroups = new ConcurrentHashMap<>();
 
         List<CompletableFuture<Void>> futures = LANGUAGE_LIST.stream()
-                .filter(language -> !language.equals("EN"))
                 .map(language -> CompletableFuture.runAsync(() -> {
                     Set<MenuGroup> translated = translateMenu(originalMenuGroup, language);
                     translatedMenuGroups.put(language, translated);

@@ -54,7 +54,7 @@ class PlaceAppenderTest {
         ).containsExactly(
                 place.getGooglePlaceId(),
                 place.getPlaceName(),
-                place.getPrimaryType(),
+                "Japanese Restaurant",
                 place.getFormattedAddress(),
                 place.getLocation(),
                 place.getOpeningHours(),
