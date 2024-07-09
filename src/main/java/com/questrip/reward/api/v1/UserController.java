@@ -62,7 +62,7 @@ public class UserController {
 
     @PostMapping("/preference")
     public ApiResponse<UserPreferenceResponse> savePreference(@AuthenticationPrincipal LoginUser loginUser,
-                                                              @RequestBody UserPreferenceRequest request) {
+                                                              @Valid @RequestBody UserPreferenceRequest request) {
         UserPreference userPreference = userService.savePreference(request.toUserPreference(loginUser.getId()));
 
         return ApiResponse.success(new UserPreferenceResponse(userPreference));

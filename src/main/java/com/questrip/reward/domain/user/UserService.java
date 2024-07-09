@@ -16,6 +16,7 @@ public class UserService {
     private final UserReader userReader;
 
     public UserWithToken register(User initUser) {
+        // TODO : 선호도
         validateDuplicatedEmail(initUser.getEmail());
         User user = userAppender.append(initUser);
         String accessToken = JwtUtils.generateAccessToken(user);
