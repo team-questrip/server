@@ -48,4 +48,12 @@ public class UserService {
 
         return new UserWithToken(user, newToken, user.getRefreshToken());
     }
+
+    public UserPreference getPreference(Long userId) {
+        return userReader.readPreference(userId);
+    }
+
+    public UserPreference savePreference(UserPreference userPreference) {
+        return userAppender.appendPreference(userPreference);
+    }
 }

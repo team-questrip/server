@@ -18,4 +18,8 @@ public class UserAppender {
 
         return userRepository.save(user);
     }
+
+    public UserPreference appendPreference(UserPreference userPreference) {
+        return userRepository.savePreference(userPreference);
+    }
 }

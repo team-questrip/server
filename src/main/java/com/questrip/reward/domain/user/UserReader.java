@@ -16,4 +16,8 @@ public class UserReader {
     public User readLoginUserEmail(String email) {
         return userRepository.findUserByEmail(email);
     }
+
+    public UserPreference readPreference(Long userId) {
+        return userRepository.findUserPreference(userId);
+    }
 }

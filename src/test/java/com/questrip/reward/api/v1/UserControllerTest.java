@@ -4,8 +4,11 @@ import com.questrip.reward.api.RestDocsTest;
 import com.questrip.reward.api.v1.request.UserCreateRequest;
 import com.questrip.reward.api.v1.request.UserEmailValidateRequest;
 import com.questrip.reward.api.v1.request.UserLoginRequest;
+import com.questrip.reward.api.v1.request.UserPreferenceRequest;
+import com.questrip.reward.domain.user.UserPreference;
 import com.questrip.reward.domain.user.UserService;
 import com.questrip.reward.fixture.UserFixture;
+import com.questrip.reward.mockuser.MockUser;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -17,11 +20,9 @@ import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.docume
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.resourceDetails;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.mock;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -205,6 +206,121 @@ class UserControllerTest extends RestDocsTest {
                                         .description("토큰"),
                                 fieldWithPath("data.refreshToken").type(JsonFieldType.STRING)
                                         .description("리프레시 토큰")
+                        )
+                ));
+    }
+
+    @DisplayName("유저 선호도를 가져온다")
+    @MockUser
+    @Test
+    void getPreference() throws Exception {
+        // given
+        given(userService.getPreference(any()))
+                .willReturn(UserPreference.defaultPreference(1L));
+
+        // when & then
+        mockMvc.perform(get("/api/v1/user/preference")
+                        .header(AUTHORIZATION, ACCESS_TOKEN)
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("user-preference-get",
+                        resourceDetails()
+                                .tag("user")
+                                .description("유저 선호도 조회 API"),
+                        requestHeaders(
+                                headerWithName(AUTHORIZATION).description(ACCESS_TOKEN)
+                        ),
+                        responseFields(
+                                fieldWithPath("status").type(JsonFieldType.STRING)
+                                        .description("응답 상태"),
+                                fieldWithPath("message").type(JsonFieldType.NULL)
+                                        .description("메시지"),
+                                fieldWithPath("data").type(JsonFieldType.OBJECT)
+                                        .description("데이터"),
+                                fieldWithPath("data.groupSize").type(JsonFieldType.NUMBER)
+                                        .description("그룹 사이즈"),
+                                fieldWithPath("data.travelingWithKid").type(JsonFieldType.BOOLEAN)
+                                        .description("아이와 함께 여행"),
+                                fieldWithPath("data.distance").type(JsonFieldType.NUMBER)
+                                        .description("거리"),
+                                fieldWithPath("data.dietary").type(JsonFieldType.OBJECT)
+                                        .description("음식 선호"),
+                                fieldWithPath("data.dietary.vegetarian").type(JsonFieldType.BOOLEAN)
+                                        .description("베지테리안"),
+                                fieldWithPath("data.dietary.nonAlcoholic").type(JsonFieldType.BOOLEAN)
+                                        .description("알콜 섭취"),
+                                fieldWithPath("data.dietary.seafoodRestrictions").type(JsonFieldType.BOOLEAN)
+                                        .description("해산물"),
+                                fieldWithPath("data.dietary.noSpicyFood").type(JsonFieldType.BOOLEAN)
+                                        .description("매운 음식")
+                        )
+                ));
+    }
+
+    @DisplayName("유저 선호도를 저장한다")
+    @MockUser
+    @Test
+    void savePreference() throws Exception {
+        // given
+        given(userService.savePreference(any()))
+                .willReturn(UserPreference.defaultPreference(1L));
+
+        UserPreferenceRequest request = new UserPreferenceRequest(1, false, false, false, false, false, 5);
+        // when & then
+        mockMvc.perform(post("/api/v1/user/preference")
+                        .header(AUTHORIZATION, ACCESS_TOKEN)
+                        .content(objectMapper.writeValueAsString(request))
+                        .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("user-preference-post",
+                        resourceDetails()
+                                .tag("user")
+                                .description("유저 선호도 추가 API"),
+                        requestHeaders(
+                                headerWithName(AUTHORIZATION).description(ACCESS_TOKEN)
+                        ),
+                        requestFields(
+                                fieldWithPath("groupSize").type(JsonFieldType.NUMBER)
+                                        .description("그룹 사이즈"),
+                                fieldWithPath("travelingWithKid").type(JsonFieldType.BOOLEAN)
+                                        .description("아이와 함께 여행"),
+                                fieldWithPath("distance").type(JsonFieldType.NUMBER)
+                                        .description("거리"),
+                                fieldWithPath("vegetarian").type(JsonFieldType.BOOLEAN)
+                                        .description("베지테리안"),
+                                fieldWithPath("nonAlcoholic").type(JsonFieldType.BOOLEAN)
+                                        .description("알콜 섭취"),
+                                fieldWithPath("seafoodRestrictions").type(JsonFieldType.BOOLEAN)
+                                        .description("해산물"),
+                                fieldWithPath("noSpicyFood").type(JsonFieldType.BOOLEAN)
+                                        .description("매운 음식")
+                        ),
+                        responseFields(
+                                fieldWithPath("status").type(JsonFieldType.STRING)
+                                        .description("응답 상태"),
+                                fieldWithPath("message").type(JsonFieldType.NULL)
+                                        .description("메시지"),
+                                fieldWithPath("data").type(JsonFieldType.OBJECT)
+                                        .description("데이터"),
+                                fieldWithPath("data.groupSize").type(JsonFieldType.NUMBER)
+                                        .description("그룹 사이즈"),
+                                fieldWithPath("data.travelingWithKid").type(JsonFieldType.BOOLEAN)
+                                        .description("아이와 함께 여행"),
+                                fieldWithPath("data.distance").type(JsonFieldType.NUMBER)
+                                        .description("거리"),
+                                fieldWithPath("data.dietary").type(JsonFieldType.OBJECT)
+                                        .description("음식 선호"),
+                                fieldWithPath("data.dietary.vegetarian").type(JsonFieldType.BOOLEAN)
+                                        .description("베지테리안"),
+                                fieldWithPath("data.dietary.nonAlcoholic").type(JsonFieldType.BOOLEAN)
+                                        .description("알콜 섭취"),
+                                fieldWithPath("data.dietary.seafoodRestrictions").type(JsonFieldType.BOOLEAN)
+                                        .description("해산물"),
+                                fieldWithPath("data.dietary.noSpicyFood").type(JsonFieldType.BOOLEAN)
+                                        .description("매운 음식")
                         )
                 ));
     }

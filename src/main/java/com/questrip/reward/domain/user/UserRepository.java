@@ -14,4 +14,8 @@ public interface UserRepository {
     User findUserByEmail(String email);
 
     void updateRefreshToken(User user);
+
+    UserPreference findUserPreference(Long userId);
+
+    UserPreference savePreference(UserPreference userPreference);
 }
