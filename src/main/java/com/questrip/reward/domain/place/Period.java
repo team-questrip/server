@@ -15,4 +15,11 @@ public class Period {
         private int hour;
         private int minute;
     }
+
+    public boolean is24HourService() {
+        return this.getOpen().getDay() == 0
+                && this.getOpen().getHour() == 0
+                && this.getOpen().getMinute() == 0
+                && this.getClose() == null;
+    }
 }

@@ -32,6 +32,10 @@ public class OpenPeriods {
     }
 
     private boolean isWithinPeriod(Period period, LocalDateTime now, int dayOfWeek, int yesterdayOfWeek) {
+        if(period.is24HourService()) {
+            return true;
+        }
+
         LocalTime openTime = LocalTime.of(period.getOpen().getHour(), period.getOpen().getMinute());
         LocalTime closeTime = LocalTime.of(period.getClose().getHour(), period.getClose().getMinute());
         LocalTime currentTime = now.toLocalTime();

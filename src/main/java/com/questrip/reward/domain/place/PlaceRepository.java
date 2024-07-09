@@ -4,6 +4,8 @@ import com.questrip.reward.support.response.SliceResult;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @Repository
 public interface PlaceRepository {
@@ -13,9 +15,23 @@ public interface PlaceRepository {
 
     SliceResult<Place> findAllNear(LatLng userLocation, int page, int size);
 
+    SliceResult<Place> findAllNear(String language, LatLng userLocation, int page, int size);
+
     List<Place> findRecommendPlace(LatLng userLocation, List<String> placeIds);
+
+    List<Place> findRecommendPlace(LatLng userLocation, List<String> placeIds, String language);
 
     List<Place> findAllByIdIn(List<String> placeIds);
 
+    List<Place> findAllByIdIn(List<String> placeIds, String language);
+
     Place update(Place place);
+
+    void addTranslateAll(String placeId, Map<String, TranslatedInfo> translations);
+
+    void addTranslateMenuAll(String placeId, Map<String, Set<MenuGroup>> translatedMenuGroups);
+
+    Place findByIdWithLanguage(String id, String language);
+
+    List<Place> findAll();
 }

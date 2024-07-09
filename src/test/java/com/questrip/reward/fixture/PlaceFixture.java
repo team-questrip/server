@@ -25,7 +25,7 @@ public class PlaceFixture {
                 .openPeriods(OpenPeriodsFixture.get())
                 .content(getContent())
                 .images(getImages())
-                .menuGroups(getMenuGroups())
+                .menuGroups(getMenuGroups2())
                 .build();
     }
 
@@ -96,6 +96,30 @@ public class PlaceFixture {
 
         HashSet<MenuGroup> hashSet = new HashSet<>();
         hashSet.addAll(List.of(menuGroup, menuGroup2));
+        return hashSet;
+    }
+
+    public static Set<MenuGroup> getMenuGroups2() {
+        Menu 볶음밥 = new Menu("Soft Tofu Stew", 8000, "Stew made with soft tofu, seafood, and eggs.");
+        Menu 짜장밥 = new Menu("Cheonggukjang", 9000, "Rich and deep-flavored stew made with fermented soybeans.");
+        MenuGroup menuGroup = new MenuGroup("Meals", Set.of(볶음밥, 짜장밥));
+
+        Menu 짬뽕 = new Menu("Soybean Noodles", 10000, "Noodles in finely ground soybean soup, a summer delicacy.");
+        Menu 짜장면 = new Menu("Cold Noodles", 7000, "Buckwheat noodles in cold broth, a summer specialty.");
+        MenuGroup menuGroup2 = new MenuGroup("Seasonal Menu", Set.of(짬뽕, 짜장면));
+
+        HashSet<MenuGroup> hashSet = new HashSet<>();
+        hashSet.addAll(List.of(menuGroup, menuGroup2));
+        return hashSet;
+    }
+
+    public static Set<MenuGroup> getMenuGroups3() {
+        Menu 짬뽕 = new Menu("Cold Buckwheat Noodles", 10000, "Buckwheat noodles in cold broth, a summer specialty.");
+        Menu 짜장면 = new Menu("Dumpling Soup", 7000, "Soup made with dumplings and rice cakes.");
+        MenuGroup menuGroup2 = new MenuGroup("Seasonal Menu", Set.of(짬뽕, 짜장면));
+
+        HashSet<MenuGroup> hashSet = new HashSet<>();
+        hashSet.addAll(List.of(menuGroup2));
         return hashSet;
     }
 }

@@ -43,7 +43,7 @@ class RecommendControllerTest extends RestDocsTest {
     void getRecommends() throws Exception {
         // given
         List<Place> places = List.of(PlaceFixture.get("test"));
-        given(recommendService.getRecommendPlaces(any(), any()))
+        given(recommendService.getRecommendPlaces(any(), any(), any()))
                 .willReturn(places);
 
         // when
@@ -51,6 +51,7 @@ class RecommendControllerTest extends RestDocsTest {
                         .header(AUTHORIZATION, ACCESS_TOKEN)
                         .param("latitude", "37.5912474")
                         .param("longitude", "126.9184582")
+                        .param("language", "EN")
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -63,7 +64,8 @@ class RecommendControllerTest extends RestDocsTest {
                         ),
                         queryParameters(
                                 parameterWithName("latitude").description("유저 위도"),
-                                parameterWithName("longitude").description("유저 경도")
+                                parameterWithName("longitude").description("유저 경도"),
+                                parameterWithName("language").description("언어").optional()
                         ),
                         responseFields(
                                 fieldWithPath("status").type(JsonFieldType.STRING)
@@ -253,7 +255,7 @@ class RecommendControllerTest extends RestDocsTest {
                 .build();
         List<Recommend> recommends = List.of(r1, r2);
 
-        given(recommendService.getRecommendsWithStatus(any(), any(), anyInt(), anyInt())).willReturn(
+        given(recommendService.getRecommendsWithStatus(any(), any(), anyInt(), anyInt(), any())).willReturn(
                 new SliceResult<>(recommends, 0, 10, 2, false)
         );
 
@@ -261,6 +263,7 @@ class RecommendControllerTest extends RestDocsTest {
         mockMvc.perform(get("/api/v1/recommend/{status}", Recommend.Status.KEPT)
                         .param("page", "0")
                         .param("size", "10")
+                        .param("language", "EN")
                         .header(AUTHORIZATION, ACCESS_TOKEN)
                 )
                 .andDo(print())
@@ -277,7 +280,8 @@ class RecommendControllerTest extends RestDocsTest {
                                 ),
                                 queryParameters(
                                         parameterWithName("page").description("요청 페이지 Default 0").optional(),
-                                        parameterWithName("size").description("요청 페이지 Default 10").optional()
+                                        parameterWithName("size").description("요청 페이지 Default 10").optional(),
+                                        parameterWithName("language").description("언어").optional()
                                 ),
                                 responseFields(
                                         fieldWithPath("status").type(JsonFieldType.STRING)
@@ -398,7 +402,7 @@ class RecommendControllerTest extends RestDocsTest {
     @Test
     void retrieveProgressRecommend() throws Exception {
         // given
-        given(recommendService.retrieveProgressRecommend(any()))
+        given(recommendService.retrieveProgressRecommend(any(), any()))
                 .willReturn(Recommend.builder()
                         .id(1L)
                         .userId(1L)
@@ -411,6 +415,7 @@ class RecommendControllerTest extends RestDocsTest {
 
         // when
         mockMvc.perform(get("/api/v1/recommend/progress")
+                        .param("language", "EN")
                         .header(AUTHORIZATION, ACCESS_TOKEN)
                 )
                 .andDo(print())
@@ -421,6 +426,9 @@ class RecommendControllerTest extends RestDocsTest {
                                 .description("진행 중 추천 장소 조회 API"),
                         requestHeaders(
                                 headerWithName(AUTHORIZATION).description(ACCESS_TOKEN)
+                        ),
+                        queryParameters(
+                                parameterWithName("language").description("언어").optional()
                         ),
                         responseFields(
                                 fieldWithPath("status").type(JsonFieldType.STRING)

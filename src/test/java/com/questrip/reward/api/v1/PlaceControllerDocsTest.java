@@ -122,7 +122,7 @@ class PlaceControllerDocsTest extends RestDocsTest {
     @Test
     void findOne() throws Exception {
         // given
-        given(placeService.findPlaceWithDirectionSummary(any(), any()))
+        given(placeService.findPlaceWithDirectionSummary(any(), any(), any()))
                 .willReturn(
                         new PlaceAndDirection(
                                 PlaceFixture.get("6633897aa2757d5b1998ba0d"),
@@ -135,6 +135,7 @@ class PlaceControllerDocsTest extends RestDocsTest {
         mockMvc.perform(get("/api/v1/place/{placeId}", "6633897aa2757d5b1998ba0d")
                         .param("latitude", "37.5912474")
                         .param("longitude", "126.9184582")
+                        .param("language", "EN")
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -147,7 +148,8 @@ class PlaceControllerDocsTest extends RestDocsTest {
                         ),
                         queryParameters(
                                 parameterWithName("latitude").description("유저 위도"),
-                                parameterWithName("longitude").description("유저 경도")
+                                parameterWithName("longitude").description("유저 경도"),
+                                parameterWithName("language").description("언어").optional()
                         ),
                         responseFields(
                                 fieldWithPath("status").type(JsonFieldType.STRING)
@@ -216,7 +218,7 @@ class PlaceControllerDocsTest extends RestDocsTest {
     @Test
     void findAll() throws Exception {
         // given
-        given(placeService.findAllPlaceNear(any(), anyInt(), anyInt()))
+        given(placeService.findAllPlaceNear(any(), anyInt(), anyInt(), any()))
                 .willReturn(
                         new SliceResult<>(List.of(PlaceFixture.get("6633897aa2757d5b1998ba0d")), 0, 10, 1, false)
                 );
@@ -227,6 +229,7 @@ class PlaceControllerDocsTest extends RestDocsTest {
                         .param("longitude", "126.9184582")
                         .param("page", "0")
                         .param("size", "10")
+                        .param("language", "EN")
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -238,7 +241,8 @@ class PlaceControllerDocsTest extends RestDocsTest {
                                 parameterWithName("latitude").description("유저 위도"),
                                 parameterWithName("longitude").description("유저 경도"),
                                 parameterWithName("page").description("요청 페이지 (default 0)"),
-                                parameterWithName("size").description("요청 사이즈 (default 10)")
+                                parameterWithName("size").description("요청 사이즈 (default 10)"),
+                                parameterWithName("language").description("언어").optional()
                         ),
                         responseFields(
                                 fieldWithPath("status").type(JsonFieldType.STRING)
@@ -431,7 +435,7 @@ class PlaceControllerDocsTest extends RestDocsTest {
     @Test
     void retrieveMenuGroups() throws Exception {
         // given
-        given(placeService.findMenuGroups(any()))
+        given(placeService.findMenuGroups(any(), any()))
                 .willReturn(
                         PlaceFixture.getMenuGroups()
                 );
@@ -439,6 +443,7 @@ class PlaceControllerDocsTest extends RestDocsTest {
 
         // when & then
         mockMvc.perform(get("/api/v1/place/{placeId}/menu", "6633897aa2757d5b1998ba0d")
+                        .param("language", "EN")
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -448,6 +453,9 @@ class PlaceControllerDocsTest extends RestDocsTest {
                                 .description("장소 메뉴 조회 API"),
                         pathParameters(
                                 parameterWithName("placeId").description("플레이스 아이디(구글 x)")
+                        ),
+                        queryParameters(
+                                parameterWithName("language").description("언어").optional()
                         ),
                         responseFields(
                                 fieldWithPath("status").type(JsonFieldType.STRING)

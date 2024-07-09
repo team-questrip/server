@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -22,27 +23,29 @@ public class PlaceService {
     private final PlaceImageUploader placeImageUploader;
     private final PlaceFinder placeFinder;
     private final PlaceUpdater placeUpdater;
+    private final PlaceTranslator placeTranslator;
     private final DirectionSearcher directionSearcher;
 
     public Place save(String googlePlaceId, PlaceContent content, List<MultipartFile> files) {
         List<PlaceImage> images = placeImageUploader.upload(files);
         Place searched = placeSearcher.searchPlace(googlePlaceId).toPlace(content, images);
-        log.info("[place save] placeId : {} saved", searched.getGooglePlaceId());
+        Place appended = placeAppender.append(searched);
+        placeTranslator.translateAllLanguages(appended);
 
-        return placeAppender.append(searched);
+        return appended;
     }
 
-    public PlaceAndDirection findPlaceWithDirectionSummary(String id, LatLng userLocation) {
-        Place place = placeFinder.findById(id);
+    public PlaceAndDirection findPlaceWithDirectionSummary(String id, LatLng userLocation, String language) {
+        Place place = placeFinder.findByIdWithLanguage(id, language);
         DirectionSummary summary = directionSearcher.getSummary(userLocation, place.getGooglePlaceId());
 
         return new PlaceAndDirection(place, summary);
     }
 
-    public SliceResult<Place> findAllPlaceNear(LatLng userLocation, int page, int size) {
+    public SliceResult<Place> findAllPlaceNear(LatLng userLocation, int page, int size, String language) {
         log.info("[findAllPlaceNear] request userLocation lat: {}, lng: {}", userLocation.getLatitude(), userLocation.getLongitude());
 
-        return placeFinder.findAllNear(userLocation, page, size);
+        return placeFinder.findAllNear(language, userLocation, page, size);
     }
 
     public String reverseGeocode(LatLng latLng) {
@@ -55,12 +58,16 @@ public class PlaceService {
         for(MenuGroup menuGroup : menuGroups) {
             place.addMenuGroup(menuGroup);
         }
+        placeUpdater.update(place);
 
-        return placeUpdater.update(place);
+        Set<MenuGroup> set = menuGroups.stream().collect(Collectors.toSet());
+        placeTranslator.addTranslateMenuAllLanguages(placeId, set);
+
+        return place;
     }
 
-    public Set<MenuGroup> findMenuGroups(String placeId) {
-        Place place = placeFinder.findById(placeId);
+    public Set<MenuGroup> findMenuGroups(String placeId, String language) {
+        Place place = placeFinder.findByIdWithLanguage(placeId, language);
 
         return place.getMenuGroups();
     }

@@ -40,8 +40,7 @@ public class ContentService {
                 ).thenAccept(v -> {
                     updateContentAndBlocks(content, pageId, thumbnailFuture, blockFutures);
                     contentTranslator.translateAll(content);
-                }).exceptionally(this::handleException)
-                .join();
+                }).exceptionally(this::handleException);
     }
 
     private CompletableFuture<String> uploadThumbnail(Content content) {

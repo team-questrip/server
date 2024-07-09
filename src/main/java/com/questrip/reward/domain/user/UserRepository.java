@@ -12,4 +12,10 @@ public interface UserRepository {
     void validateDuplicatedEmail(String email);
 
     User findUserByEmail(String email);
+
+    void updateRefreshToken(User user);
+
+    UserPreference findUserPreference(Long userId);
+
+    UserPreference savePreference(UserPreference userPreference);
 }

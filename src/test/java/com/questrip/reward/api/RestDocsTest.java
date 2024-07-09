@@ -20,6 +20,7 @@ public abstract class RestDocsTest {
 
     public static final String AUTHORIZATION = "Authorization";
     public static final String ACCESS_TOKEN = "Bearer Token";
+    public static final String REFRESH_TOKEN = "REFRESH TOKEN";
 
 
     @BeforeEach

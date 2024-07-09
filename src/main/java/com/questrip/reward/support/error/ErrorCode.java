@@ -20,6 +20,7 @@ public enum ErrorCode {
     CAN_NOT_UPDATE_STATUS(HttpStatus.BAD_REQUEST, "Recommend status is not ACCEPTED"),
     UN_SUPPORTED_BLOCK_TYPE(HttpStatus.BAD_REQUEST, "Unsupported block type"),
     UN_SUPPORTED_LANGUAGE(HttpStatus.BAD_REQUEST, "Unsupported language"),
+    TRANSLATION_FAILED(HttpStatus.BAD_REQUEST, "Translation failed"),
 
     // security
     INVALID_PASSWORD(HttpStatus.UNAUTHORIZED, "Incorrect password."),
@@ -28,7 +29,7 @@ public enum ErrorCode {
     NOT_FOUND_TOKEN(HttpStatus.UNAUTHORIZED, "Token not found."),
     NO_ACCESS(HttpStatus.FORBIDDEN, "Access denied."),
     INVALID_JWT_TOKEN(HttpStatus.UNAUTHORIZED, "Invalid JWT token."),
-    EXPIRED_ACCESS_TOKEN(HttpStatus.UNAUTHORIZED, "JWT token has expired."),
+    EXPIRED_TOKEN(HttpStatus.UNAUTHORIZED, "JWT token has expired."),
     UNSUPPORTED_JWT_TOKEN(HttpStatus.UNAUTHORIZED, "Unsupported token.");
 
     private final HttpStatus status;

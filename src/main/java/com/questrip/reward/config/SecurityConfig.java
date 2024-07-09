@@ -42,7 +42,9 @@ public class SecurityConfig {
             "/api/v1/place",
             "/api/v1/place/.*",
             "/api/v1/question",
-            "/api/v1/user/.*",
+            "/api/v1/user/(?!preference$).*",
+            "/api/v1/content",
+            "/api/v1/content/.*",
             "/batch"
     );
 
@@ -87,7 +89,7 @@ public class SecurityConfig {
                         .accessDeniedHandler(accessDeniedHandler)
                 )
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/api/v1/recommend", "/api/v1/recommend/**").authenticated()
+                        .requestMatchers("/api/v1/recommend", "/api/v1/recommend/**", "/api/v1/user/preference").authenticated()
                         .anyRequest().permitAll()
                 )
                 .build();

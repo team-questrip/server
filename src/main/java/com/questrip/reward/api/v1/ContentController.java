@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.questrip.reward.support.utils.StringUtils.toUppercase;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/content")
@@ -32,10 +34,6 @@ public class ContentController {
         var contentBlock = contentService.getBlocks(pageId, toUppercase(language));
 
         return ApiResponse.success(new ContentBlockResponse(contentBlock));
-    }
-
-    private String toUppercase(String str) {
-        return str.toUpperCase();
     }
 
     @PostMapping("/{pageId}/init")

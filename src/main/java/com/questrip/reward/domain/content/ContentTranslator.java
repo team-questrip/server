@@ -1,7 +1,8 @@
 package com.questrip.reward.domain.content;
 
-import com.questrip.reward.api.v1.request.DeeplTranslateRequest;
+import com.questrip.reward.client.request.DeeplTranslateRequest;
 import com.questrip.reward.client.DeeplTranslateClient;
+import com.questrip.reward.support.TranslateLanguage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -18,23 +19,7 @@ public class ContentTranslator {
     private final DeeplTranslateClient client;
     private final ContentUpdater contentUpdater;
 
-    private static final List<String> languageList = List.of(
-            "DA",  // Danish
-            "DE",  // German
-            "EN",  // English
-            "ES",  // Spanish
-            "FR",  // French
-            "IT",  // Italian
-            "JA",  // Japanese
-            "KO",  // Korean
-            "NB",  // Norwegian Bokmål
-            "NL",  // Dutch
-            "PL",  // Polish
-            "PT",  // Portuguese
-            "RU",  // Russian
-            "SV",  // Swedish
-            "ZH"   // Chinese
-    );
+    private static final List<String> LANGUAGE_LIST = TranslateLanguage.LIST;
 
     public ContentBlock translateAllBlocks(List<ContentBlock.Block> blocks, String pageId, String targetLang) {
         List<String> candidates = blocks.stream()
@@ -72,13 +57,13 @@ public class ContentTranslator {
     }
 
     public void translateAll(Content content) {
-        if(content.getTranslatedList().size() == languageList.size()) {
+        if(content.getTranslatedList().size() == LANGUAGE_LIST.size()) {
             return;
         }
 
         List<String> alreadyTranslated = content.getTranslatedList().stream().map(TranslatedItem::getLanguage).collect(Collectors.toList());
 
-        List<CompletableFuture<TranslatedItem>> futures = languageList.stream()
+        List<CompletableFuture<TranslatedItem>> futures = LANGUAGE_LIST.stream()
                 .filter(language -> !alreadyTranslated.contains(language))
                 .map(language -> CompletableFuture.supplyAsync(() ->
                         translateContent(content, language)))

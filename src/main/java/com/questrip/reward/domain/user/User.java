@@ -1,5 +1,6 @@
 package com.questrip.reward.domain.user;
 
+import com.questrip.reward.security.jwt.JwtUtils;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -10,7 +11,7 @@ public class User {
     private String email;
     private String password;
     private Role role;
-
+    private String refreshToken;
 
     public enum Role {
         USER
@@ -20,12 +21,17 @@ public class User {
         this.password = password;
     }
 
+    public void issueRefreshToken() {
+        this.refreshToken = JwtUtils.generateRefreshToken(this);
+    }
+
     @Builder
-    private User(Long id, String username, String email, String password, Role role) {
+    private User(Long id, String username, String email, String password, Role role, String refreshToken) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.password = password;
         this.role = role;
+        this.refreshToken = refreshToken;
     }
 }
