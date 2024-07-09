@@ -415,4 +415,49 @@ class OpenPeriodsTest {
         assertThat(afterMidnightStatus).isEqualTo(OpenStatus.OPEN);
         assertThat(afterCloseStatus).isEqualTo(OpenStatus.CLOSE);
     }
+
+    @DisplayName("24시간 영업 중인 경우 테스트")
+    @Test
+    void isOpen24Hours() throws JsonProcessingException {
+        // given
+        String periods = "[\n" +
+                "          {\n" +
+                "            \"open\": {\n" +
+                "              \"day\": 0,\n" +
+                "              \"hour\": 0,\n" +
+                "              \"minute\": 0\n" +
+                "            }\n" +
+                "          }\n" +
+                "        ]";
+
+        List<Period> list = objectMapper.readValue(periods, new TypeReference<List<Period>>() {});
+
+        OpenPeriods openPeriods = new OpenPeriods(list);
+
+        LocalDateTime 월요일새벽 = LocalDateTime.of(2024, 4, 1, 3, 0, 0);
+        LocalDateTime 화요일오후 = LocalDateTime.of(2024, 4, 2, 14, 30, 0);
+        LocalDateTime 수요일밤 = LocalDateTime.of(2024, 4, 3, 23, 59, 59);
+        LocalDateTime 목요일아침 = LocalDateTime.of(2024, 4, 4, 8, 0, 0);
+        LocalDateTime 금요일저녁 = LocalDateTime.of(2024, 4, 5, 20, 0, 0);
+        LocalDateTime 토요일새벽 = LocalDateTime.of(2024, 4, 6, 1, 30, 0);
+        LocalDateTime 일요일점심 = LocalDateTime.of(2024, 4, 7, 12, 0, 0);
+
+        // when
+        OpenStatus 월요일새벽상태 = openPeriods.isOpen(월요일새벽);
+        OpenStatus 화요일오후상태 = openPeriods.isOpen(화요일오후);
+        OpenStatus 수요일밤상태 = openPeriods.isOpen(수요일밤);
+        OpenStatus 목요일아침상태 = openPeriods.isOpen(목요일아침);
+        OpenStatus 금요일저녁상태 = openPeriods.isOpen(금요일저녁);
+        OpenStatus 토요일새벽상태 = openPeriods.isOpen(토요일새벽);
+        OpenStatus 일요일점심상태 = openPeriods.isOpen(일요일점심);
+
+        // then
+        assertThat(월요일새벽상태).isEqualTo(OpenStatus.OPEN);
+        assertThat(화요일오후상태).isEqualTo(OpenStatus.OPEN);
+        assertThat(수요일밤상태).isEqualTo(OpenStatus.OPEN);
+        assertThat(목요일아침상태).isEqualTo(OpenStatus.OPEN);
+        assertThat(금요일저녁상태).isEqualTo(OpenStatus.OPEN);
+        assertThat(토요일새벽상태).isEqualTo(OpenStatus.OPEN);
+        assertThat(일요일점심상태).isEqualTo(OpenStatus.OPEN);
+    }
 }
