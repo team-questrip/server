@@ -43,14 +43,16 @@ class RecommendControllerTest extends RestDocsTest {
     void getRecommends() throws Exception {
         // given
         List<Place> places = List.of(PlaceFixture.get("test"));
-        given(recommendService.getRecommendPlaces(any(), any(), any()))
-                .willReturn(places);
+        given(recommendService.getRecommendPlaces(any(), any(), anyInt(), anyInt(), any()))
+                .willReturn(new SliceResult<>(places, 0, 10, 1, false));
 
         // when
         mockMvc.perform(get("/api/v1/recommend")
                         .header(AUTHORIZATION, ACCESS_TOKEN)
                         .param("latitude", "37.5912474")
                         .param("longitude", "126.9184582")
+                        .param("page", "0")
+                        .param("size", "10")
                         .param("language", "EN")
                 )
                 .andDo(print())
@@ -65,6 +67,8 @@ class RecommendControllerTest extends RestDocsTest {
                         queryParameters(
                                 parameterWithName("latitude").description("유저 위도"),
                                 parameterWithName("longitude").description("유저 경도"),
+                                parameterWithName("page").description("요청 페이지 (default 0)").optional(),
+                                parameterWithName("size").description("요청 사이즈 (default 10)").optional(),
                                 parameterWithName("language").description("언어").optional()
                         ),
                         responseFields(
@@ -72,53 +76,51 @@ class RecommendControllerTest extends RestDocsTest {
                                         .description("응답 상태"),
                                 fieldWithPath("message").type(JsonFieldType.STRING)
                                         .description("메시지"),
-                                fieldWithPath("data").type(JsonFieldType.OBJECT)
+                                fieldWithPath("data").type(JsonFieldType.ARRAY)
                                         .description("데이터"),
-                                fieldWithPath("data.places").type(JsonFieldType.ARRAY)
-                                        .description("장소 목록"),
-                                fieldWithPath("data.places[].id").type(JsonFieldType.STRING)
+                                fieldWithPath("data[].id").type(JsonFieldType.STRING)
                                         .description("장소 아이디"),
-                                fieldWithPath("data.places[].googlePlaceId").type(JsonFieldType.STRING)
+                                fieldWithPath("data[].googlePlaceId").type(JsonFieldType.STRING)
                                         .description("구글 장소 아이디"),
-                                fieldWithPath("data.places[].placeName").type(JsonFieldType.STRING)
+                                fieldWithPath("data[].placeName").type(JsonFieldType.STRING)
                                         .description("장소 이름"),
-                                fieldWithPath("data.places[].primaryType").type(JsonFieldType.STRING)
+                                fieldWithPath("data[].primaryType").type(JsonFieldType.STRING)
                                         .description("카테고리"),
-                                fieldWithPath("data.places[].formattedAddress").type(JsonFieldType.STRING)
+                                fieldWithPath("data[].formattedAddress").type(JsonFieldType.STRING)
                                         .description("주소"),
-                                fieldWithPath("data.places[].location").type(JsonFieldType.OBJECT)
+                                fieldWithPath("data[].location").type(JsonFieldType.OBJECT)
                                         .description("위경도"),
-                                fieldWithPath("data.places[].location.latitude").type(JsonFieldType.NUMBER)
+                                fieldWithPath("data[].location.latitude").type(JsonFieldType.NUMBER)
                                         .description("위도"),
-                                fieldWithPath("data.places[].location.longitude").type(JsonFieldType.NUMBER)
+                                fieldWithPath("data[].location.longitude").type(JsonFieldType.NUMBER)
                                         .description("경도"),
-                                fieldWithPath("data.places[].content").type(JsonFieldType.OBJECT)
+                                fieldWithPath("data[].content").type(JsonFieldType.OBJECT)
                                         .description("장소 설명"),
-                                fieldWithPath("data.places[].content.recommendationReason").type(JsonFieldType.STRING)
+                                fieldWithPath("data[].content.recommendationReason").type(JsonFieldType.STRING)
                                         .description("추천 이유"),
-                                fieldWithPath("data.places[].content.activity").type(JsonFieldType.STRING)
+                                fieldWithPath("data[].content.activity").type(JsonFieldType.STRING)
                                         .description("추천 활동"),
-                                fieldWithPath("data.places[].images").type(JsonFieldType.ARRAY)
+                                fieldWithPath("data[].images").type(JsonFieldType.ARRAY)
                                         .description("장소 이미지"),
-                                fieldWithPath("data.places[].images[].sequence").type(JsonFieldType.NUMBER)
+                                fieldWithPath("data[].images[].sequence").type(JsonFieldType.NUMBER)
                                         .description("이미지 순서"),
-                                fieldWithPath("data.places[].images[].url").type(JsonFieldType.STRING)
+                                fieldWithPath("data[].images[].url").type(JsonFieldType.STRING)
                                         .description("이미지 url"),
-                                fieldWithPath("data.places[].openingHours").type(JsonFieldType.ARRAY)
+                                fieldWithPath("data[].openingHours").type(JsonFieldType.ARRAY)
                                         .description("영업시간"),
-                                fieldWithPath("data.places[].openNow").type(JsonFieldType.STRING)
+                                fieldWithPath("data[].openNow").type(JsonFieldType.STRING)
                                         .description("현재 영업 여부 [OPEN, CLOSE, UNKNOWN]"),
-                                fieldWithPath("data.places[].menuGroups[]").type(JsonFieldType.ARRAY)
+                                fieldWithPath("data[].menuGroups[]").type(JsonFieldType.ARRAY)
                                         .description("메뉴 그룹"),
-                                fieldWithPath("data.places[].menuGroups[].groupName").type(JsonFieldType.STRING)
+                                fieldWithPath("data[].menuGroups[].groupName").type(JsonFieldType.STRING)
                                         .description("메뉴 그룹명"),
-                                fieldWithPath("data.places[].menuGroups[].menus[]").type(JsonFieldType.ARRAY)
+                                fieldWithPath("data[].menuGroups[].menus[]").type(JsonFieldType.ARRAY)
                                         .description("메뉴 목록"),
-                                fieldWithPath("data.places[].menuGroups[].menus[].menuName").type(JsonFieldType.STRING)
+                                fieldWithPath("data[].menuGroups[].menus[].menuName").type(JsonFieldType.STRING)
                                         .description("메뉴 이름"),
-                                fieldWithPath("data.places[].menuGroups[].menus[].price").type(JsonFieldType.NUMBER)
+                                fieldWithPath("data[].menuGroups[].menus[].price").type(JsonFieldType.NUMBER)
                                         .description("메뉴 가격"),
-                                fieldWithPath("data.places[].menuGroups[].menus[].description").type(JsonFieldType.STRING)
+                                fieldWithPath("data[].menuGroups[].menus[].description").type(JsonFieldType.STRING)
                                         .description("메뉴 설명")
                         ))
 
@@ -249,7 +251,7 @@ class RecommendControllerTest extends RestDocsTest {
                 .id(1L)
                 .userId(1L)
                 .place(PlaceFixture.get("test"))
-                .status(Recommend.Status.KEPT)
+                .status(Recommend.Status.COMPLETED)
                 .createdAt(LocalDateTime.of(2024, 6, 3, 22, 19, 0))
                 .updatedAt(LocalDateTime.of(2024, 6, 3, 22, 19, 0))
                 .build();
@@ -260,7 +262,7 @@ class RecommendControllerTest extends RestDocsTest {
         );
 
         // when & then
-        mockMvc.perform(get("/api/v1/recommend/{status}", Recommend.Status.KEPT)
+        mockMvc.perform(get("/api/v1/recommend/{status}", "%s,%s".formatted(Recommend.Status.KEPT, Recommend.Status.COMPLETED))
                         .param("page", "0")
                         .param("size", "10")
                         .param("language", "EN")
@@ -276,7 +278,7 @@ class RecommendControllerTest extends RestDocsTest {
                                         headerWithName(AUTHORIZATION).description(ACCESS_TOKEN).optional()
                                 ),
                                 pathParameters(
-                                        parameterWithName("status").description("[KEPT, DENIED, ACCEPTED")
+                                        parameterWithName("status").description("ACCEPTED, DENIED, KEPT, COMPLETED, REVOKED")
                                 ),
                                 queryParameters(
                                         parameterWithName("page").description("요청 페이지 Default 0").optional(),

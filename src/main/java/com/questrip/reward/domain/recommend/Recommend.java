@@ -6,10 +6,12 @@ import com.questrip.reward.support.error.ErrorCode;
 import com.questrip.reward.support.error.GlobalException;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 
 @Getter
+@ToString
 public class Recommend {
     private Long id;
     private Long userId;

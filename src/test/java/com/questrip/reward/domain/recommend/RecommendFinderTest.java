@@ -10,6 +10,7 @@ import com.questrip.reward.storage.mysql.RecommendJpaRepository;
 import com.questrip.reward.support.error.ErrorCode;
 import com.questrip.reward.support.error.GlobalException;
 import com.questrip.reward.support.response.SliceResult;
+import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -84,11 +85,11 @@ class RecommendFinderTest {
         mock.when(LocalDateTime::now).thenReturn(mockTime);
 
         // when
-        List<Place> recommendPlaces = recommendFinder.getRecommends(userId, new LatLng(37.5051148, 127.08420179999999));
-        List<String> result = recommendPlaces.stream().map(Place::getId).collect(Collectors.toList());
+        SliceResult<Place> recommendPlaces = recommendFinder.getRecommends(userId, new LatLng(37.5051148, 127.08420179999999),0, 10, "EN");
+        List<String> result = recommendPlaces.getContent().stream().map(Place::getId).collect(Collectors.toList());
 
         // then
-        assertThat(recommendPlaces.size()).isEqualTo(2);
+        assertThat(recommendPlaces.getContent().size()).isEqualTo(2);
         assertThat(result)
                 .contains(placeIds.get(2), placeIds.get(3));
     }
@@ -111,10 +112,10 @@ class RecommendFinderTest {
         recommendJpaRepository.saveAll(entities);
 
         // when
-        List<Place> recommendPlaces = recommendFinder.getRecommends(userId, new LatLng(37.5051148, 127.08420179999999));
+        SliceResult<Place> recommendPlaces = recommendFinder.getRecommends(userId, new LatLng(37.5051148, 127.08420179999999), 0, 10, "EN");
 
         // then
-        assertThat(recommendPlaces.size()).isZero();
+        assertThat(recommendPlaces.getContent().size()).isZero();
     }
 
     @DisplayName("keep한 추천내역을 가져온다.")
@@ -135,7 +136,7 @@ class RecommendFinderTest {
         recommendJpaRepository.saveAll(entities);
 
         // when
-        SliceResult<Recommend> keptRecommends = recommendFinder.getRecommendsWithStatus(userId, Recommend.Status.KEPT, 0, 10);
+        SliceResult<Recommend> keptRecommends = recommendFinder.getRecommendsWithStatus(userId, List.of(Recommend.Status.KEPT), 0, 10, "EN");
 
         // then
         assertThat(keptRecommends.getNumberOfElements()).isEqualTo(2);
@@ -159,7 +160,7 @@ class RecommendFinderTest {
         recommendJpaRepository.saveAll(entities);
 
         // when
-        SliceResult<Recommend> keptRecommends = recommendFinder.getRecommendsWithStatus(userId, Recommend.Status.KEPT, 0, 10);
+        SliceResult<Recommend> keptRecommends = recommendFinder.getRecommendsWithStatus(userId, List.of(Recommend.Status.KEPT), 0, 10, "EN");
 
         // then
         List<String> places = keptRecommends.getContent()
@@ -192,10 +193,41 @@ class RecommendFinderTest {
         recommendJpaRepository.saveAll(entities);
 
         // when
-        SliceResult<Recommend> keptRecommends = recommendFinder.getRecommendsWithStatus(userId, Recommend.Status.ACCEPTED, 0, 10);
+        SliceResult<Recommend> keptRecommends = recommendFinder.getRecommendsWithStatus(userId, List.of(Recommend.Status.ACCEPTED), 0, 10, "EN");
 
         // then
         assertThat(keptRecommends.getNumberOfElements()).isEqualTo(1);
+    }
+
+    @DisplayName("Status에 맞는 추천내역을 가져온다.")
+    @Test
+    void getRecommendsInStatus() {
+        // given
+        Long userId = 1L;
+        Recommend r1 = createRecommend(placeIds.get(0), userId, Recommend.Status.DENIED);
+        Recommend r2 = createRecommend(placeIds.get(1), userId, Recommend.Status.KEPT);
+        Recommend r3 = createRecommend(placeIds.get(2), userId, Recommend.Status.ACCEPTED);
+        Recommend r4 = createRecommend(placeIds.get(3), userId, Recommend.Status.COMPLETED);
+
+        List<RecommendEntity> entities = List.of(r1, r2, r3, r4)
+                .stream()
+                .map(RecommendEntity::from)
+                .collect(Collectors.toList());
+
+        recommendJpaRepository.saveAll(entities);
+
+        // when
+        SliceResult<Recommend> recommends = recommendFinder.getRecommendsWithStatus(userId, List.of(Recommend.Status.ACCEPTED, Recommend.Status.COMPLETED), 0, 10, "EN");
+
+        // then
+        assertThat(recommends.getNumberOfElements()).isEqualTo(2);
+        assertThat(recommends.getContent()).extracting(
+                "placeId", "status"
+        )
+                .containsExactlyInAnyOrder(
+                        Tuple.tuple(placeIds.get(2), Recommend.Status.ACCEPTED),
+                        Tuple.tuple(placeIds.get(3), Recommend.Status.COMPLETED)
+                );
     }
 
     private Recommend createRecommend(String placeId, Long userId, Recommend.Status status) {

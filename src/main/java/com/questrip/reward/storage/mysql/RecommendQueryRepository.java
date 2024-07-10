@@ -42,13 +42,13 @@ public class RecommendQueryRepository {
                 .fetch();
     }
 
-    public Slice<RecommendEntity> findAllRecommendStatus(Long userId, Pageable pageable, Recommend.Status status) {
+    public Slice<RecommendEntity> findAllRecommendStatus(Long userId, Pageable pageable, List<Recommend.Status> status) {
         List<RecommendEntity> content = jpaQueryFactory.select(recommendEntity)
                 .from(recommendEntity)
-                .where(recommendEntity.userId.eq(userId).and(recommendEntity.status.eq(status)))
+                .where(recommendEntity.userId.eq(userId).and(recommendEntity.status.in(status)))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize()+1)
-                .orderBy(recommendEntity.createdAt.asc())
+                .orderBy(recommendEntity.createdAt.desc())
                 .fetch();
 
         return new SliceImpl<>(content, pageable, hasNextPage(content, pageable.getPageSize()));

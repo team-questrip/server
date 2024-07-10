@@ -53,19 +53,12 @@ public class PlaceCoreRepository implements PlaceRepository {
     }
 
     @Override
-    public List<Place> findRecommendPlace(LatLng userLocation, List<String> placeIds) {
-        return placeMongoRepository.findAllByLocationNearAndIdNotIn(toPoint(userLocation), placeIds)
-                .stream()
-                .map(PlaceEntity::toPlace)
-                .collect(Collectors.toList());
-    }
+    public SliceResult<Place> findRecommendPlace(LatLng userLocation, List<String> placeIds, int page, int size, String language) {
+        PageRequest pageRequest = PageRequest.of(page, size);
+        Slice<Place> slice = placeMongoRepository.findAllByLocationNearAndIdNotIn(toPoint(userLocation), placeIds, pageRequest)
+                .map(placeEntity -> placeEntity.toPlace(language));
 
-    @Override
-    public List<Place> findRecommendPlace(LatLng userLocation, List<String> placeIds, String language) {
-        return placeMongoRepository.findAllByLocationNearAndIdNotIn(toPoint(userLocation), placeIds)
-                .stream()
-                .map(placeEntity -> placeEntity.toPlace(language))
-                .collect(Collectors.toList());
+        return new SliceResult<>(slice);
     }
 
     private Point toPoint(LatLng userLocation) {

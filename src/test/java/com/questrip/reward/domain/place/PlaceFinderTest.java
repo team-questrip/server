@@ -144,9 +144,9 @@ class PlaceFinderTest {
         LatLng location = new LatLng(37.5581082, 126.9259574);
 
         // when
-        List<Place> recommendPlace = placeFinder.findRecommendPlace(location, List.of(placeIds.get(0), placeIds.get(1)));
+        SliceResult<Place> recommendPlace = placeFinder.findRecommendPlace(location, List.of(placeIds.get(0), placeIds.get(1)), 0, 10, "EN");
 
         // then
-        assertThat(recommendPlace.size()).isEqualTo(8);
+        assertThat(recommendPlace.getContent().size()).isEqualTo(8);
     }
 }

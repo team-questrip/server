@@ -11,7 +11,7 @@ import java.util.List;
 public interface PlaceMongoRepository extends MongoRepository<PlaceEntity, String> {
     Slice<PlaceEntity> findAllByLocationNear(Point point, Pageable pageable);
 
-    List<PlaceEntity> findAllByLocationNearAndIdNotIn(Point point, List<String> ids);
+    Slice<PlaceEntity> findAllByLocationNearAndIdNotIn(Point point, List<String> ids, Pageable pageable);
 
     List<PlaceEntity> findAllByIdIn(List<String> placeIds);
 

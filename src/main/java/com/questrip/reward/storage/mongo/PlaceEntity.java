@@ -52,6 +52,15 @@ public class PlaceEntity extends BaseEntity {
 
     public Place toPlace(String language) {
         TranslatedInfo info = translations.getOrDefault(language, translations.get("EN"));
+        if(info == null) {
+            info = TranslatedInfo.builder()
+                    .placeName("null")
+                    .content(new PlaceContent("null", "null"))
+                    .formattedAddress("null")
+                    .primaryType("null")
+                    .openingHours(List.of("null"))
+                    .build();
+        }
 
         return Place.builder()
                 .id(id)

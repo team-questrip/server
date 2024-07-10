@@ -19,14 +19,9 @@ public class RecommendService {
     private final RecommendValidator recommendValidator;
     private final PlaceFinder placeFinder;
 
-    public List<Place> getRecommendPlaces(Long userId, LatLng userLocation) {
+    public SliceResult<Place> getRecommendPlaces(Long userId, LatLng userLocation, int page, int size, String language) {
         recommendValidator.validateProgressRecommend(userId);
-        return recommendFinder.getRecommends(userId, userLocation);
-    }
-
-    public List<Place> getRecommendPlaces(Long userId, LatLng userLocation, String language) {
-        recommendValidator.validateProgressRecommend(userId);
-        return recommendFinder.getRecommends(userId, userLocation, language);
+        return recommendFinder.getRecommends(userId, userLocation, page, size, language);
     }
 
     public Recommend save(Long userId, String placeId, Recommend.Status status) {
@@ -37,11 +32,7 @@ public class RecommendService {
         return recommendAppender.append(place, initRecommend);
     }
 
-    public SliceResult<Recommend> getRecommendsWithStatus(Long userId, Recommend.Status status, int page, int size) {
-        return recommendFinder.getRecommendsWithStatus(userId, status, page, size);
-    }
-
-    public SliceResult<Recommend> getRecommendsWithStatus(Long userId, Recommend.Status status, int page, int size, String language) {
+    public SliceResult<Recommend> getRecommendsWithStatus(Long userId, List<Recommend.Status> status, int page, int size, String language) {
         return recommendFinder.getRecommendsWithStatus(userId, status, page, size, language);
     }
 

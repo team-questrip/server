@@ -46,6 +46,7 @@ public class RecommendFactory {
         return Recommend.builder()
                 .id(recommend.getId())
                 .place(place)
+                .placeId(place.getId())
                 .userId(recommend.getUserId())
                 .status(recommend.getStatus())
                 .createdAt(recommend.getCreatedAt())

@@ -17,9 +17,7 @@ public interface PlaceRepository {
 
     SliceResult<Place> findAllNear(String language, LatLng userLocation, int page, int size);
 
-    List<Place> findRecommendPlace(LatLng userLocation, List<String> placeIds);
-
-    List<Place> findRecommendPlace(LatLng userLocation, List<String> placeIds, String language);
+    SliceResult<Place> findRecommendPlace(LatLng userLocation, List<String> placeIds, int page, int size, String language);
 
     List<Place> findAllByIdIn(List<String> placeIds);
 

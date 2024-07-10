@@ -20,14 +20,9 @@ public class RecommendFinder {
     private final PlaceFinder placeFinder;
     private final RecommendFactory recommendFactory;
 
-    public List<Place> getRecommends(Long userId, LatLng userLocation) {
+    public SliceResult<Place> getRecommends(Long userId, LatLng userLocation, int page, int size, String language) {
         List<String> placeIds = recommendRepository.getExcludePlaceIds(userId, calculateStartDateTime(), calculateEndDateTime());
-        return placeFinder.findRecommendPlace(userLocation, placeIds);
-    }
-
-    public List<Place> getRecommends(Long userId, LatLng userLocation, String language) {
-        List<String> placeIds = recommendRepository.getExcludePlaceIds(userId, calculateStartDateTime(), calculateEndDateTime());
-        return placeFinder.findRecommendPlace(userLocation, placeIds, language);
+        return placeFinder.findRecommendPlace(userLocation, placeIds, page, size, language);
     }
 
     private LocalDateTime calculateStartDateTime() {
@@ -42,14 +37,7 @@ public class RecommendFinder {
         return LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth(), 23, 59, 59);
     }
 
-    public SliceResult<Recommend> getRecommendsWithStatus(Long userId, Recommend.Status status, int page, int size) {
-        SliceResult<Recommend> allKeptRecommend = recommendRepository.findAllRecommendsWithStatus(userId, status, page, size);
-        Map<String, Place> placeMap = placeFinder.findMapIdIn(extractPlaceIds(allKeptRecommend.getContent()));
-
-        return allKeptRecommend.map(recommend -> recommendFactory.of(recommend, placeMap.get(recommend.getPlaceId())));
-    }
-
-    public SliceResult<Recommend> getRecommendsWithStatus(Long userId, Recommend.Status status, int page, int size, String language) {
+    public SliceResult<Recommend> getRecommendsWithStatus(Long userId, List<Recommend.Status> status, int page, int size, String language) {
         SliceResult<Recommend> allKeptRecommend = recommendRepository.findAllRecommendsWithStatus(userId, status, page, size);
         Map<String, Place> placeMap = placeFinder.findMapIdIn(extractPlaceIds(allKeptRecommend.getContent()), language);
 

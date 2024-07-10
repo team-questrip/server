@@ -1,10 +1,10 @@
 package com.questrip.reward.api.v1;
 
+import com.questrip.reward.api.support.Language;
 import com.questrip.reward.api.v1.request.LocationRequest;
 import com.questrip.reward.api.v1.request.RecommendRequest;
-import com.questrip.reward.api.v1.response.PlaceListResponse;
+import com.questrip.reward.api.v1.response.PlaceResponse;
 import com.questrip.reward.api.v1.response.RecommendResponse;
-import com.questrip.reward.domain.place.Place;
 import com.questrip.reward.domain.recommend.Recommend;
 import com.questrip.reward.domain.recommend.RecommendService;
 import com.questrip.reward.security.details.LoginUser;
@@ -15,9 +15,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
-
-import static com.questrip.reward.support.utils.StringUtils.toUppercase;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,12 +27,16 @@ public class RecommendController {
     private final RecommendService recommendService;
 
     @GetMapping
-    public ApiResponse<PlaceListResponse> getRecommendPlaces(@AuthenticationPrincipal LoginUser loginUser,
-                                                              LocationRequest request,
-                                                              @RequestParam(defaultValue = "EN", required = false) String language) {
-        List<Place> recommendPlaces = recommendService.getRecommendPlaces(loginUser.getUser().getId(), request.toLocation(), toUppercase(language));
+    public ApiResponse<List<PlaceResponse>> getRecommendPlaces(@AuthenticationPrincipal LoginUser loginUser,
+                                                               LocationRequest request,
+                                                               @RequestParam(defaultValue = "0", required = false) int page,
+                                                               @RequestParam(defaultValue = "10", required = false) int size,
+                                                               @Language String language) {
+        List<PlaceResponse> result = recommendService.getRecommendPlaces(loginUser.getUser().getId(), request.toLocation(), page, size, language)
+                .map(PlaceResponse::new)
+                .getContent();
 
-        return ApiResponse.success("추천 장소 조회 완료", new PlaceListResponse(recommendPlaces));
+        return ApiResponse.success("추천 장소 조회 완료", result);
     }
 
     @PostMapping
@@ -45,12 +49,16 @@ public class RecommendController {
     @GetMapping("/{status}")
     public ApiResponse<SliceResult<RecommendResponse>> getStatusRecommends(
             @AuthenticationPrincipal LoginUser loginUser,
-            @PathVariable Recommend.Status status,
+            @PathVariable String status,
             @RequestParam(defaultValue = "0", required = false) int page,
             @RequestParam(defaultValue = "10", required = false) int size,
-            @RequestParam(defaultValue = "EN", required = false) String language
+            @Language String language
     ) {
-        SliceResult<RecommendResponse> response = recommendService.getRecommendsWithStatus(loginUser.getId(), status, page, size, toUppercase(language))
+        List<Recommend.Status> statusList = Arrays.stream(status.split(","))
+                .map(Recommend.Status::valueOf)
+                .collect(Collectors.toList());
+
+        SliceResult<RecommendResponse> response = recommendService.getRecommendsWithStatus(loginUser.getId(), statusList, page, size, language)
                 .map(RecommendResponse::new);
 
         return ApiResponse.success(response);
@@ -69,8 +77,8 @@ public class RecommendController {
 
     @GetMapping("/progress")
     public ApiResponse<RecommendResponse> retrieveProgressRecommend(@AuthenticationPrincipal LoginUser loginUser,
-                                                                    @RequestParam(defaultValue = "EN", required = false) String language) {
-        Recommend recommend = recommendService.retrieveProgressRecommend(loginUser.getId(), toUppercase(language));
+                                                                    @Language String language) {
+        Recommend recommend = recommendService.retrieveProgressRecommend(loginUser.getId(), language);
 
         return ApiResponse.success(new RecommendResponse(recommend));
     }

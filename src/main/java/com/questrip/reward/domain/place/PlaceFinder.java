@@ -27,12 +27,8 @@ public class PlaceFinder {
         return placeRepository.findAllNear(language, userLocation, page, size);
     }
 
-    public List<Place> findRecommendPlace(LatLng userLocation, List<String> placeIds) {
-        return placeRepository.findRecommendPlace(userLocation, placeIds);
-    }
-
-    public List<Place> findRecommendPlace(LatLng userLocation, List<String> placeIds, String language) {
-        return placeRepository.findRecommendPlace(userLocation, placeIds, language);
+    public SliceResult<Place> findRecommendPlace(LatLng userLocation, List<String> placeIds, int page, int size, String language) {
+        return placeRepository.findRecommendPlace(userLocation, placeIds, page, size, language);
     }
 
     public Map<String, Place> findMapIdIn(List<String> placeIds) {

@@ -87,7 +87,7 @@ class RecommendServiceTest {
         Recommend recommend = recommendService.save(1L, place.getId(), Recommend.Status.ACCEPTED);
 
         // when & then
-        assertThatThrownBy(() -> recommendService.getRecommendPlaces(1L, new LatLng(35.123, 123.23)))
+        assertThatThrownBy(() -> recommendService.getRecommendPlaces(1L, new LatLng(35.123, 123.23), 0, 10,"EN"))
                 .isInstanceOf(GlobalException.class)
                 .hasMessageContaining(ErrorCode.ALREADY_EXIST_PROGRESS_RECOMMEND.getMessage());
     }
