@@ -9,11 +9,13 @@ import com.questrip.reward.domain.place.*;
 import com.questrip.reward.support.response.ApiResponse;
 import com.questrip.reward.support.response.SliceResult;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
 
 @RestController
+@Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/place")
 public class PlaceController {
@@ -65,6 +67,7 @@ public class PlaceController {
 
     @PostMapping("/menu")
     public ApiResponse<PlaceResponse> addMenuGroup(@RequestBody MenuGroupListRequest request) {
+        log.info("place id:{} menu insert. menu amount is {}", request.placeId(), request.menuGroups().size());
         Place place = placeService.addMenuGroups(request.placeId(), request.toGroups());
 
         return ApiResponse.success(new PlaceResponse(place));

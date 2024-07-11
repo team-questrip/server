@@ -12,6 +12,7 @@ import com.questrip.reward.support.response.ApiResponse;
 import com.questrip.reward.support.response.SliceResult;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +21,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
+@Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/recommend")
 public class RecommendController {
@@ -32,6 +34,7 @@ public class RecommendController {
                                                                @RequestParam(defaultValue = "0", required = false) int page,
                                                                @RequestParam(defaultValue = "10", required = false) int size,
                                                                @Language String language) {
+        log.info("recommend request, request user Id is : {}, language is : {}", loginUser.getId(), language);
         List<PlaceResponse> result = recommendService.getRecommendPlaces(loginUser.getUser().getId(), request.toLocation(), page, size, language)
                 .map(PlaceResponse::new)
                 .getContent();
@@ -41,6 +44,7 @@ public class RecommendController {
 
     @PostMapping
     public ApiResponse<RecommendResponse> recommend(@AuthenticationPrincipal LoginUser loginUser, @Valid @RequestBody RecommendRequest request) {
+        log.info("recommend status is {}, place id is : {}, user id is", request.status(), request.placeId(), loginUser.getId());
         Recommend recommend = recommendService.save(loginUser.getId(), request.placeId(), request.status());
 
         return ApiResponse.success(new RecommendResponse(recommend));
@@ -70,6 +74,7 @@ public class RecommendController {
             @AuthenticationPrincipal LoginUser loginUser,
             LocationRequest request
     ) {
+        log.info("recommend status updated. request status is {}, user id is {}, request location latitude:{}, longitude:{}", status, loginUser.getId(), request.getLatitude(), request.getLongitude());
         recommendService.updateRecommendStatus(loginUser.getId(), request.toLocation(), status);
 
         return ApiResponse.success("처리 완료");
