@@ -8,6 +8,6 @@ public record MenuResponse(
         String description
 ) {
     public MenuResponse(Menu menu) {
-        this(menu.getName(), menu.getPrice(), menu.getDescription());
+        this("%s (%s)".formatted(menu.getName(), menu.getRomanizedMenuName()), menu.getPrice(), menu.getDescription());
     }
 }

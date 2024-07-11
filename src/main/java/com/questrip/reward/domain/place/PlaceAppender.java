@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 public class PlaceAppender {
 
     private final PlaceRepository placeRepository;
-    private final PlaceTranslator placeTranslator;
 
     public Place append(Place place) {
         return placeRepository.save(place);

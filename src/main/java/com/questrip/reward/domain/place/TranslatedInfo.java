@@ -10,7 +10,6 @@ import java.util.*;
 @Getter
 @NoArgsConstructor
 public class TranslatedInfo {
-    private String placeName;
     private String primaryType;
     private String formattedAddress;
     private PlaceContent content;
@@ -39,8 +38,7 @@ public class TranslatedInfo {
     }
 
     @Builder
-    public TranslatedInfo(String placeName, String primaryType, String formattedAddress, PlaceContent content, List<String> openingHours, Set<MenuGroup> menuGroups) {
-        this.placeName = placeName;
+    public TranslatedInfo(String primaryType, String formattedAddress, PlaceContent content, List<String> openingHours, Set<MenuGroup> menuGroups) {
         this.primaryType = primaryType;
         this.formattedAddress = formattedAddress;
         this.content = content;

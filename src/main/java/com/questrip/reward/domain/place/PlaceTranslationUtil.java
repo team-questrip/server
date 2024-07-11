@@ -5,7 +5,6 @@ import java.util.*;
 public class PlaceTranslationUtil {
     public static List<String> createPlaceTranslationRequest(Place place) {
         List<String> request = new ArrayList<>(List.of(
-                place.getPlaceName(),
                 place.getPrimaryType(),
                 place.getFormattedAddress(),
                 place.getContent().getRecommendationReason(),
@@ -16,14 +15,13 @@ public class PlaceTranslationUtil {
     }
 
     public static TranslatedInfo createTranslatedPlaceInfo(List<String> translatedTexts) {
-        int basicInfoCount = 5;
+        int basicInfoCount = 4;
         List<String> translatedOpeningHours = translatedTexts.subList(basicInfoCount, translatedTexts.size());
 
         return TranslatedInfo.builder()
-                .placeName(translatedTexts.get(0))
-                .primaryType(translatedTexts.get(1))
-                .formattedAddress(translatedTexts.get(2))
-                .content(new PlaceContent(translatedTexts.get(3), translatedTexts.get(4)))
+                .primaryType(translatedTexts.get(0))
+                .formattedAddress(translatedTexts.get(1))
+                .content(new PlaceContent(translatedTexts.get(2), translatedTexts.get(3)))
                 .openingHours(translatedOpeningHours)
                 .build();
     }
@@ -33,7 +31,6 @@ public class PlaceTranslationUtil {
         for (MenuGroup group : menuGroups) {
             request.add(group.getGroupName());
             for (Menu menu : group.getMenus()) {
-                request.add(menu.getName());
                 request.add(menu.getDescription());
             }
         }
@@ -49,9 +46,8 @@ public class PlaceTranslationUtil {
             Set<Menu> translatedMenus = new HashSet<>();
 
             for (Menu originalMenu : originalGroup.getMenus()) {
-                String translatedName = textIterator.next();
                 String translatedDescription = textIterator.next();
-                translatedMenus.add(new Menu(translatedName, originalMenu.getPrice(), translatedDescription));
+                translatedMenus.add(new Menu(originalMenu.getName(), originalMenu.getRomanizedMenuName(), originalMenu.getPrice(), translatedDescription));
             }
 
             translatedMenuGroups.add(new MenuGroup(translatedGroupName, translatedMenus));

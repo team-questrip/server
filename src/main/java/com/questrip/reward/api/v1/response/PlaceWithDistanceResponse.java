@@ -27,7 +27,7 @@ public class PlaceWithDistanceResponse {
     public PlaceWithDistanceResponse(Place place, LatLng userLocation) {
         this.id = place.getId();
         this.googlePlaceId = place.getGooglePlaceId();
-        this.placeName = place.getPlaceName();
+        this.placeName = "%s (%s)".formatted(place.getPlaceName(), place.getRomanizedPlaceName());
         this.primaryType = place.getPrimaryType();
         this.formattedAddress = place.getFormattedAddress();
         this.location = place.getLocation();

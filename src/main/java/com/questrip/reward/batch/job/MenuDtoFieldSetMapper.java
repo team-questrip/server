@@ -10,6 +10,7 @@ public class MenuDtoFieldSetMapper implements FieldSetMapper<MenuDto> {
     public static final String PLACE_ID = "placeId";
     public static final String MENU_GROUP = "menuGroup";
     public static final String MENU_NAME = "menuName";
+    public static final String ROMANIZED_MENU_NAME = "romanizedMenuName";
     public static final String PRICE = "price";
     public static final String DESCRIPTION = "description";
 
@@ -20,6 +21,7 @@ public class MenuDtoFieldSetMapper implements FieldSetMapper<MenuDto> {
                 fieldSet.readString(PLACE_ID),
                 fieldSet.readString(MENU_GROUP),
                 fieldSet.readString(MENU_NAME),
+                fieldSet.readString(ROMANIZED_MENU_NAME),
                 fieldSet.readInt(PRICE),
                 fieldSet.readString(DESCRIPTION)
         );

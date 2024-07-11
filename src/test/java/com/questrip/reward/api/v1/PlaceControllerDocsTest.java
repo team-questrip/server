@@ -5,6 +5,8 @@ import com.questrip.reward.api.v1.request.MenuGroupListRequest;
 import com.questrip.reward.api.v1.request.MenuGroupRequest;
 import com.questrip.reward.api.v1.request.MenuRequest;
 import com.questrip.reward.domain.direction.DirectionSummary;
+import com.questrip.reward.domain.place.Menu;
+import com.questrip.reward.domain.place.MenuGroup;
 import com.questrip.reward.domain.place.PlaceAndDirection;
 import com.questrip.reward.domain.place.PlaceService;
 import com.questrip.reward.fixture.PlaceFixture;
@@ -41,7 +43,7 @@ class PlaceControllerDocsTest extends RestDocsTest {
     @Test
     void create() throws Exception {
         // given
-        given(placeService.save(any(), any(), any()))
+        given(placeService.save(any(), any(), any(), any()))
                 .willReturn(
                         PlaceFixture.get("6633897aa2757d5b1998ba0d")
                 );
@@ -51,6 +53,7 @@ class PlaceControllerDocsTest extends RestDocsTest {
                         .param("googlePlaceId", "6633897aa2757d5b1998ba0d")
                         .param("recommendationReason", "test")
                         .param("activity", "test")
+                        .param("romanizedPlaceName", "test")
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -61,7 +64,8 @@ class PlaceControllerDocsTest extends RestDocsTest {
                         formParameters(
                                 parameterWithName("googlePlaceId").description("구글 플레이스 아이디"),
                                 parameterWithName("recommendationReason").description("추천 이유"),
-                                parameterWithName("activity").description("추천 활동")
+                                parameterWithName("activity").description("추천 활동"),
+                                parameterWithName("romanizedPlaceName").description("장소 이름 로마 표기")
                         ),
                         responseFields(
                                 fieldWithPath("status").type(JsonFieldType.STRING)
@@ -356,14 +360,14 @@ class PlaceControllerDocsTest extends RestDocsTest {
                 PlaceFixture.get("6633897aa2757d5b1998ba0d")
         );
 
-        MenuRequest 볶음밥 = new MenuRequest("볶음밥", 8000, "고슬고슬 맛있는 볶음밥");
-        MenuRequest 짜장밥 = new MenuRequest("짜장밥", 9000, "짜장소스 추가");
-        MenuGroupRequest 밥류 = new MenuGroupRequest("밥류", List.of(볶음밥, 짜장밥));
+        MenuRequest 볶음밥 = new MenuRequest("집밥","Jibbap", 8000, "Stew made with soft tofu, seafood, and eggs.");
+        MenuRequest 짜장밥 = new MenuRequest("김치찌개","Kimchi Jjigae", 9000, "Rich and deep-flavored stew made with fermented soybeans.");
+        MenuGroupRequest menuGroup = new MenuGroupRequest("Meals", List.of(볶음밥, 짜장밥));
 
-        MenuRequest 짬뽕 = new MenuRequest("짬뽕", 10000, "얼큰 짬뽕");
-        MenuRequest 짜장면 = new MenuRequest("짜장면", 7000, "자신없어요");
-        MenuGroupRequest 면류 = new MenuGroupRequest("면류", List.of(짬뽕, 짜장면));
-        MenuGroupListRequest request = new MenuGroupListRequest("6633897aa2757d5b1998ba0d", List.of(밥류, 면류));
+        MenuRequest 짬뽕 = new MenuRequest("콩국수", "Soybean Noodles", 10000, "Noodles in finely ground soybean soup, a summer delicacy.");
+        MenuRequest 짜장면 = new MenuRequest("냉면", "Cold Noodles", 7000, "Buckwheat noodles in cold broth, a summer specialty.");
+        MenuGroupRequest menuGroup2 = new MenuGroupRequest("Seasonal Menu", List.of(짬뽕, 짜장면));
+        MenuGroupListRequest request = new MenuGroupListRequest("6633897aa2757d5b1998ba0d", List.of(menuGroup, menuGroup2));
 
         // when & then
         mockMvc.perform(post("/api/v1/place/menu")

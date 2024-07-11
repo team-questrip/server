@@ -16,6 +16,7 @@ public class Place {
     private String id;
     private String googlePlaceId;
     private String placeName;
+    private String romanizedPlaceName;
     private String primaryType;
     private String formattedAddress;
     private LatLng location;
@@ -43,10 +44,11 @@ public class Place {
     }
 
     @Builder
-    private Place(String id, String googlePlaceId, String placeName, String primaryType, String formattedAddress, LatLng location, PlaceContent content, List<String> openingHours, List<Period> openPeriods, List<PlaceImage> images, Set<MenuGroup> menuGroups) {
+    private Place(String id, String googlePlaceId, String placeName, String romanizedPlaceName, String primaryType, String formattedAddress, LatLng location, PlaceContent content, List<String> openingHours, List<Period> openPeriods, List<PlaceImage> images, Set<MenuGroup> menuGroups) {
         this.id = id;
         this.googlePlaceId = googlePlaceId;
         this.placeName = placeName;
+        this.romanizedPlaceName = romanizedPlaceName;
         this.primaryType = primaryType;
         this.formattedAddress = formattedAddress;
         this.content = content;

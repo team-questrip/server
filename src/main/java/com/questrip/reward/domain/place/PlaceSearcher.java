@@ -31,7 +31,7 @@ public class PlaceSearcher {
             backoff = @Backoff(delay = 1000)
     )
     public GooglePlaceSearchResponse searchPlace(String googlePlaceId) {
-        return googlePlaceClient.placeDetails(googlePlaceId, "*", "en", googleKey);
+        return googlePlaceClient.placeDetails(googlePlaceId, "*", "ko", googleKey);
     }
 
     @Retryable(

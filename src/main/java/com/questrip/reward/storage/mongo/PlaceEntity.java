@@ -23,6 +23,7 @@ public class PlaceEntity extends BaseEntity {
     private String id;
     private String googlePlaceId;
     private String placeName;
+    private String romanizedPlaceName;
     private String primaryType;
     private String formattedAddress;
     @GeoSpatialIndexed(type = GeoSpatialIndexType.GEO_2DSPHERE)
@@ -39,6 +40,7 @@ public class PlaceEntity extends BaseEntity {
                 .id(id)
                 .googlePlaceId(googlePlaceId)
                 .placeName(placeName)
+                .romanizedPlaceName(romanizedPlaceName)
                 .primaryType(parseType(primaryType))
                 .formattedAddress(formattedAddress)
                 .location(new LatLng(location.getY(), location.getX()))
@@ -54,7 +56,6 @@ public class PlaceEntity extends BaseEntity {
         TranslatedInfo info = translations.getOrDefault(language, translations.get("EN"));
         if(info == null) {
             info = TranslatedInfo.builder()
-                    .placeName("null")
                     .content(new PlaceContent("null", "null"))
                     .formattedAddress("null")
                     .primaryType("null")
@@ -65,7 +66,8 @@ public class PlaceEntity extends BaseEntity {
         return Place.builder()
                 .id(id)
                 .googlePlaceId(googlePlaceId)
-                .placeName(info.getPlaceName())
+                .placeName(placeName)
+                .romanizedPlaceName(romanizedPlaceName)
                 .primaryType(parseType(info.getPrimaryType()))
                 .formattedAddress(info.getFormattedAddress())
                 .location(new LatLng(location.getY(), location.getX()))
@@ -82,6 +84,7 @@ public class PlaceEntity extends BaseEntity {
                 .id(place.getId())
                 .googlePlaceId(place.getGooglePlaceId())
                 .placeName(place.getPlaceName())
+                .romanizedPlaceName(place.getRomanizedPlaceName())
                 .primaryType(place.getPrimaryType())
                 .formattedAddress(place.getFormattedAddress())
                 .location(new Point(place.getLocation().getLongitude(), place.getLocation().getLatitude()))
@@ -111,10 +114,11 @@ public class PlaceEntity extends BaseEntity {
     }
 
     @Builder
-    private PlaceEntity(String id, String googlePlaceId, String placeName, String primaryType, String formattedAddress, Point location, PlaceContent content, List<String> openingHours, List<Period> openPeriods, List<PlaceImage> images, Set<MenuGroup> menuGroups) {
+    private PlaceEntity(String id, String googlePlaceId, String placeName, String romanizedPlaceName, String primaryType, String formattedAddress, Point location, PlaceContent content, List<String> openingHours, List<Period> openPeriods, List<PlaceImage> images, Set<MenuGroup> menuGroups) {
         this.id = id;
         this.googlePlaceId = googlePlaceId;
         this.placeName = placeName;
+        this.romanizedPlaceName = romanizedPlaceName;
         this.primaryType = primaryType;
         this.formattedAddress = formattedAddress;
         this.location = location;

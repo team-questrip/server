@@ -26,9 +26,9 @@ public class PlaceService {
     private final PlaceTranslator placeTranslator;
     private final DirectionSearcher directionSearcher;
 
-    public Place save(String googlePlaceId, PlaceContent content, List<MultipartFile> files) {
+    public Place save(String googlePlaceId, String romanizedPlaceName, PlaceContent content, List<MultipartFile> files) {
         List<PlaceImage> images = placeImageUploader.upload(files);
-        Place searched = placeSearcher.searchPlace(googlePlaceId).toPlace(content, images);
+        Place searched = placeSearcher.searchPlace(googlePlaceId).toPlace(content, romanizedPlaceName, images);
         Place appended = placeAppender.append(searched);
         placeTranslator.translateAllLanguages(appended);
 

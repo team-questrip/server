@@ -9,8 +9,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -22,6 +25,9 @@ class PlaceServiceTest {
 
     @Autowired
     PlaceService placeService;
+
+    @MockBean
+    PlaceTranslator placeTranslator;
 
     @Autowired
     PlaceMongoRepository placeMongoRepository;
@@ -50,8 +56,7 @@ class PlaceServiceTest {
         // given
         Place init = PlaceFixture.get();
         Place place = placeMongoRepository.save(PlaceEntity.from(init)).toPlace();
-        MenuGroup menuGroup = new MenuGroup("testGroup", Set.of(new Menu("testMenu", 9000, "testMenu")));
-        MenuGroup menuGroup2 = new MenuGroup("testGroup", Set.of(new Menu("testMenu", 9000, "testMenu")));
+        MenuGroup menuGroup = new MenuGroup("testGroup", Set.of(new Menu("testMenu", "test", 9000, "testMenu")));
 
         // when
         Place expect = placeService.addMenuGroups(place.getId(), List.of(menuGroup));
@@ -66,8 +71,8 @@ class PlaceServiceTest {
         // given
         Place init = PlaceFixture.get();
         Place place = placeMongoRepository.save(PlaceEntity.from(init)).toPlace();
-        MenuGroup menuGroup = new MenuGroup("testGroup", Set.of(new Menu("testMenu", 9000, "testMenu"), new Menu("testMenu1", 9000, "testMenu")));
-        MenuGroup menuGroup2 = new MenuGroup("testGroup2", Set.of(new Menu("testMenu2", 10000, "testMenu2")));
+        MenuGroup menuGroup = new MenuGroup("testGroup", new HashSet<>(Arrays.asList(new Menu("testMenu", "test", 9000, "testMenu"), new Menu("testMenu2", "test", 9000, "testMenu"))));
+        MenuGroup menuGroup2 = new MenuGroup("testGroup2", new HashSet<>(Arrays.asList(new Menu("testMenu2", "test2", 9000, "testMenu2"))));
 
         // when
         Place expect = placeService.addMenuGroups(place.getId(), List.of(menuGroup, menuGroup2));
@@ -83,9 +88,9 @@ class PlaceServiceTest {
         // given
         Place init = PlaceFixture.get();
         Place place = placeMongoRepository.save(PlaceEntity.from(init)).toPlace();
-        MenuGroup menuGroup = new MenuGroup("testGroup", Set.of(new Menu("testMenu", 9000, "testMenu"), new Menu("testMenu1", 9000, "testMenu")));
+        MenuGroup menuGroup = new MenuGroup("testGroup", Set.of(new Menu("testMenu", "test", 9000, "testMenu"), new Menu("testMenu2", "test", 9000, "testMenu")));
         placeService.addMenuGroups(place.getId(), List.of(menuGroup));
-        MenuGroup menuGroup2 = new MenuGroup("testGroup2", Set.of(new Menu("testMenu2", 10000, "testMenu2")));
+        MenuGroup menuGroup2 = new MenuGroup("testGroup2", Set.of(new Menu("testMenu2", "test", 9000, "testMenu")));
 
         // when
         Place expect = placeService.addMenuGroups(place.getId(), List.of(menuGroup, menuGroup2));
@@ -101,10 +106,10 @@ class PlaceServiceTest {
         // given
         Place init = PlaceFixture.get();
         Place place = placeMongoRepository.save(PlaceEntity.from(init)).toPlace();
-        MenuGroup menuGroup = new MenuGroup("testGroup", Set.of(new Menu("testMenu", 9000, "testMenu"), new Menu("testMenu1", 8000, "testMenu1")));
+        MenuGroup menuGroup = new MenuGroup("testGroup", Set.of(new Menu("testMenu", "test",9000, "testMenu"), new Menu("testMenu1", "test", 8000, "testMenu1")));
         placeService.addMenuGroups(place.getId(), List.of(menuGroup));
 
-        MenuGroup menuGroup2 = new MenuGroup("testGroup", Set.of(new Menu("testMenu2", 10000, "testMenu2")));
+        MenuGroup menuGroup2 = new MenuGroup("testGroup", Set.of(new Menu("testMenu2", "test",10000, "testMenu2")));
 
         // when
         Place expect = placeService.addMenuGroups(place.getId(), List.of(menuGroup2));

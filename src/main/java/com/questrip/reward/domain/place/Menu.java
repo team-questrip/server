@@ -7,11 +7,13 @@ import java.util.Objects;
 @Getter
 public class Menu {
     private String name;
+    private String romanizedMenuName;
     private int price;
     private String description;
 
-    public Menu(String name, int price, String description) {
+    public Menu(String name, String romanizedMenuName, int price, String description) {
         this.name = name;
+        this.romanizedMenuName = romanizedMenuName;
         this.price = price;
         this.description = description;
     }

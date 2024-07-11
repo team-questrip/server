@@ -36,7 +36,7 @@ class PlaceUpdaterTest {
         // given
         Place init = PlaceFixture.get();
         Place place = placeRepository.save(PlaceEntity.from(init)).toPlace();
-        Menu menu = new Menu("testMenu", 90000, "testMenu");
+        Menu menu = new Menu("testMenu", "test",90000, "testMenu");
 
         place.addMenu("testGroup", menu);
 
@@ -44,6 +44,6 @@ class PlaceUpdaterTest {
         Place update = placeUpdater.update(place);
 
         // then
-        assertThat(update.getMenuGroups().contains(new MenuGroup("testGroup", Set.of(new Menu("testMenu", 90000, "testMenu")))));
+        assertThat(update.getMenuGroups().contains(new MenuGroup("testGroup", Set.of(new Menu("testMenu", "test",90000, "testMenu")))));
     }
 }
