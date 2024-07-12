@@ -67,6 +67,7 @@ public class PlaceController {
 
     @PostMapping("/menu")
     public ApiResponse<PlaceResponse> addMenuGroup(@RequestBody MenuGroupListRequest request) {
+        System.out.println(request.toString());
         log.info("place id:{} menu insert. menu amount is {}", request.placeId(), request.menuGroups().size());
         Place place = placeService.addMenuGroups(request.placeId(), request.toGroups());
 
