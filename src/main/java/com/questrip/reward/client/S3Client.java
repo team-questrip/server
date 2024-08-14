@@ -91,7 +91,6 @@ public class S3Client {
 
                 ObjectMetadata metadata = new ObjectMetadata();
                 metadata.setContentLength(imageBytes.length);
-                metadata.setContentType(contentType);
 
                 PutObjectRequest putObjectRequest = new PutObjectRequest(
                         bucket,
@@ -111,6 +110,7 @@ public class S3Client {
 
     private String getFileExtension(String contentType) {
         return switch (contentType) {
+            case "video/mp4" -> ".mp4";
             case "image/png" -> ".png";
             case "image/gif" -> ".gif";
             case "image/webp" -> ".webp";
