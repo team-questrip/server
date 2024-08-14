@@ -106,6 +106,8 @@ class RecommendControllerTest extends RestDocsTest {
                                         .description("이미지 순서"),
                                 fieldWithPath("data[].images[].url").type(JsonFieldType.STRING)
                                         .description("이미지 url"),
+                                fieldWithPath("data[].images[].createdBy").type(JsonFieldType.STRING)
+                                        .description("출처"),
                                 fieldWithPath("data[].openingHours").type(JsonFieldType.ARRAY)
                                         .description("영업시간"),
                                 fieldWithPath("data[].openNow").type(JsonFieldType.STRING)
@@ -212,6 +214,8 @@ class RecommendControllerTest extends RestDocsTest {
                                                 .description("이미지 순서"),
                                         fieldWithPath("data.place.images[].url").type(JsonFieldType.STRING)
                                                 .description("이미지 url"),
+                                        fieldWithPath("data.place.images[].createdBy").type(JsonFieldType.STRING)
+                                                .description("출처"),
                                         fieldWithPath("data.place.openingHours").type(JsonFieldType.ARRAY)
                                                 .description("영업시간"),
                                         fieldWithPath("data.place.openNow").type(JsonFieldType.STRING)
@@ -340,6 +344,8 @@ class RecommendControllerTest extends RestDocsTest {
                                                 .description("장소 이미지"),
                                         fieldWithPath("data.content[].place.images[].sequence").type(JsonFieldType.NUMBER)
                                                 .description("이미지 순서"),
+                                        fieldWithPath("data.content[].place.images[].createdBy").type(JsonFieldType.STRING)
+                                                .description("출처"),
                                         fieldWithPath("data.content[].place.images[].url").type(JsonFieldType.STRING)
                                                 .description("이미지 url"),
                                         fieldWithPath("data.content[].place.openingHours").type(JsonFieldType.ARRAY)
@@ -479,6 +485,8 @@ class RecommendControllerTest extends RestDocsTest {
                                         .description("이미지 순서"),
                                 fieldWithPath("data.place.images[].url").type(JsonFieldType.STRING)
                                         .description("이미지 url"),
+                                fieldWithPath("data.place.images[].createdBy").type(JsonFieldType.STRING)
+                                        .description("출처"),
                                 fieldWithPath("data.place.openingHours").type(JsonFieldType.ARRAY)
                                         .description("영업시간"),
                                 fieldWithPath("data.place.openNow").type(JsonFieldType.STRING)

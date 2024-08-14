@@ -1,9 +1,7 @@
 package com.questrip.reward.api.v1;
 
 import com.questrip.reward.api.RestDocsTest;
-import com.questrip.reward.api.v1.request.MenuGroupListRequest;
-import com.questrip.reward.api.v1.request.MenuGroupRequest;
-import com.questrip.reward.api.v1.request.MenuRequest;
+import com.questrip.reward.api.v1.request.*;
 import com.questrip.reward.domain.direction.DirectionSummary;
 import com.questrip.reward.domain.place.Menu;
 import com.questrip.reward.domain.place.MenuGroup;
@@ -27,8 +25,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -96,6 +93,101 @@ class PlaceControllerDocsTest extends RestDocsTest {
                                         .description("추천 이유"),
                                 fieldWithPath("data.content.activity").type(JsonFieldType.STRING)
                                         .description("추천 활"),
+                                fieldWithPath("data.images").type(JsonFieldType.ARRAY)
+                                        .description("장소 이미지"),
+                                fieldWithPath("data.images[].sequence").type(JsonFieldType.NUMBER)
+                                        .description("이미지 순서"),
+                                fieldWithPath("data.images[].url").type(JsonFieldType.STRING)
+                                        .description("이미지 url"),
+                                fieldWithPath("data.images[].createdBy").type(JsonFieldType.STRING)
+                                        .description("출처"),
+                                fieldWithPath("data.openingHours").type(JsonFieldType.ARRAY)
+                                        .description("영업시간"),
+                                fieldWithPath("data.openNow").type(JsonFieldType.STRING)
+                                        .description("현재 영업 여부 [OPEN, CLOSE, UNKNOWN]"),
+                                fieldWithPath("data.menuGroups[]").type(JsonFieldType.ARRAY)
+                                        .description("메뉴 그룹"),
+                                fieldWithPath("data.menuGroups[].groupName").type(JsonFieldType.STRING)
+                                        .description("메뉴 그룹명"),
+                                fieldWithPath("data.menuGroups[].menus[]").type(JsonFieldType.ARRAY)
+                                        .description("메뉴 목록"),
+                                fieldWithPath("data.menuGroups[].menus[].menuName").type(JsonFieldType.STRING)
+                                        .description("메뉴 이름"),
+                                fieldWithPath("data.menuGroups[].menus[].price").type(JsonFieldType.NUMBER)
+                                        .description("메뉴 가격"),
+                                fieldWithPath("data.menuGroups[].menus[].description").type(JsonFieldType.STRING)
+                                        .description("메뉴 설명")
+                        )
+                ));
+    }
+
+    @DisplayName("장소 등록 API")
+    @Test
+    void createFromCrawledData() throws Exception {
+        // given
+        List<PlaceImageRequest> placeImageRequests = List.of(new PlaceImageRequest(1, "url", "createdBy"));
+        given(placeService.saveCrawlingContents(any(), any(), any(), any()))
+                .willReturn(
+                        PlaceFixture.get("6633897aa2757d5b1998ba0d")
+                );
+        CrawlingPlaceRequest request = new CrawlingPlaceRequest("ChIJo0gMXbOlfDURSjmLcTy52qQ", "Kkochijib", "testRecommend", "testActivity", placeImageRequests);
+
+        // when & then
+        mockMvc.perform(post("/api/v1/place/crawled")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request))
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("place-create-crawled",
+                        resourceDetails()
+                                .tag("place")
+                                .description("인스타그램 크롤링 장소 등록 API"),
+                        requestFields(
+                                fieldWithPath("googlePlaceId").type(JsonFieldType.STRING)
+                                        .description("googlePlaceId"),
+                                fieldWithPath("romanizedPlaceName").type(JsonFieldType.STRING)
+                                        .description("romanizedPlaceName"),
+                                fieldWithPath("recommendationReason").type(JsonFieldType.STRING)
+                                        .description("recommendationReason"),
+                                fieldWithPath("activity").type(JsonFieldType.STRING)
+                                        .description("activity"),
+                                fieldWithPath("images[].sequence").type(JsonFieldType.NUMBER)
+                                        .description("순서"),
+                                fieldWithPath("images[].url").type(JsonFieldType.STRING)
+                                        .description("url"),
+                                fieldWithPath("images[].createdBy").type(JsonFieldType.STRING)
+                                        .description("출처")
+                        ),
+                        responseFields(
+                                fieldWithPath("status").type(JsonFieldType.STRING)
+                                        .description("응답 상태"),
+                                fieldWithPath("message").type(JsonFieldType.NULL)
+                                        .description("메시지"),
+                                fieldWithPath("data").type(JsonFieldType.OBJECT)
+                                        .description("데이터"),
+                                fieldWithPath("data.id").type(JsonFieldType.STRING)
+                                        .description("장소 아이디"),
+                                fieldWithPath("data.googlePlaceId").type(JsonFieldType.STRING)
+                                        .description("구글 장소 아이디"),
+                                fieldWithPath("data.placeName").type(JsonFieldType.STRING)
+                                        .description("장소 이름"),
+                                fieldWithPath("data.primaryType").type(JsonFieldType.STRING)
+                                        .description("카테고리"),
+                                fieldWithPath("data.formattedAddress").type(JsonFieldType.STRING)
+                                        .description("주소"),
+                                fieldWithPath("data.location").type(JsonFieldType.OBJECT)
+                                        .description("위경도"),
+                                fieldWithPath("data.location.latitude").type(JsonFieldType.NUMBER)
+                                        .description("위도"),
+                                fieldWithPath("data.location.longitude").type(JsonFieldType.NUMBER)
+                                        .description("경도"),
+                                fieldWithPath("data.content").type(JsonFieldType.OBJECT)
+                                        .description("장소 설명"),
+                                fieldWithPath("data.content.recommendationReason").type(JsonFieldType.STRING)
+                                        .description("추천 이유"),
+                                fieldWithPath("data.content.activity").type(JsonFieldType.STRING)
+                                        .description("추천 활동"),
                                 fieldWithPath("data.images").type(JsonFieldType.ARRAY)
                                         .description("장소 이미지"),
                                 fieldWithPath("data.images[].sequence").type(JsonFieldType.NUMBER)

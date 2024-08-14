@@ -35,6 +35,15 @@ public class PlaceService {
         return appended;
     }
 
+    public Place saveCrawlingContents(String googlePlaceId, String romanizedPlaceName, PlaceContent content, List<PlaceImage> images) {
+        List<PlaceImage> placeImages = placeImageUploader.upload(images);
+        Place searched = placeSearcher.searchPlace(googlePlaceId).toPlace(content, romanizedPlaceName, placeImages);
+        Place appended = placeAppender.append(searched);
+        placeTranslator.translateAllLanguages(appended);
+
+        return appended;
+    }
+
     public PlaceAndDirection findPlaceWithDirectionSummary(String id, LatLng userLocation, String language) {
         Place place = placeFinder.findByIdWithLanguage(id, language);
         DirectionSummary summary = directionSearcher.getSummary(userLocation, place.getGooglePlaceId());

@@ -1,6 +1,7 @@
 package com.questrip.reward.api.v1;
 
 import com.questrip.reward.api.support.Language;
+import com.questrip.reward.api.v1.request.CrawlingPlaceRequest;
 import com.questrip.reward.api.v1.request.LocationRequest;
 import com.questrip.reward.api.v1.request.MenuGroupListRequest;
 import com.questrip.reward.api.v1.request.PlaceCreateRequest;
@@ -27,6 +28,13 @@ public class PlaceController {
         Place saved = placeService.save(request.getGooglePlaceId(), request.getRomanizedPlaceName(), request.toContent(), request.getImages(), request.getCreatedBy());
 
         return ApiResponse.success("장소 저장 성공", new PlaceResponse(saved));
+    }
+
+    @PostMapping("/crawled")
+    public ApiResponse<PlaceResponse> createFromCrawledData(@RequestBody CrawlingPlaceRequest request){
+        Place place = placeService.saveCrawlingContents(request.googlePlaceId(), request.romanizedPlaceName(), request.toContent(), request.toImages());
+
+        return ApiResponse.success(new PlaceResponse(place));
     }
 
     @GetMapping("/{placeId}")
