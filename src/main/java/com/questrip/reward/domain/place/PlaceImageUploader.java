@@ -15,11 +15,11 @@ public class PlaceImageUploader {
 
     private final S3Client s3Client;
 
-    public List<PlaceImage> upload(List<MultipartFile> images) {
+    public List<PlaceImage> upload(List<MultipartFile> images, String createdBy) {
         AtomicInteger sequence = new AtomicInteger(1);
 
         return images.stream()
-                .map(f -> new PlaceImage(sequence.getAndIncrement(), s3Client.upload(f)))
+                .map(f -> new PlaceImage(sequence.getAndIncrement(), s3Client.upload(f), createdBy))
                 .collect(Collectors.toList());
     }
 }

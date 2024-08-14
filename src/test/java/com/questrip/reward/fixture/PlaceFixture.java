@@ -82,8 +82,8 @@ public class PlaceFixture {
     }
 
     public static List<PlaceImage> getImages() {
-        PlaceImage img1 = new PlaceImage(1, "https://questrip-reward.s3.ap-northeast-2.amazonaws.com/836d62f7-b1a7-4550-b137-f292ea5f881c.HEIC");
-        PlaceImage img2 = new PlaceImage(2, "https://questrip-reward.s3.ap-northeast-2.amazonaws.com/e2f8b8cc-fd53-47da-bea5-c113f8f6393c.jpeg");
+        PlaceImage img1 = new PlaceImage(1, "https://questrip-reward.s3.ap-northeast-2.amazonaws.com/836d62f7-b1a7-4550-b137-f292ea5f881c.HEIC", "harok");
+        PlaceImage img2 = new PlaceImage(2, "https://questrip-reward.s3.ap-northeast-2.amazonaws.com/e2f8b8cc-fd53-47da-bea5-c113f8f6393c.jpeg", "harok");
 
         return List.of(img1, img2);
     }

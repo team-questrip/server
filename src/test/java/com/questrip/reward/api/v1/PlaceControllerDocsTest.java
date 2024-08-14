@@ -43,7 +43,7 @@ class PlaceControllerDocsTest extends RestDocsTest {
     @Test
     void create() throws Exception {
         // given
-        given(placeService.save(any(), any(), any(), any()))
+        given(placeService.save(any(), any(), any(), any(), any()))
                 .willReturn(
                         PlaceFixture.get("6633897aa2757d5b1998ba0d")
                 );
@@ -102,6 +102,8 @@ class PlaceControllerDocsTest extends RestDocsTest {
                                         .description("이미지 순서"),
                                 fieldWithPath("data.images[].url").type(JsonFieldType.STRING)
                                         .description("이미지 url"),
+                                fieldWithPath("data.images[].createdBy").type(JsonFieldType.STRING)
+                                        .description("출처"),
                                 fieldWithPath("data.openingHours").type(JsonFieldType.ARRAY)
                                         .description("영업시간"),
                                 fieldWithPath("data.openNow").type(JsonFieldType.STRING)
@@ -192,6 +194,8 @@ class PlaceControllerDocsTest extends RestDocsTest {
                                         .description("이미지 순서"),
                                 fieldWithPath("data.place.images[].url").type(JsonFieldType.STRING)
                                         .description("이미지 url"),
+                                fieldWithPath("data.place.images[].createdBy").type(JsonFieldType.STRING)
+                                        .description("출처"),
                                 fieldWithPath("data.place.openingHours").type(JsonFieldType.ARRAY)
                                         .description("영업시간"),
                                 fieldWithPath("data.place.openNow").type(JsonFieldType.STRING)
@@ -285,6 +289,8 @@ class PlaceControllerDocsTest extends RestDocsTest {
                                         .description("이미지 순서"),
                                 fieldWithPath("data.content[].images[].url").type(JsonFieldType.STRING)
                                         .description("이미지 url"),
+                                fieldWithPath("data.content[].images[].createdBy").type(JsonFieldType.STRING)
+                                        .description("출처"),
                                 fieldWithPath("data.content[].openingHours").type(JsonFieldType.ARRAY)
                                         .description("영업시간"),
                                 fieldWithPath("data.content[].menuGroups[]").type(JsonFieldType.ARRAY)
@@ -415,6 +421,8 @@ class PlaceControllerDocsTest extends RestDocsTest {
                                         .description("이미지 순서"),
                                 fieldWithPath("data.images[].url").type(JsonFieldType.STRING)
                                         .description("이미지 url"),
+                                fieldWithPath("data.images[].createdBy").type(JsonFieldType.STRING)
+                                        .description("출처"),
                                 fieldWithPath("data.openingHours").type(JsonFieldType.ARRAY)
                                         .description("영업시간"),
                                 fieldWithPath("data.openNow").type(JsonFieldType.STRING)

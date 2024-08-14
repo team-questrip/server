@@ -24,7 +24,7 @@ public class PlaceController {
 
     @PostMapping
     public ApiResponse<PlaceResponse> create(PlaceCreateRequest request) {
-        Place saved = placeService.save(request.getGooglePlaceId(), request.getRomanizedPlaceName(), request.toContent(), request.getImages());
+        Place saved = placeService.save(request.getGooglePlaceId(), request.getRomanizedPlaceName(), request.toContent(), request.getImages(), request.getCreatedBy());
 
         return ApiResponse.success("장소 저장 성공", new PlaceResponse(saved));
     }
