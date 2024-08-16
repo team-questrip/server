@@ -100,7 +100,7 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.addAllowedHeader("*");
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH"));
-        configuration.setAllowedOriginPatterns(List.of("http://localhost:5173", "https://questrips.com", "https://api.questrips.com", "https://us-east-1.aws.data.mongodb-api.com"));
+        configuration.setAllowedOriginPatterns(List.of("http://localhost:5173", "https://questrips.com", "https://api.questrips.com", "https://localhost:3000"));
         configuration.setAllowCredentials(true);
         configuration.addExposedHeader("Authorization");
 
