@@ -125,12 +125,12 @@ class PlaceControllerDocsTest extends RestDocsTest {
     @Test
     void createFromCrawledData() throws Exception {
         // given
-        List<PlaceImageRequest> placeImageRequests = List.of(new PlaceImageRequest(1, "url", "createdBy"));
+        List<PlaceImageRequest> placeImageRequests = List.of(new PlaceImageRequest(1, "url"));
         given(placeService.saveCrawlingContents(any(), any(), any(), any()))
                 .willReturn(
                         PlaceFixture.get("6633897aa2757d5b1998ba0d")
                 );
-        CrawlingPlaceRequest request = new CrawlingPlaceRequest("ChIJo0gMXbOlfDURSjmLcTy52qQ", "Kkochijib", "testRecommend", "testActivity", placeImageRequests);
+        CrawlingPlaceRequest request = new CrawlingPlaceRequest("ChIJo0gMXbOlfDURSjmLcTy52qQ", "Kkochijib", "testRecommend", "testActivity", placeImageRequests, "createdBy");
 
         // when & then
         mockMvc.perform(post("/api/v1/place/crawled")
@@ -156,7 +156,7 @@ class PlaceControllerDocsTest extends RestDocsTest {
                                         .description("순서"),
                                 fieldWithPath("images[].url").type(JsonFieldType.STRING)
                                         .description("url"),
-                                fieldWithPath("images[].createdBy").type(JsonFieldType.STRING)
+                                fieldWithPath("createdBy").type(JsonFieldType.STRING)
                                         .description("출처")
                         ),
                         responseFields(

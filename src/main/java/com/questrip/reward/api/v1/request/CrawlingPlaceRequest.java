@@ -10,13 +10,14 @@ public record CrawlingPlaceRequest(
         String romanizedPlaceName,
         String recommendationReason,
         String activity,
-        List<PlaceImageRequest> images
+        List<PlaceImageRequest> images,
+        String createdBy
 ) {
     public PlaceContent toContent() {
         return new PlaceContent(recommendationReason, activity);
     }
 
-    public List<PlaceImage> toImages() {
-        return images.stream().map(PlaceImageRequest::toPlaceImage).toList();
+    public List<PlaceImage> toImages(String createdBy) {
+        return images.stream().map(r -> r.toPlaceImage(createdBy)).toList();
     }
 }

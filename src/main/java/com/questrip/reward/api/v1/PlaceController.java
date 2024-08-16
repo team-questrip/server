@@ -32,7 +32,7 @@ public class PlaceController {
 
     @PostMapping("/crawled")
     public ApiResponse<PlaceResponse> createFromCrawledData(@RequestBody CrawlingPlaceRequest request){
-        Place place = placeService.saveCrawlingContents(request.googlePlaceId(), request.romanizedPlaceName(), request.toContent(), request.toImages());
+        Place place = placeService.saveCrawlingContents(request.googlePlaceId(), request.romanizedPlaceName(), request.toContent(), request.toImages(request.createdBy()));
 
         return ApiResponse.success(new PlaceResponse(place));
     }

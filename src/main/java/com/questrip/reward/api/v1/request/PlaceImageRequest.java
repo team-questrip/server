@@ -6,10 +6,9 @@ import java.util.List;
 
 public record PlaceImageRequest(
         Integer sequence,
-        String url,
-        String createdBy
+        String url
 ) {
-    public PlaceImage toPlaceImage() {
+    public PlaceImage toPlaceImage(String createdBy) {
         return new PlaceImage(sequence, url, createdBy);
     }
 }
