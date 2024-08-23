@@ -35,7 +35,7 @@ public class PlaceWithDistanceResponse {
         this.images = place.getImages();
         this.openingHours = place.getOpeningHours();
         this.openNow = place.getOpenPeriods().isOpen(LocalDateTime.now());
-        this.distance = place.calculateDistance(userLocation);
+        this.distance = Double.parseDouble(String.format("%.2f", place.calculateDistance(userLocation)));
         this.menuGroups = place.getMenuGroups() == null
                 ? List.of()
                 : place.getMenuGroups()
