@@ -20,22 +20,12 @@ public class PlaceFinder {
         return placeRepository.findById(id);
     }
 
-    public SliceResult<Place> findAllNear(LatLng userLocation, int page, int size) {
-        return placeRepository.findAllNear(userLocation, page, size);
-    }
-
-    public SliceResult<Place> findAllNear(String language, LatLng userLocation, int page, int size) {
-        return placeRepository.findAllNear(language, userLocation, page, size);
+    public SliceResult<Place> findAllNear(String language, CategoryGroup category, LatLng userLocation, int page, int size) {
+        return placeRepository.findAllNear(language, category, userLocation, page, size);
     }
 
     public SliceResult<Place> findRecommendPlace(LatLng userLocation, List<String> placeIds, int page, int size, String language) {
         return placeRepository.findRecommendPlace(userLocation, placeIds, page, size, language);
-    }
-
-    public Map<String, Place> findMapIdIn(List<String> placeIds) {
-        return placeRepository.findAllByIdIn(placeIds)
-                .stream()
-                .collect(Collectors.toMap(Place::getId, Function.identity()));
     }
 
     public Map<String, Place> findMapIdIn(List<String> placeIds, String language) {

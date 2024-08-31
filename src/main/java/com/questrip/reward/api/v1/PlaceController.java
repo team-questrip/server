@@ -51,9 +51,10 @@ public class PlaceController {
     public ApiResponse<SliceResult<PlaceWithDistanceResponse>> findAll(@ModelAttribute LocationRequest location,
                                                                        @RequestParam(defaultValue = "0", required = false) int page,
                                                                        @RequestParam(defaultValue = "10", required = false) int size,
-                                                                       @Language String language
+                                                                       @Language String language,
+                                                                       @RequestParam(required = false) CategoryGroup category
     ) {
-        SliceResult<PlaceWithDistanceResponse> response = placeService.findAllPlaceNear(location.toLocation(), page, size, language)
+        SliceResult<PlaceWithDistanceResponse> response = placeService.findAllPlaceNear(location.toLocation(), category, page, size, language)
                 .map(p -> new PlaceWithDistanceResponse(p, location.toLocation()));
 
         return ApiResponse.success("장소 조회 성공", response);

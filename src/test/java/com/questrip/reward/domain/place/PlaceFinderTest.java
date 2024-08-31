@@ -62,7 +62,7 @@ class PlaceFinderTest {
         LatLng 월드컵경기장 = new LatLng(37.5682617, 126.8972735);
 
         // when
-        SliceResult<Place> result = placeFinder.findAllNear(월드컵경기장, 0, 5);
+        SliceResult<Place> result = placeFinder.findAllNear("KO", null, 월드컵경기장, 0, 5);
 
         // then
         assertThat(result.getNumberOfElements()).isEqualTo(4);
@@ -90,7 +90,7 @@ class PlaceFinderTest {
         LatLng 월드컵경기장 = new LatLng(37.5682617, 126.8972735);
 
         // when
-        SliceResult<Place> result = placeFinder.findAllNear(월드컵경기장, 0, 2);
+        SliceResult<Place> result = placeFinder.findAllNear("KO", null, 월드컵경기장, 0, 2);
 
         // then
         assertThat(result.getNumberOfElements()).isEqualTo(2);
@@ -118,7 +118,7 @@ class PlaceFinderTest {
         LatLng 월드컵경기장 = new LatLng(37.5682617, 126.8972735);
 
         // when
-        SliceResult<Place> result = placeFinder.findAllNear(월드컵경기장, 1, 2);
+        SliceResult<Place> result = placeFinder.findAllNear("KO", null, 월드컵경기장, 1, 2);
 
         // then
         assertThat(result.getNumberOfElements()).isEqualTo(2);
@@ -126,6 +126,52 @@ class PlaceFinderTest {
                 .extracting("location")
                 .containsExactly(
                         홍대입구역, 롯데월드
+                );
+    }
+
+    @DisplayName("해당 카테고리의 그룹에 속하는 장소를 찾을 수 있다.")
+    @Test
+    void findAllNear4() {
+        // given
+        PlaceEntity p1 = placeMongoRepository.save(PlaceEntity.from(PlaceFixture.get(Category.RESTAURANT)));
+        PlaceEntity p2 = placeMongoRepository.save(PlaceEntity.from(PlaceFixture.get(Category.RESTAURANT)));
+        PlaceEntity p3 = placeMongoRepository.save(PlaceEntity.from(PlaceFixture.get(Category.DAY_TOUR)));
+        PlaceEntity p4 = placeMongoRepository.save(PlaceEntity.from(PlaceFixture.get(Category.RESTAURANT)));
+
+        LatLng 월드컵경기장 = new LatLng(37.5682617, 126.8972735);
+
+        // when
+        SliceResult<Place> result = placeFinder.findAllNear("KO", CategoryGroup.FOOD_AND_DRINKS, 월드컵경기장, 0, 10);
+
+        // then
+        assertThat(result.getNumberOfElements()).isEqualTo(3);
+        assertThat(result.getContent())
+                .extracting("category")
+                .containsExactly(
+                        Category.RESTAURANT, Category.RESTAURANT, Category.RESTAURANT
+                );
+    }
+
+    @DisplayName("조회 조건에 카테고리가 없을 경우 모든 장소를 가까운 순으로 조회한다.")
+    @Test
+    void findAllNear5() {
+        // given
+        PlaceEntity p1 = placeMongoRepository.save(PlaceEntity.from(PlaceFixture.get(Category.RESTAURANT)));
+        PlaceEntity p2 = placeMongoRepository.save(PlaceEntity.from(PlaceFixture.get(Category.RESTAURANT)));
+        PlaceEntity p3 = placeMongoRepository.save(PlaceEntity.from(PlaceFixture.get(Category.BAR)));
+        PlaceEntity p4 = placeMongoRepository.save(PlaceEntity.from(PlaceFixture.get(Category.RESTAURANT)));
+
+        LatLng 월드컵경기장 = new LatLng(37.5682617, 126.8972735);
+
+        // when
+        SliceResult<Place> result = placeFinder.findAllNear("KO", null, 월드컵경기장, 0, 10);
+
+        // then
+        assertThat(result.getNumberOfElements()).isEqualTo(4);
+        assertThat(result.getContent())
+                .extracting("category")
+                .containsExactlyInAnyOrder(
+                        Category.RESTAURANT, Category.RESTAURANT, Category.BAR, Category.RESTAURANT
                 );
     }
 

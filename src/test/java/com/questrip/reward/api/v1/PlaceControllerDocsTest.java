@@ -270,6 +270,10 @@ class PlaceControllerDocsTest extends RestDocsTest {
                                         .description("플레이스"),
                                 fieldWithPath("data.place.id").type(JsonFieldType.STRING)
                                         .description("장소 아이디"),
+                                fieldWithPath("data.place.categoryGroup").type(JsonFieldType.STRING)
+                                        .description("장소 카테고리 그룹"),
+                                fieldWithPath("data.place.category").type(JsonFieldType.STRING)
+                                        .description("장소 카테고리"),
                                 fieldWithPath("data.place.googlePlaceId").type(JsonFieldType.STRING)
                                         .description("구글 장소 아이디"),
                                 fieldWithPath("data.place.placeName").type(JsonFieldType.STRING)
@@ -328,7 +332,7 @@ class PlaceControllerDocsTest extends RestDocsTest {
     @Test
     void findAll() throws Exception {
         // given
-        given(placeService.findAllPlaceNear(any(), anyInt(), anyInt(), any()))
+        given(placeService.findAllPlaceNear(any(), any(), anyInt(), anyInt(), any()))
                 .willReturn(
                         new SliceResult<>(List.of(PlaceFixture.get("6633897aa2757d5b1998ba0d")), 0, 10, 1, false)
                 );
@@ -340,6 +344,7 @@ class PlaceControllerDocsTest extends RestDocsTest {
                         .param("page", "0")
                         .param("size", "10")
                         .param("language", "EN")
+                        .param("category", CategoryGroup.FOOD_AND_DRINKS.toString())
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -352,7 +357,8 @@ class PlaceControllerDocsTest extends RestDocsTest {
                                 parameterWithName("longitude").description("유저 경도"),
                                 parameterWithName("page").description("요청 페이지 (default 0)"),
                                 parameterWithName("size").description("요청 사이즈 (default 10)"),
-                                parameterWithName("language").description("언어").optional()
+                                parameterWithName("language").description("언어").optional(),
+                                parameterWithName("category").description("카테고리").optional()
                         ),
                         responseFields(
                                 fieldWithPath("status").type(JsonFieldType.STRING)
@@ -365,6 +371,10 @@ class PlaceControllerDocsTest extends RestDocsTest {
                                         .description("데이터"),
                                 fieldWithPath("data.content[].id").type(JsonFieldType.STRING)
                                         .description("장소 아이디"),
+                                fieldWithPath("data.content[].categoryGroup").type(JsonFieldType.STRING)
+                                        .description("장소 카테고리 그룹"),
+                                fieldWithPath("data.content[].category").type(JsonFieldType.STRING)
+                                        .description("장소 카테고리"),
                                 fieldWithPath("data.content[].googlePlaceId").type(JsonFieldType.STRING)
                                         .description("구글 장소 아이디"),
                                 fieldWithPath("data.content[].placeName").type(JsonFieldType.STRING)

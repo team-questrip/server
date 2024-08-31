@@ -80,6 +80,10 @@ class RecommendControllerTest extends RestDocsTest {
                                         .description("데이터"),
                                 fieldWithPath("data[].id").type(JsonFieldType.STRING)
                                         .description("장소 아이디"),
+                                fieldWithPath("data[].categoryGroup").type(JsonFieldType.STRING)
+                                        .description("장소 카테고리 그룹"),
+                                fieldWithPath("data[].category").type(JsonFieldType.STRING)
+                                        .description("장소 카테고리"),
                                 fieldWithPath("data[].googlePlaceId").type(JsonFieldType.STRING)
                                         .description("구글 장소 아이디"),
                                 fieldWithPath("data[].placeName").type(JsonFieldType.STRING)
@@ -188,6 +192,10 @@ class RecommendControllerTest extends RestDocsTest {
                                                 .description("장소 데이터"),
                                         fieldWithPath("data.place.id").type(JsonFieldType.STRING)
                                                 .description("장소 아이디"),
+                                        fieldWithPath("data.place.categoryGroup").type(JsonFieldType.STRING)
+                                                .description("장소 카테고리 그룹"),
+                                        fieldWithPath("data.place.category").type(JsonFieldType.STRING)
+                                                .description("장소 카테고리"),
                                         fieldWithPath("data.place.googlePlaceId").type(JsonFieldType.STRING)
                                                 .description("구글 장소 아이디"),
                                         fieldWithPath("data.place.placeName").type(JsonFieldType.STRING)
@@ -320,6 +328,10 @@ class RecommendControllerTest extends RestDocsTest {
                                                 .description("장소 데이터"),
                                         fieldWithPath("data.content[].place.id").type(JsonFieldType.STRING)
                                                 .description("장소 아이디"),
+                                        fieldWithPath("data.content[].place.categoryGroup").type(JsonFieldType.STRING)
+                                                .description("장소 카테고리 그룹"),
+                                        fieldWithPath("data.content[].place.category").type(JsonFieldType.STRING)
+                                                .description("장소 카테고리"),
                                         fieldWithPath("data.content[].place.googlePlaceId").type(JsonFieldType.STRING)
                                                 .description("구글 장소 아이디"),
                                         fieldWithPath("data.content[].place.placeName").type(JsonFieldType.STRING)
@@ -459,6 +471,10 @@ class RecommendControllerTest extends RestDocsTest {
                                         .description("장소 데이터"),
                                 fieldWithPath("data.place.id").type(JsonFieldType.STRING)
                                         .description("장소 아이디"),
+                                fieldWithPath("data.place.categoryGroup").type(JsonFieldType.STRING)
+                                        .description("장소 카테고리 그룹"),
+                                fieldWithPath("data.place.category").type(JsonFieldType.STRING)
+                                        .description("장소 카테고리"),
                                 fieldWithPath("data.place.googlePlaceId").type(JsonFieldType.STRING)
                                         .description("구글 장소 아이디"),
                                 fieldWithPath("data.place.placeName").type(JsonFieldType.STRING)

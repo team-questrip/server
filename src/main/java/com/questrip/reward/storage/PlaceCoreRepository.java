@@ -35,20 +35,16 @@ public class PlaceCoreRepository implements PlaceRepository {
     }
 
     @Override
-    public SliceResult<Place> findAllNear(LatLng userLocation, int page, int size) {
+    public SliceResult<Place> findAllNear(String language, CategoryGroup category, LatLng userLocation, int page, int size) {
         PageRequest pageRequest = PageRequest.of(page, size);
-        Slice<Place> slice = placeMongoRepository.findAllByLocationNear(toPoint(userLocation), pageRequest)
-                .map(PlaceEntity::toPlace);
+        Slice<PlaceEntity> placeEntities;
+        if (category != null) {
+            placeEntities = placeMongoRepository.findAllByLocationNearAndCategoryGroup(toPoint(userLocation), category, pageRequest);
+        } else {
+            placeEntities = placeMongoRepository.findAllByLocationNear(toPoint(userLocation), pageRequest);
+        }
 
-        return new SliceResult<>(slice);
-    }
-
-    @Override
-    public SliceResult<Place> findAllNear(String language, LatLng userLocation, int page, int size) {
-        PageRequest pageRequest = PageRequest.of(page, size);
-        Slice<Place> slice = placeMongoRepository.findAllByLocationNear(toPoint(userLocation), pageRequest)
-                .map(placeEntity -> placeEntity.toPlace(language));
-
+        Slice<Place> slice = placeEntities.map(placeEntity -> placeEntity.toPlace(language));
         return new SliceResult<>(slice);
     }
 
@@ -63,14 +59,6 @@ public class PlaceCoreRepository implements PlaceRepository {
 
     private Point toPoint(LatLng userLocation) {
         return new Point(userLocation.getLongitude(), userLocation.getLatitude());
-    }
-
-    @Override
-    public List<Place> findAllByIdIn(List<String> placeIds) {
-        return placeMongoRepository.findAllByIdIn(placeIds)
-                .stream()
-                .map(PlaceEntity::toPlace)
-                .collect(Collectors.toList());
     }
 
     @Override

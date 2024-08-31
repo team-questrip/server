@@ -30,8 +30,9 @@ public class PlaceCreateRequest {
     }
 
     @Builder
-    public PlaceCreateRequest(List<MultipartFile> images, String createdBy, String romanizedPlaceName, String googlePlaceId, String recommendationReason, String activity) {
+    public PlaceCreateRequest(List<MultipartFile> images, Category category, String createdBy, String romanizedPlaceName, String googlePlaceId, String recommendationReason, String activity) {
         this.images = images;
+        this.category = category;
         this.createdBy = createdBy;
         this.romanizedPlaceName = romanizedPlaceName;
         this.googlePlaceId = googlePlaceId;

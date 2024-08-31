@@ -51,10 +51,11 @@ public class PlaceService {
         return new PlaceAndDirection(place, summary);
     }
 
-    public SliceResult<Place> findAllPlaceNear(LatLng userLocation, int page, int size, String language) {
+    public SliceResult<Place> findAllPlaceNear(LatLng userLocation, CategoryGroup category, int page, int size, String language) {
         log.info("[findAllPlaceNear] request userLocation lat: {}, lng: {}", userLocation.getLatitude(), userLocation.getLongitude());
+        log.info("[findAllPlaceNear] request category: {}", category);
 
-        return placeFinder.findAllNear(language, userLocation, page, size);
+        return placeFinder.findAllNear(language, category, userLocation, page, size);
     }
 
     public String reverseGeocode(LatLng latLng) {

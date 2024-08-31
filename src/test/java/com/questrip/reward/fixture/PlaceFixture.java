@@ -86,6 +86,32 @@ public class PlaceFixture {
                 .build();
     }
 
+    public static Place get(Category category) {
+        return Place.builder()
+                .googlePlaceId("ChIJo0gMXbOlfDURSjmLcTy52qQ")
+                .category(category)
+                .translatedCategory(Category.RESTAURANT.getTranslation("EN"))
+                .translatedCategoryGroup(Category.RESTAURANT.getCategoryGroup().getTranslation("EN"))
+                .placeName("꼬치집")
+                .romanizedPlaceName("Kkochijib")
+                .primaryType("japanese_restaurant")
+                .formattedAddress("South Korea, Seoul, Songpa-gu, 잠실본동 314-5")
+                .location(new LatLng(37.5051148, 127.08420179999999))
+                .openingHours(List.of("Monday: 5:00PM-2:00AM",
+                        "Tuesday: 5:00PM-2:00AM",
+                        "Wednesday: 5:00PM-2:00AM",
+                        "Thursday: 5:00PM-2:00AM",
+                        "Friday: 5:00PM-2:00AM",
+                        "Saturday: 5:00PM-2:00AM",
+                        "Sunday: 5:00PM-2:00AM")
+                )
+                .openPeriods(OpenPeriodsFixture.get())
+                .content(getContent())
+                .images(getImages())
+                .menuGroups(getMenuGroups2())
+                .build();
+    }
+
     public static PlaceContent getContent() {
         return new PlaceContent("testRecommend", "testActivity");
     }
