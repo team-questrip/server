@@ -9,6 +9,7 @@ import com.questrip.reward.api.v1.response.*;
 import com.questrip.reward.domain.place.*;
 import com.questrip.reward.support.response.ApiResponse;
 import com.questrip.reward.support.response.SliceResult;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -32,7 +33,7 @@ public class PlaceController {
     }
 
     @PostMapping("/crawled")
-    public ApiResponse<PlaceResponse> createFromCrawledData(@RequestBody CrawlingPlaceRequest request){
+    public ApiResponse<PlaceResponse> createFromCrawledData(@RequestBody @Valid CrawlingPlaceRequest request){
         Place place = placeService.saveCrawlingContents(request.googlePlaceId(), request.category(), request.romanizedPlaceName(), request.toContent(), request.toImages(request.createdBy()));
 
         return ApiResponse.success(new PlaceResponse(place));

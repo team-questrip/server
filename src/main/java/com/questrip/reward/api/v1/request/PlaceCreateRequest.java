@@ -15,6 +15,7 @@ public class PlaceCreateRequest {
     @NotNull(message = "이미지는 필수입니다.")
     private List<MultipartFile> images;
     private String createdBy;
+    @NotNull(message = "카테고리는 필수입니다.")
     private Category category;
     @NotNull(message = "로마 표기는 필수입니다.")
     private String romanizedPlaceName;
