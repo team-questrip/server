@@ -21,6 +21,7 @@ public enum ErrorCode {
     UN_SUPPORTED_BLOCK_TYPE(HttpStatus.BAD_REQUEST, "Unsupported block type"),
     UN_SUPPORTED_LANGUAGE(HttpStatus.BAD_REQUEST, "Unsupported language"),
     TRANSLATION_FAILED(HttpStatus.BAD_REQUEST, "Translation failed"),
+    CATEGORY_NOT_FOUND(HttpStatus.BAD_REQUEST, "Category not found."),
 
     // security
     INVALID_PASSWORD(HttpStatus.UNAUTHORIZED, "Incorrect password."),

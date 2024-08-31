@@ -4,6 +4,7 @@ import com.questrip.reward.support.response.SliceResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -45,5 +46,9 @@ public class PlaceFinder {
 
     public Place findByIdWithLanguage(String id, String language) {
         return placeRepository.findByIdWithLanguage(id, language);
+    }
+
+    public List<CategoryGroup> findCategories() {
+        return Arrays.stream(CategoryGroup.values()).toList();
     }
 }

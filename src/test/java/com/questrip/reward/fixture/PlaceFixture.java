@@ -10,6 +10,9 @@ public class PlaceFixture {
     public static Place get() {
         return Place.builder()
                 .googlePlaceId("ChIJo0gMXbOlfDURSjmLcTy52qQ")
+                .category(Category.RESTAURANT)
+                .translatedCategory(Category.RESTAURANT.getTranslation("EN"))
+                .translatedCategoryGroup(Category.RESTAURANT.getCategoryGroup().getTranslation("EN"))
                 .placeName("꼬치집")
                 .romanizedPlaceName("Kkochijib")
                 .primaryType("japanese_restaurant")
@@ -33,6 +36,9 @@ public class PlaceFixture {
     public static Place get(String id) {
         return Place.builder()
                 .id(id)
+                .category(Category.RESTAURANT)
+                .translatedCategory(Category.RESTAURANT.getTranslation("EN"))
+                .translatedCategoryGroup(Category.RESTAURANT.getCategoryGroup().getTranslation("EN"))
                 .googlePlaceId("ChIJo0gMXbOlfDURSjmLcTy52qQ")
                 .placeName("꼬치집")
                 .romanizedPlaceName("Kkochijib")
@@ -57,6 +63,9 @@ public class PlaceFixture {
     public static Place get(LatLng location) {
         return Place.builder()
                 .googlePlaceId("ChIJo0gMXbOlfDURSjmLcTy52qQ")
+                .category(Category.RESTAURANT)
+                .translatedCategory(Category.RESTAURANT.getTranslation("EN"))
+                .translatedCategoryGroup(Category.RESTAURANT.getCategoryGroup().getTranslation("EN"))
                 .placeName("꼬치집")
                 .romanizedPlaceName("Kkochijib")
                 .primaryType("japanese_restaurant")

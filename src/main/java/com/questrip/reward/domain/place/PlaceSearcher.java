@@ -14,6 +14,8 @@ import org.springframework.retry.annotation.Recover;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -30,8 +32,8 @@ public class PlaceSearcher {
             maxAttempts = 3,
             backoff = @Backoff(delay = 1000)
     )
-    public GooglePlaceSearchResponse searchPlace(String googlePlaceId) {
-        return googlePlaceClient.placeDetails(googlePlaceId, "*", "ko", googleKey);
+    public Place searchPlace(String googlePlaceId, PlaceContent content, Category category, String romanizedPlaceName, List<PlaceImage> images) {
+        return googlePlaceClient.placeDetails(googlePlaceId, "*", "ko", googleKey).toPlace(content, category, romanizedPlaceName, images);
     }
 
     @Retryable(

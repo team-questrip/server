@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -25,14 +26,14 @@ public class PlaceController {
 
     @PostMapping
     public ApiResponse<PlaceResponse> create(PlaceCreateRequest request) {
-        Place saved = placeService.save(request.getGooglePlaceId(), request.getRomanizedPlaceName(), request.toContent(), request.getImages(), request.getCreatedBy());
+        Place saved = placeService.save(request.getGooglePlaceId(), request.getRomanizedPlaceName(),request.getCategory(), request.toContent(), request.getImages(), request.getCreatedBy());
 
         return ApiResponse.success("장소 저장 성공", new PlaceResponse(saved));
     }
 
     @PostMapping("/crawled")
     public ApiResponse<PlaceResponse> createFromCrawledData(@RequestBody CrawlingPlaceRequest request){
-        Place place = placeService.saveCrawlingContents(request.googlePlaceId(), request.romanizedPlaceName(), request.toContent(), request.toImages(request.createdBy()));
+        Place place = placeService.saveCrawlingContents(request.googlePlaceId(), request.category(), request.romanizedPlaceName(), request.toContent(), request.toImages(request.createdBy()));
 
         return ApiResponse.success(new PlaceResponse(place));
     }
@@ -80,5 +81,12 @@ public class PlaceController {
         Place place = placeService.addMenuGroups(request.placeId(), request.toGroups());
 
         return ApiResponse.success(new PlaceResponse(place));
+    }
+
+    @GetMapping("/category")
+    public ApiResponse<CategoryGroupListResponse> getCategories(@Language String language) {
+        List<CategoryGroup> categories = placeService.findCategories();
+
+        return ApiResponse.success(CategoryGroupListResponse.of(categories, language));
     }
 }

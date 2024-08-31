@@ -1,5 +1,6 @@
 package com.questrip.reward.api.v1.request;
 
+import com.questrip.reward.domain.place.Category;
 import com.questrip.reward.domain.place.PlaceContent;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
@@ -14,6 +15,7 @@ public class PlaceCreateRequest {
     @NotNull(message = "이미지는 필수입니다.")
     private List<MultipartFile> images;
     private String createdBy;
+    private Category category;
     @NotNull(message = "로마 표기는 필수입니다.")
     private String romanizedPlaceName;
     @NotNull(message = "구글 플레이스 아이디는 필수입니다.")

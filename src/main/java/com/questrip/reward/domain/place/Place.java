@@ -14,6 +14,9 @@ public class Place {
     private static final double CHECK_IN_SUCCESS_DISTANCE = 0.5;
 
     private String id;
+    private Category category;
+    private String translatedCategoryGroup;
+    private String translatedCategory;
     private String googlePlaceId;
     private String placeName;
     private String romanizedPlaceName;
@@ -41,22 +44,6 @@ public class Place {
         if(distance > CHECK_IN_SUCCESS_DISTANCE) {
             throw new GlobalException(ErrorCode.DISTANCE_CHECK_FAILED, "User is %.2f kilometers away from the location, which is greater than allowed distance (%.2f kilometers).".formatted(distance, CHECK_IN_SUCCESS_DISTANCE));
         }
-    }
-
-    @Builder
-    private Place(String id, String googlePlaceId, String placeName, String romanizedPlaceName, String primaryType, String formattedAddress, LatLng location, PlaceContent content, List<String> openingHours, List<Period> openPeriods, List<PlaceImage> images, Set<MenuGroup> menuGroups) {
-        this.id = id;
-        this.googlePlaceId = googlePlaceId;
-        this.placeName = placeName;
-        this.romanizedPlaceName = romanizedPlaceName;
-        this.primaryType = primaryType;
-        this.formattedAddress = formattedAddress;
-        this.content = content;
-        this.location = location;
-        this.openingHours = openingHours;
-        this.openPeriods = new OpenPeriods(openPeriods);
-        this.images = images;
-        this.menuGroups = menuGroups;
     }
 
     public void addMenuGroup(MenuGroup group) {
@@ -94,5 +81,24 @@ public class Place {
         }
 
         return menuGroups;
+    }
+
+    @Builder
+    private Place(String id, Category category, String translatedCategoryGroup, String translatedCategory, String googlePlaceId, String placeName, String romanizedPlaceName, String primaryType, String formattedAddress, LatLng location, PlaceContent content, List<String> openingHours, List<Period> openPeriods, List<PlaceImage> images, Set<MenuGroup> menuGroups) {
+        this.id = id;
+        this.category = category;
+        this.translatedCategoryGroup = translatedCategoryGroup;
+        this.translatedCategory = translatedCategory;
+        this.googlePlaceId = googlePlaceId;
+        this.placeName = placeName;
+        this.romanizedPlaceName = romanizedPlaceName;
+        this.primaryType = primaryType;
+        this.formattedAddress = formattedAddress;
+        this.content = content;
+        this.location = location;
+        this.openingHours = openingHours;
+        this.openPeriods = new OpenPeriods(openPeriods);
+        this.images = images;
+        this.menuGroups = menuGroups;
     }
 }

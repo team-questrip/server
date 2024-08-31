@@ -3,10 +3,7 @@ package com.questrip.reward.api.v1;
 import com.questrip.reward.api.RestDocsTest;
 import com.questrip.reward.api.v1.request.*;
 import com.questrip.reward.domain.direction.DirectionSummary;
-import com.questrip.reward.domain.place.Menu;
-import com.questrip.reward.domain.place.MenuGroup;
-import com.questrip.reward.domain.place.PlaceAndDirection;
-import com.questrip.reward.domain.place.PlaceService;
+import com.questrip.reward.domain.place.*;
 import com.questrip.reward.fixture.PlaceFixture;
 import com.questrip.reward.support.response.SliceResult;
 import org.junit.jupiter.api.DisplayName;
@@ -16,6 +13,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -40,7 +38,7 @@ class PlaceControllerDocsTest extends RestDocsTest {
     @Test
     void create() throws Exception {
         // given
-        given(placeService.save(any(), any(), any(), any(), any()))
+        given(placeService.save(any(), any(), any(), any(), any(), any()))
                 .willReturn(
                         PlaceFixture.get("6633897aa2757d5b1998ba0d")
                 );
@@ -51,6 +49,7 @@ class PlaceControllerDocsTest extends RestDocsTest {
                         .param("recommendationReason", "test")
                         .param("activity", "test")
                         .param("romanizedPlaceName", "test")
+                        .param("category", Category.RESTAURANT.toString())
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -62,7 +61,8 @@ class PlaceControllerDocsTest extends RestDocsTest {
                                 parameterWithName("googlePlaceId").description("구글 플레이스 아이디"),
                                 parameterWithName("recommendationReason").description("추천 이유"),
                                 parameterWithName("activity").description("추천 활동"),
-                                parameterWithName("romanizedPlaceName").description("장소 이름 로마 표기")
+                                parameterWithName("romanizedPlaceName").description("장소 이름 로마 표기"),
+                                parameterWithName("category").description("카테고리")
                         ),
                         responseFields(
                                 fieldWithPath("status").type(JsonFieldType.STRING)
@@ -75,6 +75,10 @@ class PlaceControllerDocsTest extends RestDocsTest {
                                         .description("장소 아이디"),
                                 fieldWithPath("data.googlePlaceId").type(JsonFieldType.STRING)
                                         .description("구글 장소 아이디"),
+                                fieldWithPath("data.categoryGroup").type(JsonFieldType.STRING)
+                                        .description("장소 카테고리 그룹"),
+                                fieldWithPath("data.category").type(JsonFieldType.STRING)
+                                        .description("장소 카테고리"),
                                 fieldWithPath("data.placeName").type(JsonFieldType.STRING)
                                         .description("장소 이름"),
                                 fieldWithPath("data.primaryType").type(JsonFieldType.STRING)
@@ -121,16 +125,16 @@ class PlaceControllerDocsTest extends RestDocsTest {
                 ));
     }
 
-    @DisplayName("장소 등록 API")
+    @DisplayName("크롤링 장소 등록 API")
     @Test
     void createFromCrawledData() throws Exception {
         // given
         List<PlaceImageRequest> placeImageRequests = List.of(new PlaceImageRequest(1, "url"));
-        given(placeService.saveCrawlingContents(any(), any(), any(), any()))
+        given(placeService.saveCrawlingContents(any(), any(), any(), any(), any()))
                 .willReturn(
                         PlaceFixture.get("6633897aa2757d5b1998ba0d")
                 );
-        CrawlingPlaceRequest request = new CrawlingPlaceRequest("ChIJo0gMXbOlfDURSjmLcTy52qQ", "Kkochijib", "testRecommend", "testActivity", placeImageRequests, "createdBy");
+        CrawlingPlaceRequest request = new CrawlingPlaceRequest("ChIJo0gMXbOlfDURSjmLcTy52qQ", Category.RESTAURANT,"Kkochijib", "testRecommend", "testActivity", placeImageRequests, "createdBy");
 
         // when & then
         mockMvc.perform(post("/api/v1/place/crawled")
@@ -157,7 +161,9 @@ class PlaceControllerDocsTest extends RestDocsTest {
                                 fieldWithPath("images[].url").type(JsonFieldType.STRING)
                                         .description("url"),
                                 fieldWithPath("createdBy").type(JsonFieldType.STRING)
-                                        .description("출처")
+                                        .description("출처"),
+                                fieldWithPath("category").type(JsonFieldType.STRING)
+                                        .description("카테고리")
                         ),
                         responseFields(
                                 fieldWithPath("status").type(JsonFieldType.STRING)
@@ -170,6 +176,10 @@ class PlaceControllerDocsTest extends RestDocsTest {
                                         .description("장소 아이디"),
                                 fieldWithPath("data.googlePlaceId").type(JsonFieldType.STRING)
                                         .description("구글 장소 아이디"),
+                                fieldWithPath("data.categoryGroup").type(JsonFieldType.STRING)
+                                        .description("장소 카테고리 그룹"),
+                                fieldWithPath("data.category").type(JsonFieldType.STRING)
+                                        .description("장소 카테고리"),
                                 fieldWithPath("data.placeName").type(JsonFieldType.STRING)
                                         .description("장소 이름"),
                                 fieldWithPath("data.primaryType").type(JsonFieldType.STRING)
@@ -489,6 +499,10 @@ class PlaceControllerDocsTest extends RestDocsTest {
                                         .description("장소 아이디"),
                                 fieldWithPath("data.googlePlaceId").type(JsonFieldType.STRING)
                                         .description("구글 장소 아이디"),
+                                fieldWithPath("data.categoryGroup").type(JsonFieldType.STRING)
+                                                .description("장소 카테고리 그룹"),
+                                fieldWithPath("data.category").type(JsonFieldType.STRING)
+                                        .description("장소 카테고리"),
                                 fieldWithPath("data.placeName").type(JsonFieldType.STRING)
                                         .description("장소 이름"),
                                 fieldWithPath("data.primaryType").type(JsonFieldType.STRING)
@@ -580,6 +594,49 @@ class PlaceControllerDocsTest extends RestDocsTest {
                                         .description("메뉴 가격"),
                                 fieldWithPath("data.menuGroups[].menus[].description").type(JsonFieldType.STRING)
                                         .description("메뉴 설명")
+                        )
+                ));
+    }
+
+    @DisplayName("카테고리 조회 API")
+    @Test
+    void retrieveCategories() throws Exception {
+        // given
+        given(placeService.findCategories())
+                .willReturn(Arrays.asList(CategoryGroup.values()));
+
+        // when & then
+        mockMvc.perform(get("/api/v1/place/category")
+                        .param("language", "EN")
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("place-category-get",
+                        resourceDetails()
+                                .tag("place")
+                                .description("장소 카테고리 조회 API"),
+                        queryParameters(
+                                parameterWithName("language").description("언어").optional()
+                        ),
+                        responseFields(
+                                fieldWithPath("status").type(JsonFieldType.STRING)
+                                        .description("응답 상태"),
+                                fieldWithPath("message").type(JsonFieldType.NULL)
+                                        .description("메시지"),
+                                fieldWithPath("data").type(JsonFieldType.OBJECT)
+                                        .description("데이터"),
+                                fieldWithPath("data.groupList").type(JsonFieldType.ARRAY)
+                                        .description("카테고리 그룹 목록"),
+                                fieldWithPath("data.groupList[].groupName").type(JsonFieldType.STRING)
+                                        .description("카테고리 그룹명"),
+                                fieldWithPath("data.groupList[].enumName").type(JsonFieldType.STRING)
+                                        .description("카테고리 그룹 Enum 이름"),
+                                fieldWithPath("data.groupList[].categories").type(JsonFieldType.ARRAY)
+                                        .description("카테고리 목록"),
+                                fieldWithPath("data.groupList[].categories[].category").type(JsonFieldType.STRING)
+                                        .description("카테고리명"),
+                                fieldWithPath("data.groupList[].categories[].enumName").type(JsonFieldType.STRING)
+                                        .description("카테고리 Enum 이름")
                         )
                 ));
     }

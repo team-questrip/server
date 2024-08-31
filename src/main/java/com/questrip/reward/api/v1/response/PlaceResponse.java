@@ -12,6 +12,8 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 public class PlaceResponse {
     private String id;
+    private String categoryGroup;
+    private String category;
     private String googlePlaceId;
     private String placeName;
     private String primaryType;
@@ -25,6 +27,8 @@ public class PlaceResponse {
 
     public PlaceResponse(Place place) {
         this.id = place.getId();
+        this.categoryGroup = place.getTranslatedCategoryGroup();
+        this.category = place.getTranslatedCategory();
         this.googlePlaceId = place.getGooglePlaceId();
         this.placeName = "%s (%s)".formatted(place.getPlaceName(), place.getRomanizedPlaceName());
         this.primaryType = place.getPrimaryType();

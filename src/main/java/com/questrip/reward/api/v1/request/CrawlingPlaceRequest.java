@@ -1,5 +1,6 @@
 package com.questrip.reward.api.v1.request;
 
+import com.questrip.reward.domain.place.Category;
 import com.questrip.reward.domain.place.PlaceContent;
 import com.questrip.reward.domain.place.PlaceImage;
 
@@ -7,6 +8,7 @@ import java.util.List;
 
 public record CrawlingPlaceRequest(
         String googlePlaceId,
+        Category category,
         String romanizedPlaceName,
         String recommendationReason,
         String activity,

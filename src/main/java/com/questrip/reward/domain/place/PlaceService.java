@@ -26,18 +26,18 @@ public class PlaceService {
     private final PlaceTranslator placeTranslator;
     private final DirectionSearcher directionSearcher;
 
-    public Place save(String googlePlaceId, String romanizedPlaceName, PlaceContent content, List<MultipartFile> files, String createdBy) {
+    public Place save(String googlePlaceId, String romanizedPlaceName, Category category, PlaceContent content, List<MultipartFile> files, String createdBy) {
         List<PlaceImage> images = placeImageUploader.upload(files, createdBy);
-        Place searched = placeSearcher.searchPlace(googlePlaceId).toPlace(content, romanizedPlaceName, images);
+        Place searched = placeSearcher.searchPlace(googlePlaceId, content, category, romanizedPlaceName, images);
         Place appended = placeAppender.append(searched);
         placeTranslator.translateAllLanguages(appended);
 
         return appended;
     }
 
-    public Place saveCrawlingContents(String googlePlaceId, String romanizedPlaceName, PlaceContent content, List<PlaceImage> images) {
+    public Place saveCrawlingContents(String googlePlaceId, Category category, String romanizedPlaceName, PlaceContent content, List<PlaceImage> images) {
         List<PlaceImage> placeImages = placeImageUploader.upload(images);
-        Place searched = placeSearcher.searchPlace(googlePlaceId).toPlace(content, romanizedPlaceName, placeImages);
+        Place searched = placeSearcher.searchPlace(googlePlaceId, content, category, romanizedPlaceName, placeImages);
         Place appended = placeAppender.append(searched);
         placeTranslator.translateAllLanguages(appended);
 
@@ -79,5 +79,9 @@ public class PlaceService {
         Place place = placeFinder.findByIdWithLanguage(placeId, language);
 
         return place.getMenuGroups();
+    }
+
+    public List<CategoryGroup> findCategories() {
+        return placeFinder.findCategories();
     }
 }

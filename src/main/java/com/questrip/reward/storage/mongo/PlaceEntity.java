@@ -21,6 +21,8 @@ public class PlaceEntity extends BaseEntity {
 
     @Id
     private String id;
+    private CategoryGroup categoryGroup;
+    private Category category;
     private String googlePlaceId;
     private String placeName;
     private String romanizedPlaceName;
@@ -38,6 +40,9 @@ public class PlaceEntity extends BaseEntity {
     public Place toPlace() {
         return Place.builder()
                 .id(id)
+                .category(category)
+                .translatedCategoryGroup(category.getCategoryGroup().getTranslation("EN"))
+                .translatedCategory(category.getTranslation("EN"))
                 .googlePlaceId(googlePlaceId)
                 .placeName(placeName)
                 .romanizedPlaceName(romanizedPlaceName)
@@ -65,6 +70,9 @@ public class PlaceEntity extends BaseEntity {
 
         return Place.builder()
                 .id(id)
+                .category(category)
+                .translatedCategory(category.getTranslation(language))
+                .translatedCategoryGroup(categoryGroup.getTranslation(language))
                 .googlePlaceId(googlePlaceId)
                 .placeName(placeName)
                 .romanizedPlaceName(romanizedPlaceName)
@@ -82,6 +90,8 @@ public class PlaceEntity extends BaseEntity {
     public static PlaceEntity from(Place place) {
         return PlaceEntity.builder()
                 .id(place.getId())
+                .categoryGroup(CategoryGroup.findGroup(place.getCategory()))
+                .category(place.getCategory())
                 .googlePlaceId(place.getGooglePlaceId())
                 .placeName(place.getPlaceName())
                 .romanizedPlaceName(place.getRomanizedPlaceName())
@@ -101,6 +111,8 @@ public class PlaceEntity extends BaseEntity {
     }
 
     public void update(Place place) {
+        this.categoryGroup = CategoryGroup.findGroup(place.getCategory());
+        this.category = place.getCategory();
         this.googlePlaceId = place.getGooglePlaceId();
         this.placeName = place.getPlaceName();
         this.primaryType = place.getPrimaryType();
@@ -114,8 +126,10 @@ public class PlaceEntity extends BaseEntity {
     }
 
     @Builder
-    private PlaceEntity(String id, String googlePlaceId, String placeName, String romanizedPlaceName, String primaryType, String formattedAddress, Point location, PlaceContent content, List<String> openingHours, List<Period> openPeriods, List<PlaceImage> images, Set<MenuGroup> menuGroups) {
+    private PlaceEntity(String id, CategoryGroup categoryGroup, Category category, String googlePlaceId, String placeName, String romanizedPlaceName, String primaryType, String formattedAddress, Point location, PlaceContent content, List<String> openingHours, List<Period> openPeriods, List<PlaceImage> images, Set<MenuGroup> menuGroups) {
         this.id = id;
+        this.categoryGroup = categoryGroup;
+        this.category = category;
         this.googlePlaceId = googlePlaceId;
         this.placeName = placeName;
         this.romanizedPlaceName = romanizedPlaceName;
