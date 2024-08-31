@@ -41,9 +41,10 @@ public class GooglePlaceSearchResponse {
         }
     }
 
-    public Place toPlace(PlaceContent content, String romanizedPlaceName, List<PlaceImage> images) {
+    public Place toPlace(PlaceContent content, Category category, String romanizedPlaceName, List<PlaceImage> images) {
         return Place.builder()
                 .googlePlaceId(id)
+                .category(category)
                 .placeName(displayName.getText())
                 .romanizedPlaceName(romanizedPlaceName)
                 .primaryType(parseType(primaryType))

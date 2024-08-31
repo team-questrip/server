@@ -1,10 +1,15 @@
 package com.questrip.reward.domain.place;
 
+import com.questrip.reward.support.error.ErrorCode;
+import com.questrip.reward.support.error.GlobalException;
+import lombok.Getter;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+@Getter
 public enum CategoryGroup {
     FOOD_AND_DRINKS(
             Map.ofEntries(
@@ -101,8 +106,7 @@ public enum CategoryGroup {
                     Map.entry("RU", "Однодневные туры и мероприятия")
             ),
             Category.ONE_DAY_CLASS, Category.DAY_TOUR
-    ),
-    EMPTY(Map.of());
+    );
 
     private final Map<String, String> translations;
     private final Set<Category> categories;
@@ -120,6 +124,6 @@ public enum CategoryGroup {
         return Arrays.stream(CategoryGroup.values())
                 .filter(group -> group.categories.contains(category))
                 .findFirst()
-                .orElse(EMPTY);
+                .orElseThrow(() -> new GlobalException(ErrorCode.CATEGORY_NOT_FOUND));
     }
 }

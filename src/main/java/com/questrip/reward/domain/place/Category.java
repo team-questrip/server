@@ -1,7 +1,10 @@
 package com.questrip.reward.domain.place;
 
+import lombok.Getter;
+
 import java.util.Map;
 
+@Getter
 public enum Category {
     // Food & Drinks
     RESTAURANT(Map.ofEntries(
