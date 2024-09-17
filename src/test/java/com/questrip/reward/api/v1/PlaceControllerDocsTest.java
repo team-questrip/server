@@ -15,7 +15,6 @@ import org.springframework.restdocs.payload.JsonFieldType;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.resourceDetails;
@@ -612,8 +611,17 @@ class PlaceControllerDocsTest extends RestDocsTest {
     @Test
     void retrieveCategories() throws Exception {
         // given
-        given(placeService.findCategories())
-                .willReturn(Arrays.asList(CategoryGroup.values()));
+        List<CategoryWithCount> categoryWithCounts = Arrays.asList(
+                new CategoryWithCount(CategoryGroup.FOOD_AND_DRINKS, 100L),
+                new CategoryWithCount(CategoryGroup.CULTURE_AND_HISTORY, 50L),
+                new CategoryWithCount(CategoryGroup.NATURE_AND_LANDMARKS, 75L),
+                new CategoryWithCount(CategoryGroup.SHOPPING_AND_ENTERTAINMENT, 80L),
+                new CategoryWithCount(CategoryGroup.WELLNESS_AND_RELAXATION, 30L),
+                new CategoryWithCount(CategoryGroup.DAY_TOURS_AND_ACTIVITIES, 40L)
+        );
+
+        given(placeService.findCategoryGroupsWithCounts())
+                .willReturn(categoryWithCounts);
 
         // when & then
         mockMvc.perform(get("/api/v1/place/category")
@@ -643,6 +651,8 @@ class PlaceControllerDocsTest extends RestDocsTest {
                                         .description("카테고리 그룹 Enum 이름"),
                                 fieldWithPath("data.groupList[].categories").type(JsonFieldType.ARRAY)
                                         .description("카테고리 목록"),
+                                fieldWithPath("data.groupList[].placeCounts").type(JsonFieldType.NUMBER)
+                                        .description("카테고리 그룹의 장소 수"),
                                 fieldWithPath("data.groupList[].categories[].category").type(JsonFieldType.STRING)
                                         .description("카테고리명"),
                                 fieldWithPath("data.groupList[].categories[].enumName").type(JsonFieldType.STRING)

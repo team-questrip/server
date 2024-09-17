@@ -5,6 +5,8 @@ import com.questrip.reward.domain.direction.DirectionSummary;
 import com.questrip.reward.support.response.SliceResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,8 +15,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Service
 @Slf4j
+@Service
 @RequiredArgsConstructor
 public class PlaceService {
 
@@ -82,7 +84,13 @@ public class PlaceService {
         return place.getMenuGroups();
     }
 
-    public List<CategoryGroup> findCategories() {
-        return placeFinder.findCategories();
+    public List<CategoryWithCount> findCategoryGroupsWithCounts() {
+        return placeFinder.findCategoryGroupsWithCounts();
+    }
+
+    @Scheduled(fixedRate = 21600000) // 6시간마다 실행
+    @CacheEvict(value = "placeCounts", allEntries = true)
+    public void refreshPlaceCountsCache() {
+        findCategoryGroupsWithCounts();
     }
 }

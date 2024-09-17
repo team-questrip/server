@@ -2,6 +2,7 @@ package com.questrip.reward.domain.place;
 
 import com.questrip.reward.support.response.SliceResult;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
@@ -38,7 +39,13 @@ public class PlaceFinder {
         return placeRepository.findByIdWithLanguage(id, language);
     }
 
-    public List<CategoryGroup> findCategories() {
-        return Arrays.stream(CategoryGroup.values()).toList();
+    @Cacheable(value = "placeCounts", sync = true)
+    public List<CategoryWithCount> findCategoryGroupsWithCounts() {
+        List<CategoryGroup> categoryGroups = Arrays.stream(CategoryGroup.values()).toList();
+        Map<CategoryGroup, Long> categoryGroupCountMap = placeRepository.getCategoryGroupCountMap();
+
+        return categoryGroups.stream()
+                .map(group -> new CategoryWithCount(group, categoryGroupCountMap.getOrDefault(group, 0L)))
+                .toList();
     }
 }

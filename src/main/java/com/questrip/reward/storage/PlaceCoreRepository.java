@@ -115,4 +115,11 @@ public class PlaceCoreRepository implements PlaceRepository {
                 .map(PlaceEntity::toPlace)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public Map<CategoryGroup, Long> getCategoryGroupCountMap() {
+        return placeMongoRepository.findAll()
+                .stream()
+                .collect(Collectors.groupingBy(PlaceEntity::getCategoryGroup, Collectors.counting()));
+    }
 }

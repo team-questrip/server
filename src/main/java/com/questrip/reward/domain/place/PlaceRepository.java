@@ -28,4 +28,6 @@ public interface PlaceRepository {
     Place findByIdWithLanguage(String id, String language);
 
     List<Place> findAll();
+
+    Map<CategoryGroup, Long> getCategoryGroupCountMap();
 }

@@ -1,13 +1,13 @@
 package com.questrip.reward.api.v1.response;
 
 import com.questrip.reward.domain.place.Category;
-import com.questrip.reward.domain.place.CategoryGroup;
+import com.questrip.reward.domain.place.CategoryWithCount;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 public record CategoryGroupListResponse(List<CategoryGroupResponse> groupList) {
-    public static CategoryGroupListResponse of(List<CategoryGroup> categoryGroups, String language) {
+    public static CategoryGroupListResponse of(List<CategoryWithCount> categoryGroups, String language) {
         return new CategoryGroupListResponse(
                 categoryGroups.stream()
                         .map(group -> CategoryGroupResponse.of(group, language))
@@ -15,14 +15,15 @@ public record CategoryGroupListResponse(List<CategoryGroupResponse> groupList) {
         );
     }
 
-    public record CategoryGroupResponse(String groupName, String enumName, List<CategoryResponse> categories) {
-        public static CategoryGroupResponse of(CategoryGroup group, String language) {
+    public record CategoryGroupResponse(String groupName, String enumName, List<CategoryResponse> categories, Long placeCounts) {
+        public static CategoryGroupResponse of(CategoryWithCount categoryWithCount, String language) {
             return new CategoryGroupResponse(
-                    group.getTranslation(language),
-                    group.name(),
-                    group.getCategories().stream()
+                    categoryWithCount.categoryGroup().getTranslation(language),
+                    categoryWithCount.categoryGroup().name(),
+                    categoryWithCount.categoryGroup().getCategories().stream()
                             .map(category -> CategoryResponse.of(category, language))
-                            .collect(Collectors.toList())
+                            .collect(Collectors.toList()),
+                    categoryWithCount.placeCount()
             );
         }
     }

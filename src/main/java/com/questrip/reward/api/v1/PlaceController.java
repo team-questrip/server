@@ -87,7 +87,7 @@ public class PlaceController {
 
     @GetMapping("/category")
     public ApiResponse<CategoryGroupListResponse> getCategories(@Language String language) {
-        List<CategoryGroup> categories = placeService.findCategories();
+        List<CategoryWithCount> categories = placeService.findCategoryGroupsWithCounts();
 
         return ApiResponse.success(CategoryGroupListResponse.of(categories, language));
     }
